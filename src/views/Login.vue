@@ -2,7 +2,8 @@
   <v-container>
     <v-layout justify-center>
       <v-flex xs12 sm6 md4 row>
-        <v-card height="500" class="mt-4">
+        <v-card height="500" class="mt-4 mt-0">
+          <v-progress-linear :indeterminate="true" class=""></v-progress-linear>
           <v-card-title primary-title>
             <h2>Login</h2>
           </v-card-title>
@@ -42,7 +43,9 @@
               >
               <p class="mx-1 mt-3">Don't Have an Account?</p>
 
-              <v-btn class="btn-login" Large>Register</v-btn>
+              <v-btn v-on:click="register" class="btn-login" Large
+                >Register</v-btn
+              >
             </v-flex>
           </v-card-actions>
         </v-card>
@@ -52,10 +55,9 @@
 </template>
 
 <script>
+//Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
-
-const axios = require("axios");
 
 export default {
   mixins: [validationMixin],
@@ -70,6 +72,7 @@ export default {
   }),
 
   computed: {
+    /**Form Validation and Error Handlin - begin */
     emailErrors() {
       const errors = [];
       if (!this.$v.email.$dirty) return errors;
@@ -83,6 +86,7 @@ export default {
       !this.$v.password.required && errors.push("Password is required");
       return errors;
     }
+    /**Form Validation and Error Handlin - end */
   },
 
   methods: {
@@ -92,17 +96,24 @@ export default {
     },
     //Login Method -> Sends HTTP POST request to the server to verify the user
     login() {
-      axios
+      this.$http
         .post("http://localhost:5000/api/login", {
-          firstName: "Fred",
-          lastName: "Flintstone"
+          email: this.email,
+          password: this.password
         })
         .then(function(response) {
           console.log(response);
+          // this.login.$router.push("/");
+          localStorage.setItem("token", response.token);
         })
         .catch(function(error) {
           console.log(error);
         });
+    },
+    //Navigate to User Registration Page
+    register() {
+      // this.$router.push("/");
+      console.log(localStorage.token);
     }
   }
 };
@@ -126,5 +137,9 @@ export default {
 .forg-pass a {
   text-decoration: none;
   color: #455a64;
+}
+
+.loader {
+  margin-bottom: -25px;
 }
 </style>
