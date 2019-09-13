@@ -161,7 +161,9 @@
               >
               <p class="mx-1 mt-3">Already Have an Account?</p>
 
-              <v-btn v-on:click="register" class="btn-login" Large>Login</v-btn>
+              <v-btn v-on:click="toLoginPage" class="btn-login" Large
+                >Login</v-btn
+              >
             </v-flex>
           </v-card-actions>
         </v-card>
@@ -261,9 +263,9 @@ export default {
         });
     },
     //Navigate to User Registration Page
-    register() {
-      // this.$router.push("/");
-      console.log(localStorage.token);
+    toLoginPage() {
+      this.$router.push("/login");
+      // console.log(localStorage.token);
     }
   }
 };

@@ -43,7 +43,7 @@
               >
               <p class="mx-1 mt-3">Don't Have an Account?</p>
 
-              <v-btn v-on:click="register" class="btn-login" Large
+              <v-btn v-on:click="toRegisterPage" class="btn-login" Large
                 >Register</v-btn
               >
             </v-flex>
@@ -111,9 +111,9 @@ export default {
         });
     },
     //Navigate to User Registration Page
-    register() {
-      // this.$router.push("/");
-      console.log(localStorage.token);
+    toRegisterPage() {
+      this.$router.push("/register");
+      // console.log(localStorage.token);
     }
   }
 };
