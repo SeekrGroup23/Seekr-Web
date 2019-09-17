@@ -2,12 +2,26 @@
   <v-container>
     <v-layout justify-center>
       <v-flex xs12 sm6 md4 row>
-        <v-card height="500" class="mt-4 mt-0">
-          <v-progress-linear :indeterminate="true" class=""></v-progress-linear>
+        <v-card :height="alert ? '550' : '500'" class="mt-4 mt-0">
+          <v-progress-linear
+            v-show="isPending"
+            :indeterminate="isPending"
+          ></v-progress-linear>
+
           <v-card-title primary-title>
             <h2>Login</h2>
           </v-card-title>
           <v-card-text>
+            <v-alert
+              class="mb-4"
+              :outline="true"
+              :value="alert"
+              color="error"
+              icon="warning"
+              style="height: 10px;"
+            >
+              Invalid Email or Password!
+            </v-alert>
             <v-text-field
               v-model="email"
               :error-messages="emailErrors"
@@ -15,7 +29,10 @@
               label="Email"
               append-icon="email"
               required
-              @input="$v.email.$touch()"
+              @input="
+                $v.email.$touch();
+                clearAlert();
+              "
               @blur="$v.email.$touch()"
             ></v-text-field>
 
@@ -26,7 +43,10 @@
               label="Password"
               append-icon="lock"
               required
-              @input="$v.password.$touch()"
+              @input="
+                $v.password.$touch();
+                clearAlert();
+              "
               @blur="$v.password.$touch()"
             ></v-text-field>
 
@@ -68,7 +88,10 @@ export default {
 
   data: () => ({
     email: "",
-    password: ""
+    password: "",
+    isPending: false,
+    cardHeight: 0,
+    alert: false
   }),
 
   computed: {
@@ -90,25 +113,57 @@ export default {
   },
 
   methods: {
-    //Form Validation
-    submit() {
-      this.$v.$touch();
+    clearAlert() {
+      this.alert = false;
     },
     //Login Method -> Sends HTTP POST request to the server to verify the user
     login() {
-      this.$http
-        .post("http://localhost:5000/api/login", {
-          email: this.email,
-          password: this.password
-        })
-        .then(function(response) {
-          console.log(response);
-          // this.login.$router.push("/");
-          localStorage.setItem("token", response.token);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      //Form Validation
+      this.$v.$touch();
+
+      if (this.$v.$invalid) {
+        console.log("Error..");
+      } else {
+        console.log("Testing....");
+        this.isPending = true;
+
+        //Sending the HTTP request - POST to verify user credentials
+        this.$http
+          .post("/api/login", {
+            email: this.email,
+            password: this.password
+          })
+          .then(response => {
+            // Debugging
+            console.log(response);
+            localStorage.setItem("token", response.token);
+
+            // Debugging
+            console.log(response.data.token);
+
+            if (response.data.token == "invalid") {
+              this.alert = true;
+            } else {
+              this.alert = false;
+            }
+            // Stop the Linear Progress Indicator
+            this.isPending = false;
+
+            if (response.data.token == "invalid") {
+              alert("Invalid User");
+            } else {
+              //All the user roles should be identified and navigated to corresponding pages
+              alert("Welcome Back User");
+
+              // this.login.$router.push("/");
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+
+        // this.isPending = false;
+      }
     },
     //Navigate to User Registration Page
     toRegisterPage() {

@@ -8,7 +8,7 @@ import Axios from "axios";
 Vue.config.productionTip = false;
 
 Vue.prototype.$http = Axios.create({
-  baseURL: "http://localhost:5000/"
+  baseURL: "http://localhost:5000"
 });
 const token = localStorage.getItem("token");
 if (token) {
