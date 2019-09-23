@@ -9,5 +9,6 @@ export default new Vuex.Store({
     currentUser: {}
   },
   mutations: {},
-  actions: {}
+  actions: {},
+  getters: {}
 });

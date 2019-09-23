@@ -1,89 +1,98 @@
 <template>
-  <v-container>
-    <v-layout justify-center>
-      <v-flex xs12 sm6 md4 row>
-        <v-card :height="alert ? '550' : '500'" class="mt-4 mt-0">
-          <v-progress-linear
-            v-show="isPending"
-            :indeterminate="isPending"
-          ></v-progress-linear>
+  <v-app>
+    <v-content>
+      <v-container>
+        <toolbar></toolbar>
+        <v-layout justify-center>
+          <v-flex xs12 sm6 md4 row>
+            <v-card :height="alert ? '550' : '500'" class="mt-4 mt-0">
+              <v-progress-linear
+                v-show="isPending"
+                :indeterminate="isPending"
+              ></v-progress-linear>
 
-          <v-card-title primary-title>
-            <h2>Login</h2>
-          </v-card-title>
-          <v-card-text>
-            <v-alert
-              class="mb-4"
-              :outline="true"
-              :value="alert"
-              color="error"
-              icon="warning"
-              style="height: 10px;"
-            >
-              Invalid Email or Password!
-            </v-alert>
-            <v-text-field
-              v-model="email"
-              :error-messages="emailErrors"
-              outline
-              label="Email"
-              append-icon="email"
-              required
-              @input="
-                $v.email.$touch();
-                clearAlert();
-              "
-              @blur="$v.email.$touch()"
-            ></v-text-field>
+              <v-card-title primary-title>
+                <h2>Login</h2>
+              </v-card-title>
+              <v-card-text>
+                <v-alert
+                  class="mb-4"
+                  :outline="true"
+                  :value="alert"
+                  color="error"
+                  icon="warning"
+                  style="height: 10px;"
+                >
+                  Invalid Email or Password!
+                </v-alert>
+                <v-text-field
+                  v-model="email"
+                  :error-messages="emailErrors"
+                  label="Email"
+                  append-icon="email"
+                  required
+                  @input="
+                    $v.email.$touch();
+                    clearAlert();
+                  "
+                  @blur="$v.email.$touch()"
+                ></v-text-field>
 
-            <v-text-field
-              v-model="password"
-              :error-messages="passwordErrors"
-              outline
-              label="Password"
-              append-icon="lock"
-              required
-              @input="
-                $v.password.$touch();
-                clearAlert();
-              "
-              @blur="$v.password.$touch()"
-            ></v-text-field>
+                <v-text-field
+                  v-model="password"
+                  :error-messages="passwordErrors"
+                  label="Password"
+                  append-icon="lock"
+                  required
+                  @input="
+                    $v.password.$touch();
+                    clearAlert();
+                  "
+                  @blur="$v.password.$touch()"
+                ></v-text-field>
 
-            <span class="forg-pass mt-0"><a href="#">Forgot Password</a></span>
-          </v-card-text>
-          <v-card-actions>
-            <v-flex class="mx-1 px-1">
-              <v-btn
-                v-on:click="login"
-                class="btn-login mb-2"
-                Large
-                color="primary"
-                >Login</v-btn
-              >
-              <p class="mx-1 mt-3">Don't Have an Account?</p>
+                <span class="forg-pass mt-0"
+                  ><a href="#">Forgot Password</a></span
+                >
+              </v-card-text>
+              <v-card-actions>
+                <v-flex class="mx-1 px-1">
+                  <v-btn
+                    v-on:click="login"
+                    class="btn-login mb-2"
+                    Large
+                    color="primary"
+                    >Login</v-btn
+                  >
+                  <p class="mx-1 mt-3">Don't Have an Account?</p>
 
-              <v-btn v-on:click="toRegisterPage" class="btn-login" Large
-                >Register</v-btn
-              >
-            </v-flex>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+                  <v-btn v-on:click="toRegisterPage" class="btn-login" Large
+                    >Register</v-btn
+                  >
+                </v-flex>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-content>
+  </v-app>
 </template>
 
 <script>
 //Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
+import toolbar from "../components/toolbar";
 
 export default {
   mixins: [validationMixin],
   validations: {
     email: { required, email },
     password: { required }
+  },
+  components: {
+    toolbar
   },
 
   data: () => ({

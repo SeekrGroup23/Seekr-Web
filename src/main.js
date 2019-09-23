@@ -2,7 +2,7 @@ import Vue from "vue";
 import "./plugins/vuetify";
 import App from "./App.vue";
 import router from "./router";
-import store from "./store";
+import store from "./store/store";
 import Axios from "axios";
 
 Vue.config.productionTip = false;
@@ -16,7 +16,7 @@ if (token) {
 }
 
 new Vue({
-  router,
-  store,
+  router, //router : router
+  store, //store : store
   render: h => h(App)
 }).$mount("#app");

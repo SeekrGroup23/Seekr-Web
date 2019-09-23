@@ -1,5 +1,6 @@
 <template>
   <v-container>
+    <toolbar></toolbar>
     <v-layout justify-center>
       <v-flex xs12 sm6 md4 row>
         <v-card height="700" class="mt-2 mt-0">
@@ -194,6 +195,7 @@
 //Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
 import { required, email, minLength } from "vuelidate/lib/validators";
+import toolbar from "../components/toolbar";
 
 export default {
   mixins: [validationMixin],
@@ -209,6 +211,9 @@ export default {
       email: { required, email },
       password: { required, minLength: minLength(8) }
     }
+  },
+  components: {
+    toolbar
   },
 
   data() {

@@ -3,6 +3,9 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
+import GramaNiladhari from "./views/GramaNiladhari/GramaNiladhari.vue";
+import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
+import GN_Profile from "./views/GramaNiladhari/Profile.vue";
 
 Vue.use(Router);
 
@@ -27,6 +30,21 @@ export default new Router({
       path: "/register",
       name: "register",
       component: Register
+    },
+    {
+      path: "/gramaniladhari/:id",
+      children: [
+        {
+          path: "",
+          component: GN_Dashboard
+        },
+        {
+          path: "profile",
+          component: GN_Profile
+        }
+      ],
+
+      component: GramaNiladhari
     }
   ]
 });
