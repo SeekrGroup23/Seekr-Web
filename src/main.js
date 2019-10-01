@@ -10,8 +10,10 @@ Vue.config.productionTip = false;
 Vue.prototype.$http = Axios.create({
   baseURL: "http://localhost:5000"
 });
-const token = localStorage.getItem("token");
-if (token) {
+
+// Adding Authorization Header to every request made to the server by Axios
+const token = store.state.userJWT;
+if (token != "") {
   Vue.prototype.$http.defaults.headers.common["Authorization"] = token;
 }
 

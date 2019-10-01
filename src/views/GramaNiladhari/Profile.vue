@@ -280,21 +280,40 @@
                           <v-container class="py-0">
                             <v-avatar
                               :size="avatarSize"
-                              color="secondary "
+                              color=""
                               tile
+                              @click="$refs.selectImageFile.click()"
                             >
                               <img
-                                src="https://vuetifyjs.com/apple-touch-icon-180x180.png"
+                                v-if="!isUploading"
+                                :src="imagePreview"
                                 alt="avatar"
                               />
+                              <v-progress-circular
+                                v-if="isUploading"
+                                :value="20"
+                                color="green"
+                                :indeterminate="true"
+                              ></v-progress-circular>
                             </v-avatar>
                           </v-container>
                         </v-flex>
                         <v-flex>
-                          <v-container class="py-2" align-content-center fluid>
-                            <v-btn color="primary" block>
-                              Upload
-                              <v-icon right dark>cloud_upload</v-icon>
+                          <v-container class="py-0" align-content-center fluid>
+                            <input
+                              hidden
+                              type="file"
+                              @change="onImageFileSelected"
+                              ref="selectImageFile"
+                              accept="image/*"
+                            />
+                            <v-btn
+                              color="primary"
+                              @click="$refs.selectImageFile.click()"
+                              block
+                              :disabled="isUploading"
+                            >
+                              Choose Photo
                             </v-btn>
                           </v-container>
                         </v-flex>
@@ -544,7 +563,8 @@ export default {
         maritalStatus: "",
         nic: "",
         address: "",
-        gender: "M" //personal.gender == 'M'? 'Male' : personal.gender? 'F'? 'Female' : personal.gender == 'O'? 'Other' : ' '
+        gender: "M",
+        selectedImageFile: null
       },
       general: {},
       other: {
@@ -552,10 +572,41 @@ export default {
         currentPassword: "",
         newPassword: ""
       },
+      // Date Picker
       date: new Date().toISOString().substr(0, 10),
       dateFormatted: vm.formatDate(new Date().toISOString().substr(0, 10)),
-      menu1: false
+      menu1: false,
+      // Image File Uploading Progress
+      isImageFileSelected: false,
+      isUploading: false,
+      uploadProgress: 0,
+      imagePreview: "https://image.flaticon.com/icons/svg/149/149071.svg"
     };
+  },
+  created() {
+    console.log("In Created");
+    this.$http
+      .get("/api/gramaniladhari/get_profile", {
+        params: {
+          // id: this.$store.state.user.id
+          id: "W67Qr4BYUkgR2AUworGH"
+        }
+      })
+      .then(response => {
+        console.log(response.data);
+
+        this.personal.firstName = response.data.firstName;
+        this.personal.lastName = response.data.lastName;
+        this.personal.nameInFull = response.data.nameInFull;
+        this.personal.dob = response.data.dob;
+        this.personal.maritalStatus = response.data.maritalStatus;
+        this.personal.nic = response.data.nic;
+        this.personal.address = response.data.address;
+        this.personal.gender = response.data.gender;
+      })
+      .catch(error => {
+        console.log(error);
+      });
   },
   methods: {
     switchEditableMode() {
@@ -585,6 +636,50 @@ export default {
           ? 3
           : 0;
       alert(this.personal.gender);
+    },
+    // Upload Profile Image on change event of the input file
+    onImageFileSelected(event) {
+      this.personal.selectedImageFile = event.target.files[0];
+      this.isImageFileSelected = true;
+      // create a new FileReader to read this image and convert to base64 format
+      var reader = new FileReader();
+      reader.onload = e => {
+        // Note: arrow function used here, so that "this.imageData" refers to the imageData of Vue component
+        // Read image as base64 and set to imageData
+        this.imagePreview = e.target.result;
+      };
+      // Start the reader job - read file as a data url (base64 format)
+      reader.readAsDataURL(this.personal.selectedImageFile);
+      this.uploadImageFile();
+    },
+    uploadImageFile() {
+      this.isImageFileSelected = false;
+      this.isUploading = true;
+      const fd = new FormData();
+      fd.append(
+        "image",
+        this.personal.selectedImageFile,
+        this.personal.selectedImageFile.name
+      );
+      this.$http
+        .post("/api/testing/file_upload_local", fd, {
+          onUploadProgress: uploadEvent => {
+            this.uploadProgress = Math.round(
+              (uploadEvent.loaded / uploadEvent.total) * 100
+            );
+            if (this.uploadProgress == 100) {
+              this.isUploading = false;
+            } else {
+              this.isUploading = true;
+            }
+          }
+        })
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
   computed: {
@@ -692,9 +787,6 @@ export default {
     date() {
       this.dateFormatted = this.formatDate(this.date);
     }
-  },
-  created: () => {
-    console.log("Profile Page Loaded");
   }
 };
 </script>

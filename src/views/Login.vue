@@ -84,6 +84,7 @@
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 import toolbar from "../components/toolbar";
+import jwtDecode from "jwt-decode";
 
 export default {
   mixins: [validationMixin],
@@ -162,9 +163,33 @@ export default {
               alert("Invalid User");
             } else {
               //All the user roles should be identified and navigated to corresponding pages
-              alert("Welcome Back User");
 
-              // this.login.$router.push("/");
+              //  Store the received JWT in the state variavle of Vuex Store "userJWT"
+              this.$store.state.userJWT = response.data.token;
+              // Decoding the Payload fro the userJWT
+              const jwtPayload = jwtDecode(this.$store.state.userJWT);
+              console.log(jwtPayload.user.id);
+              this.$store.state.user.id = jwtPayload.user.id;
+              this.$store.state.user.firstName = jwtPayload.user.firstName;
+              this.$store.state.user.lastName = jwtPayload.user.lastName;
+              this.$store.state.user.email = jwtPayload.user.email;
+              // this.$store.state.user.imageURL = jwtPayload.user.imageURL;
+              this.$store.state.user.role = jwtPayload.user.role;
+
+              switch (this.$store.state.user.role) {
+                case "admin":
+                  break;
+
+                case "gramaNiladhari":
+                  console.log("Router GN");
+                  this.$router.push("/gramaniladhari/");
+                  break;
+                case "user":
+                  break;
+
+                default:
+                  break;
+              }
             }
           })
           .catch(function(error) {

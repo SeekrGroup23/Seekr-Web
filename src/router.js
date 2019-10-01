@@ -32,7 +32,7 @@ export default new Router({
       component: Register
     },
     {
-      path: "/gramaniladhari/:id",
+      path: "/gramaniladhari/",
       children: [
         {
           path: "",
