@@ -6,6 +6,7 @@ import Register from "./views/Register.vue";
 import GramaNiladhari from "./views/GramaNiladhari/GramaNiladhari.vue";
 import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
 import GN_Profile from "./views/GramaNiladhari/Profile.vue";
+import GN_Patients from "./views/GramaNiladhari/Patients.vue";
 
 Vue.use(Router);
 
@@ -41,6 +42,10 @@ export default new Router({
         {
           path: "profile",
           component: GN_Profile
+        },
+        {
+          path: "patients",
+          component: GN_Patients
         }
       ],
 

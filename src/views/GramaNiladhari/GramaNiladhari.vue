@@ -1,12 +1,12 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" fixed app temporary>
-      <v-container class="py-2">
+    <v-navigation-drawer v-model="drawer" fixed app permanent dark>
+      <!-- <v-container class="py-2">
         <v-layout row>
           <v-flex> <h5 class="subheading py-1">Grama Niladhari</h5> </v-flex>
         </v-layout>
       </v-container>
-      <v-divider></v-divider>
+      <v-divider></v-divider> -->
 
       <v-container class="pa-0 " fluid>
         <v-layout class="" row>
@@ -42,7 +42,7 @@
 
       <!-- List Items Begin From Here -->
       <v-list dense>
-        <v-list-tile>
+        <v-list-tile router-link to="/gramaniladhari">
           <v-list-tile-action>
             <v-icon>home</v-icon>
           </v-list-tile-action>
@@ -54,56 +54,86 @@
         <v-list-group prepend-icon="account_circle" value="true">
           <template v-slot:activator>
             <v-list-tile>
-              <v-list-tile-title>Users</v-list-tile-title>
+              <v-list-tile-title>CKDu Patient</v-list-tile-title>
             </v-list-tile>
           </template>
-          <v-list-group no-action sub-group value="true">
-            <template v-slot:activator>
-              <v-list-tile>
-                <v-list-tile-title>Admin</v-list-tile-title>
-              </v-list-tile>
-            </template>
+          <v-list-tile router-link to="/gramaniladhari/patients">
+            <v-list-tile-action>
+              <!-- <v-icon>home</v-icon> -->
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>View All</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
 
-            <!-- <v-list-tile v-for="(admin, i) in admins" :key="i">
+          <v-list-tile>
+            <v-list-tile-action>
+              <!-- <v-icon>home</v-icon> -->
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Add New</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile>
+            <v-list-tile-action>
+              <!-- <v-icon>home</v-icon> -->
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Find</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <!-- <v-list-tile v-for="(admin, i) in admins" :key="i">
               <v-list-tile-title v-text="admin[0]"></v-list-tile-title>
               <v-list-tile-action>
                 <v-icon v-text="admin[1]"></v-icon>
               </v-list-tile-action>
             </v-list-tile> -->
-          </v-list-group>
-
-          <v-list-group sub-group no-action>
-            <template v-slot:activator>
-              <v-list-tile>
-                <v-list-tile-title>Actions</v-list-tile-title>
-              </v-list-tile>
-            </template>
-            <!-- <v-list-tile v-for="(crud, i) in cruds" :key="i">
-              <v-list-tile-title v-text="crud[0]"></v-list-tile-title>
-              <v-list-tile-action>
-                <v-icon v-text="crud[1]"></v-icon>
-              </v-list-tile-action>
-            </v-list-tile> -->
-          </v-list-group>
         </v-list-group>
 
-        <v-list-tile router-link to="profile">
-          <v-list-tile-action>
-            <v-icon>account_circle</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Profile</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <!-- All Users -->
 
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>CKDu Patient</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+        <v-list-group prepend-icon="account_circle" value="true">
+          <template v-slot:activator>
+            <v-list-tile>
+              <v-list-tile-title>All Users</v-list-tile-title>
+            </v-list-tile>
+          </template>
+          <v-list-tile router-link to="/gramaniladhari/users">
+            <v-list-tile-action>
+              <!-- <v-icon>home</v-icon> -->
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>View All</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile>
+            <v-list-tile-action>
+              <!-- <v-icon>home</v-icon> -->
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Add New</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <v-list-tile>
+            <v-list-tile-action>
+              <!-- <v-icon>home</v-icon> -->
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Find</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+
+          <!-- <v-list-tile v-for="(admin, i) in admins" :key="i">
+              <v-list-tile-title v-text="admin[0]"></v-list-tile-title>
+              <v-list-tile-action>
+                <v-icon v-text="admin[1]"></v-icon>
+              </v-list-tile-action>
+            </v-list-tile> -->
+        </v-list-group>
 
         <v-list-tile>
           <v-list-tile-action>
@@ -111,6 +141,15 @@
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title>Messages</v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+
+        <v-list-tile router-link to="gramaniladhari/profile">
+          <v-list-tile-action>
+            <v-icon>account_circle</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+            <v-list-tile-title>Profile</v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
 
@@ -125,7 +164,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-toolbar fixed app dense>
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+      <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
       <v-toolbar-title>Seekr</v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -159,7 +198,7 @@
     </v-toolbar>
 
     <v-content>
-      <v-container class="py-0 ma-0 containerPadding" fluid>
+      <v-container class="py-0 ma-0 containerRouterView" fluid>
         <router-view></router-view>
       </v-container>
     </v-content>
@@ -204,8 +243,8 @@ export default {
 </script>
 
 <style scoped>
-.containerPadding {
-  padding-left: 100px;
-  padding-right: 100px;
+.containerRouterView {
+  padding-left: 3%;
+  padding-right: 3%;
 }
 </style>

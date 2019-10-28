@@ -2,12 +2,12 @@
   <v-container fluid px-5>
     <v-layout column>
       <v-flex class="mt-1 mb-4">
-        <v-card height="200">
+        <v-card height="200" class="rounded-card">
           <v-container fluid>
             <v-layout row wrap fill-height>
               <v-flex shrink>
                 <v-card flat>
-                  <v-avatar :size="avatarSize" color="secondary " tile>
+                  <v-avatar :size="avatarSize" color="">
                     <img
                       src="https://vuetifyjs.com/apple-touch-icon-180x180.png"
                       alt="avatar"
@@ -22,16 +22,7 @@
                     type="title"
                     class="mb-1"
                   ></textView>
-                  <textView
-                    text="Grama Niladhari"
-                    type="subheading"
-                    class="mb-1"
-                  ></textView>
-                  <textView
-                    text="Wethara - 453"
-                    type="subheading"
-                    class="mb-1"
-                  ></textView>
+
                   <textView
                     text="lapjanith@gmail.com"
                     type="subheading"
@@ -41,6 +32,27 @@
                     text="+94 (77) 123 1234"
                     type="subheading"
                   ></textView>
+                  <v-container fluid class="px-0">
+                    <v-layout row>
+                      <v-flex shrink>
+                        <textView
+                          text="Grama Niladhari"
+                          type="subheading"
+                          class="mb-1 px-0 mr-2"
+                        ></textView>
+                      </v-flex>
+                      <v-flex shrink>
+                        <v-divider vertical></v-divider>
+                      </v-flex>
+                      <v-flex shrink>
+                        <textView
+                          text="Wethara - 453"
+                          type="subheading"
+                          class="mb-1 ml-2"
+                        ></textView>
+                      </v-flex>
+                    </v-layout>
+                  </v-container>
                 </v-card>
               </v-flex>
               <v-flex shrink><v-divider vertical></v-divider></v-flex>
@@ -72,7 +84,7 @@
         </v-card>
       </v-flex>
       <v-flex>
-        <v-card>
+        <v-card class="rounded-card">
           <v-tabs
             v-model="active"
             color="primary"
@@ -85,11 +97,11 @@
             <!-- Personal Tab -->
             <v-tab-item>
               <v-card flat>
-                <v-container class="px-4">
+                <v-container class="px-3">
                   <v-layout row>
                     <v-flex grow>
                       <!-- Left Column -->
-                      <v-layout column class="pr-5 pl-4">
+                      <v-layout column class="pr-5 pl-2">
                         <v-flex>
                           <v-card flat>
                             <v-card-text class="px-0"
@@ -791,4 +803,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.rounded-card {
+  border-radius: 5px;
+}
+</style>
