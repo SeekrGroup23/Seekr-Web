@@ -1,12 +1,13 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./views/Home.vue";
+import Home from "./views/Home/Home.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
 import GramaNiladhari from "./views/GramaNiladhari/GramaNiladhari.vue";
 import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
 import GN_Profile from "./views/GramaNiladhari/Profile.vue";
 import GN_Patients from "./views/GramaNiladhari/Patients.vue";
+import User_Profile from "./views/User/Profile.vue";
 
 Vue.use(Router);
 
@@ -46,6 +47,10 @@ export default new Router({
         {
           path: "patients",
           component: GN_Patients
+        },
+        {
+          path: "user_profile",
+          component: User_Profile
         }
       ],
 
