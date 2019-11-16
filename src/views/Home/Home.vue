@@ -16,7 +16,9 @@
               <v-btn flat small>About</v-btn>
               <v-btn flat small>Contact</v-btn>
             </v-toolbar-items>
-            <v-btn color="primary" small>Register/Login</v-btn>
+            <v-btn color="primary" @click="$router.push('/login')" small
+              >Register/Login</v-btn
+            >
           </v-toolbar>
         </v-flex>
         <!-- Image Carousal -->

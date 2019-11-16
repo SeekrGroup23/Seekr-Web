@@ -44,6 +44,7 @@
                   label="Password"
                   append-icon="lock"
                   required
+                  type="password"
                   @input="
                     $v.password.$touch();
                     clearAlert();

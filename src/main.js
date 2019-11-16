@@ -8,6 +8,7 @@ import Axios from "axios";
 Vue.config.productionTip = false;
 
 Vue.prototype.$http = Axios.create({
+  // baseURL: "http://ec2-18-216-145-208.us-east-2.compute.amazonaws.com:5000"
   baseURL: "http://localhost:5000"
 });
 
@@ -16,6 +17,9 @@ const token = store.state.userJWT;
 if (token != "") {
   Vue.prototype.$http.defaults.headers.common["Authorization"] = token;
 }
+
+// For Event Bus -> https://blog.logrocket.com/using-event-bus-in-vue-js-to-pass-data-between-components/
+export const bus = new Vue();
 
 new Vue({
   router, //router : router

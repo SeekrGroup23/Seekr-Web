@@ -8,6 +8,7 @@ import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
 import GN_Profile from "./views/GramaNiladhari/Profile.vue";
 import GN_Patients from "./views/GramaNiladhari/Patients.vue";
 import User_Profile from "./views/User/Profile.vue";
+import Questionnaire from "./views/Questionnaire/Questionnaire_A.vue";
 
 Vue.use(Router);
 
@@ -51,6 +52,10 @@ export default new Router({
         {
           path: "user_profile",
           component: User_Profile
+        },
+        {
+          path: "questionnaire",
+          component: Questionnaire
         }
       ],
 

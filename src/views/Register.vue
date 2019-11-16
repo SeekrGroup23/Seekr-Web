@@ -1,89 +1,86 @@
 <template>
-  <v-container>
-    <toolbar></toolbar>
-    <v-layout justify-center>
-      <v-flex xs12 sm6 md4 row>
-        <v-card height="700" class="mt-2 mt-0">
-          <!-- Progress Bar -->
-          <v-progress-linear
-            :indeterminate="isPending"
-            v-show="isPending"
-          ></v-progress-linear>
+  <v-app>
+    <v-container>
+      <toolbar></toolbar>
+      <v-layout justify-center>
+        <v-flex xs12 sm6 md4 row>
+          <v-card height="700" class="mt-2 mt-0">
+            <!-- Progress Bar -->
+            <v-progress-linear
+              :indeterminate="isPending"
+              v-show="isPending"
+            ></v-progress-linear>
 
-          <v-card-title primary-title>
-            <h2>Register</h2>
-          </v-card-title>
+            <v-card-title primary-title>
+              <h2>Register</h2>
+            </v-card-title>
 
-          <v-card-text>
-            <v-tabs color="#F5F5F5" slider-color="" fixed-tabs>
-              <v-tab
-                v-for="n in 2"
-                :key="n"
-                ripple
-                @click="getActiveTabNumber(n)"
-              >
-                {{ regArray[n - 1] }}</v-tab
-              >
+            <v-card-text>
+              <v-tabs color="#F5F5F5" slider-color="" fixed-tabs>
+                <v-tab
+                  v-for="n in 2"
+                  :key="n"
+                  ripple
+                  @click="getActiveTabNumber(n)"
+                >
+                  {{ regArray[n - 1] }}</v-tab
+                >
 
-              <v-tab-item :key="1">
-                <v-layout class="reg-container" column>
-                  <v-text-field
-                    v-model="user.firstName"
-                    :error-messages="firstNameErrors"
-                    outline
-                    label="First Name"
-                    append-icon="account_circle"
-                    required
-                    @input="$v.user.firstName.$touch()"
-                    @blur="$v.user.firstName.$touch()"
-                  ></v-text-field>
+                <v-tab-item :key="1">
+                  <v-layout class="reg-container" column>
+                    <v-text-field
+                      v-model="user.firstName"
+                      :error-messages="firstNameErrors"
+                      label="First Name"
+                      append-icon="account_circle"
+                      required
+                      @input="$v.user.firstName.$touch()"
+                      @blur="$v.user.firstName.$touch()"
+                    ></v-text-field>
 
-                  <v-text-field
-                    v-model="user.lastName"
-                    :error-messages="lastNameErrors"
-                    outline
-                    label="Last Name"
-                    append-icon="account_circle"
-                    required
-                    @input="$v.user.lastName.$touch()"
-                    @blur="$v.user.lastName.$touch()"
-                  ></v-text-field>
+                    <v-text-field
+                      v-model="user.lastName"
+                      :error-messages="lastNameErrors"
+                      label="Last Name"
+                      append-icon="account_circle"
+                      required
+                      @input="$v.user.lastName.$touch()"
+                      @blur="$v.user.lastName.$touch()"
+                    ></v-text-field>
 
-                  <v-text-field
-                    v-model="user.email"
-                    :error-messages="emailErrors"
-                    outline
-                    label="Email"
-                    append-icon="email"
-                    required
-                    @input="
-                      $v.user.email.$touch();
-                      clearIsEmailAvailable();
-                    "
-                    @blur="
-                      $v.user.email.$touch();
-                      checkEmailAvailable();
-                    "
-                  ></v-text-field>
+                    <v-text-field
+                      v-model="user.email"
+                      :error-messages="emailErrors"
+                      label="Email"
+                      append-icon="email"
+                      required
+                      @input="
+                        $v.user.email.$touch();
+                        clearIsEmailAvailable();
+                      "
+                      @blur="
+                        $v.user.email.$touch();
+                        checkEmailAvailable();
+                      "
+                    ></v-text-field>
 
-                  <v-text-field
-                    v-model="user.password"
-                    :error-messages="passwordErrors"
-                    outline
-                    label="Password"
-                    required
-                    :append-icon="
-                      passwordShow ? 'visibility' : 'visibility_off'
-                    "
-                    :type="passwordShow ? 'text' : 'password'"
-                    hint="At least 8 characters"
-                    counter
-                    @click:append="passwordShow = !passwordShow"
-                    @input="$v.user.password.$touch()"
-                    @blur="$v.user.password.$touch()"
-                  ></v-text-field>
+                    <v-text-field
+                      v-model="user.password"
+                      :error-messages="passwordErrors"
+                      label="Password"
+                      required
+                      :append-icon="
+                        passwordShow ? 'visibility' : 'visibility_off'
+                      "
+                      :type="passwordShow ? 'text' : 'password'"
+                      hint="At least 8 characters"
+                      counter
+                      @click:append="passwordShow = !passwordShow"
+                      @input="$v.user.password.$touch()"
+                      @blur="$v.user.password.$touch()"
+                    ></v-text-field>
 
-                  <!-- <v-text-field
+                    <!-- <v-text-field
                     v-model="paswordConfirmation"
                     :error-messages="passwordConfirmationErrors"
                     outline
@@ -93,102 +90,102 @@
                     @input="$v.passwordConfirmation.$touch()"
                     @blur="$v.passwordConfirmation.$touch()"
                   ></v-text-field> -->
-                </v-layout>
-              </v-tab-item>
+                  </v-layout>
+                </v-tab-item>
 
-              <v-tab-item :key="2">
-                <v-layout column>
-                  <v-radio-group
-                    v-model="donor.category"
-                    :mandatory="false"
-                    row
-                  >
-                    <v-radio label="Individual" value="individual"></v-radio>
-                    <v-radio
-                      label="Organization"
-                      value="organization"
-                    ></v-radio>
-                  </v-radio-group>
+                <v-tab-item :key="2">
+                  <v-layout column>
+                    <v-radio-group
+                      v-model="donor.category"
+                      :mandatory="false"
+                      row
+                    >
+                      <v-radio label="Individual" value="individual"></v-radio>
+                      <v-radio
+                        label="Organization"
+                        value="organization"
+                      ></v-radio>
+                    </v-radio-group>
 
-                  <v-text-field
-                    v-model="donor.name"
-                    :error-messages="donorNameErrors"
-                    outline
-                    :label="
-                      donor.category == 'individual'
-                        ? 'First Name & Last Name'
-                        : 'Organizarion/Company Name'
-                    "
-                    :append-icon="
-                      donor.category == 'individual' ? 'account_circle' : 'home'
-                    "
-                    required
-                    @input="$v.donor.name.$touch()"
-                    @blur="$v.donor.name.$touch()"
-                  ></v-text-field>
+                    <v-text-field
+                      v-model="donor.name"
+                      :error-messages="donorNameErrors"
+                      :label="
+                        donor.category == 'individual'
+                          ? 'First Name & Last Name'
+                          : 'Organizarion/Company Name'
+                      "
+                      :append-icon="
+                        donor.category == 'individual'
+                          ? 'account_circle'
+                          : 'home'
+                      "
+                      required
+                      @input="$v.donor.name.$touch()"
+                      @blur="$v.donor.name.$touch()"
+                    ></v-text-field>
 
-                  <v-text-field
-                    v-model="donor.email"
-                    :error-messages="donorEmailErrors"
-                    outline
-                    :label="
-                      donor.category == 'individual'
-                        ? 'Email'
-                        : 'Organizarion/Company Email'
-                    "
-                    append-icon="email"
-                    required
-                    @input="
-                      $v.donor.email.$touch();
-                      clearIsEmailAvailable();
-                    "
-                    @blur="
-                      $v.donor.email.$touch();
-                      checkEmailAvailable();
-                    "
-                  ></v-text-field>
+                    <v-text-field
+                      v-model="donor.email"
+                      :error-messages="donorEmailErrors"
+                      :label="
+                        donor.category == 'individual'
+                          ? 'Email'
+                          : 'Organizarion/Company Email'
+                      "
+                      append-icon="email"
+                      required
+                      @input="
+                        $v.donor.email.$touch();
+                        clearIsEmailAvailable();
+                      "
+                      @blur="
+                        $v.donor.email.$touch();
+                        checkEmailAvailable();
+                      "
+                    ></v-text-field>
 
-                  <v-text-field
-                    v-model="donor.password"
-                    :error-messages="donorPasswordErrors"
-                    outline
-                    label="Password"
-                    required
-                    :append-icon="
-                      passwordShow ? 'visibility' : 'visibility_off'
-                    "
-                    :type="passwordShow ? 'text' : 'password'"
-                    hint="At least 8 characters"
-                    counter
-                    @click:append="passwordShow = !passwordShow"
-                    @input="$v.donor.password.$touch()"
-                    @blur="$v.donor.password.$touch()"
-                  ></v-text-field>
-                </v-layout>
-              </v-tab-item>
-            </v-tabs>
-          </v-card-text>
+                    <v-text-field
+                      v-model="donor.password"
+                      :error-messages="donorPasswordErrors"
+                      label="Password"
+                      required
+                      :append-icon="
+                        passwordShow ? 'visibility' : 'visibility_off'
+                      "
+                      :type="passwordShow ? 'text' : 'password'"
+                      hint="At least 8 characters"
+                      counter
+                      @click:append="passwordShow = !passwordShow"
+                      @input="$v.donor.password.$touch()"
+                      @blur="$v.donor.password.$touch()"
+                    ></v-text-field>
+                  </v-layout>
+                </v-tab-item>
+              </v-tabs>
+            </v-card-text>
 
-          <v-card-actions>
-            <v-flex class="mx-1 px-1">
-              <v-btn
-                v-on:click="register"
-                class="btn-login mb-2"
-                Large
-                color="primary"
-                >Register</v-btn
-              >
-              <p class="mx-1 mt-3">Already Have an Account?</p>
+            <v-card-actions>
+              <v-flex class="mx-1 px-1">
+                <v-btn
+                  v-on:click="register"
+                  class="btn-login mb-2"
+                  Large
+                  color="primary"
+                  >Register</v-btn
+                >
+                <p class="mx-1 mt-3">Already Have an Account?</p>
 
-              <v-btn v-on:click="toLoginPage" class="btn-login" Large
-                >Login</v-btn
-              >
-            </v-flex>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+                <v-btn v-on:click="toLoginPage" class="btn-login" Large
+                  >Login</v-btn
+                >
+              </v-flex>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
@@ -315,16 +312,16 @@ export default {
     },
     //Login Method -> Sends HTTP POST request to the server to verify the user
     register() {
-      console.log(this.active);
-      switch (this.active) {
+      console.log("Selected ->" + this.active);
+      switch (parseInt(this.active)) {
         case 1:
           this.registerUser();
           break;
         case 2:
           this.registerDonor();
           break;
-
         default:
+          console.log("Unknown Selection");
           break;
       }
     },
@@ -405,7 +402,8 @@ export default {
             firstName: this.user.firstName,
             lastName: this.user.lastName,
             email: this.user.email,
-            password: this.user.password
+            password: this.user.password,
+            isPatient: false
           })
           .then(function(response) {
             console.log(response);
@@ -432,9 +430,11 @@ export default {
           })
           .then(function(response) {
             console.log(response);
+            console.log("Success :)");
           })
           .catch(function(error) {
             console.log(error);
+            console.log("Failed :(");
           });
       }
     }
