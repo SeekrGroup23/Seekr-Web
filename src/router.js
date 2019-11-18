@@ -30,6 +30,14 @@ export default new Router({
       component: Login
     },
     {
+      path: "/questionnaire",
+      name: "questionnaire",
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: Questionnaire
+    },
+    {
       path: "/register",
       name: "register",
       component: Register

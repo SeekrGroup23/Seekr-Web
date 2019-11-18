@@ -6,6 +6,7 @@
         <v-layout row wrap>
           <v-flex class="pr-5">
             <v-text-field
+              v-model="firstName"
               color="primary"
               label="First Name"
               required
@@ -14,6 +15,7 @@
 
           <v-flex>
             <v-text-field
+              v-model="lastName"
               color="primary"
               label="Last Name"
               required
@@ -124,6 +126,11 @@
 </template>
 
 <script>
+//Form Validation - Vuelidate
+import { validationMixin } from "vuelidate";
+import { required, email, minLength } from "vuelidate/lib/validators";
+import { bus } from "../main";
+
 export default {
   data: () => {
     return {
@@ -131,11 +138,26 @@ export default {
       menu: false,
       menu2: false,
       radioGroup_MaritalStatus: "S",
-      radioGroup_Gender: "F"
+      radioGroup_Gender: "F",
+
+      // Data related to General Section
+      firstName: "",
+      lastName: "",
+      nameInFull: "",
+      dob: "",
+      gender: ""
     };
   },
   computed: {},
-  methods: {}
+  methods: {},
+  created() {
+    bus.$on("reg_ok", data => {
+      console.log("I'm Here");
+      this.firstName = data.firstName;
+      this.lastName = data.lastName;
+      this.loadingReg = false;
+    });
+  }
 };
 </script>
 

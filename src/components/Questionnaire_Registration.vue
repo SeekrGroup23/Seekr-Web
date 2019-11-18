@@ -24,6 +24,16 @@
             ></v-text-field>
           </v-flex>
         </v-layout>
+        <v-flex>
+          <v-text-field
+            v-model="nic"
+            :error-messages="nicErrors"
+            label="National Identity Card No."
+            required
+            @input="$v.nic.$touch()"
+            @blur="$v.nic.$touch()"
+          ></v-text-field>
+        </v-flex>
 
         <v-text-field
           v-model="email"
@@ -70,7 +80,8 @@ export default {
     firstName: { required, minLength: minLength(4) },
     lastName: { required, minLength: minLength(4) },
     email: { required, email },
-    password: { required, minLength: minLength(8) }
+    password: { required, minLength: minLength(8) },
+    nic: { required, minLength: minLength(8) }
   },
   data: () => {
     return {
@@ -78,7 +89,8 @@ export default {
       lastName: "",
       email: "",
       password: "",
-      passwordShow: false
+      passwordShow: false,
+      nic: ""
     };
   },
   created() {
@@ -127,6 +139,13 @@ export default {
         errors.push("Password must have at least 8 characters");
 
       return errors;
+    },
+    nicErrors() {
+      const errors = [];
+      if (!this.$v.nic.$dirty) return errors;
+      !this.$v.nic.required && errors.push("NIC is Required");
+      !this.$v.nic.minLength && errors.push("NIC must have 10 characters");
+      return errors;
     }
   },
   methods: {
@@ -173,16 +192,18 @@ export default {
 
         console.log("I'm Here**********************");
         this.$http
-          .post("/api/generaluser/registration", {
+          .post("/api/patient/register", {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
             password: this.password,
-            isPatient: true
+            isPatient: true,
+            nic: this.nic
           })
-          .then(function(response) {
+          .then(response => {
             console.log(response);
-            bus.$emit("reg_ok", "Testing");
+            let params = { firstName: this.firstName, lastName: this.lastName };
+            bus.$emit("reg_ok", params);
           })
           .catch(function(error) {
             console.log(error);
