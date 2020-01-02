@@ -1,6 +1,9 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
+import Deem from "./views/Deem.vue";
+import ADD_Grama from "./views/Admin/AddGrama.vue";
+import Admin from "./views/Admin/Admin.vue";
 
 Vue.use(Router);
 
@@ -21,6 +24,18 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () =>
         import(/* webpackChunkName: "about" */ "./views/About.vue")
+    },
+    {
+      path: "/deem",
+      component: Deem
+    },
+    {
+      path: "/admin/",
+      component: Admin
+    },
+    {
+      path: "/addgrama",
+      component: ADD_Grama
     }
   ]
 });
