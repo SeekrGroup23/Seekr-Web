@@ -115,23 +115,28 @@
               Sorry, nothing to display here :(
             </v-alert>
           </template>
+          <!-- Fields -->
           <template v-slot:items="props">
-            <td class="text-md-left">
+            <td class="text-xs-left" width="250">
               {{ props.item.firstName }} {{ props.item.lastName }}
             </td>
-            <td>
+            <td class="text-xs-left" width="250">
+              {{ props.item.email }}
+            </td>
+            <td class="text-xs-left" width="100">
               {{ props.item.dateCreated.split("T")[0] }}
             </td>
             <!-- <td class="text-md-right">{{ props.item.fat }}</td>
             <td class="text-md-right">{{ props.item.carbs }}</td>
             <td class="text-xs-right">{{ props.item.protein }}</td>
             <td class="text-xs-right">{{ props.item.iron }}</td> -->
-            <td class="justify-center layout px-0">
-              <v-icon small class="mr-2" @click="editItem(props.item)">
+            <td class="">
+              <!-- <v-icon class="mr-4 " @click="editItem(props.item)">
                 edit
-              </v-icon>
-              <v-icon small @click="deleteItem(props.item)">
-                delete
+              </v-icon> -->
+
+              <v-icon class="mr-4" @click="deleteItem(props.item)">
+                remove_red_eye
               </v-icon>
             </td>
           </template>
@@ -152,10 +157,12 @@ export default {
           text: "Name",
           align: "left",
           sortable: true,
-          value: "firstName"
+          value: "firstName",
+          width: "300"
         },
-        { text: "Email", value: "email" },
-        { text: "Date Joined", value: "dateJoined" }
+        { text: "Email", value: "email", width: "300" },
+        { text: "Date Joined", value: "dateJoined", width: "400" },
+        { text: "Actions", value: "", width: "250" }
       ],
       patients: [],
       items: [

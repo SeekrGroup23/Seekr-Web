@@ -17,14 +17,10 @@
               </v-flex>
               <v-flex grow>
                 <v-card flat class="px-1 mx-4">
-                  <textView
-                    text="Pasindu Dewapriya"
-                    type="title"
-                    class="mb-1"
-                  ></textView>
+                  <textView :text="name" type="title" class="mb-1"></textView>
 
                   <textView
-                    text="lapjanith@gmail.com"
+                    :text="other.email"
                     type="subheading"
                     class="mb-1"
                   ></textView>
@@ -46,7 +42,7 @@
                       </v-flex>
                       <v-flex shrink>
                         <textView
-                          text="Wethara - 453"
+                          :text="general.divSummary"
                           type="subheading"
                           class="mb-1 ml-2"
                         ></textView>
@@ -331,14 +327,13 @@
                         </v-flex>
 
                         <v-flex>
-                          <v-layout align-end justify-end column fill-height>
+                          <v-layout>
                             <v-flex>
                               <v-btn
                                 @click="switchEditableMode()"
-                                fab
                                 dark
-                                color="primary"
-                                ><v-icon>create</v-icon></v-btn
+                                color="secondary"
+                                >{{ editBtnText }}</v-btn
                               >
                               <v-card dark></v-card>
                             </v-flex>
@@ -370,7 +365,7 @@
                         <v-flex>
                           <v-card flat>
                             <v-text-field
-                              v-model="email"
+                              v-model="general.gid"
                               label="Grama Niladhari ID"
                             ></v-text-field>
                           </v-card>
@@ -379,7 +374,7 @@
                         <v-flex>
                           <v-card flat>
                             <v-text-field
-                              v-model="email"
+                              v-model="general.division"
                               label="Division"
                             ></v-text-field>
                           </v-card>
@@ -388,7 +383,7 @@
                         <v-flex>
                           <v-card flat>
                             <v-text-field
-                              v-model="email"
+                              v-model="general.divisionCode"
                               label="Division Code"
                             ></v-text-field>
                           </v-card>
@@ -397,7 +392,7 @@
                         <v-flex>
                           <v-card flat>
                             <v-text-field
-                              v-model="email"
+                              v-model="general.divSectrateriat"
                               label="Divisional Secrateriate"
                             ></v-text-field>
                           </v-card>
@@ -406,7 +401,7 @@
                         <v-flex>
                           <v-card flat>
                             <v-text-field
-                              v-model="email"
+                              v-model="general.dateJoined"
                               label="Date Joined"
                             ></v-text-field>
                           </v-card>
@@ -454,7 +449,7 @@
                                       <v-flex>
                                         <v-card flat>
                                           <v-text-field
-                                            v-model="email"
+                                            v-model="other.email"
                                             label="Email"
                                           ></v-text-field>
                                         </v-card>
@@ -576,9 +571,17 @@ export default {
         nic: "",
         address: "",
         gender: "M",
-        selectedImageFile: null
+        selectedImageFile: null,
+        name: ""
       },
-      general: {},
+      general: {
+        gid: "",
+        division: "",
+        divisionCode: "",
+        divSectrateriat: "",
+        dateJoined: "",
+        divSummary: ""
+      },
       other: {
         email: "",
         currentPassword: "",
@@ -592,7 +595,8 @@ export default {
       isImageFileSelected: false,
       isUploading: false,
       uploadProgress: 0,
-      imagePreview: "https://image.flaticon.com/icons/svg/149/149071.svg"
+      imagePreview: "https://image.flaticon.com/icons/svg/149/149071.svg",
+      editBtnText: "Edit"
     };
   },
   created() {
@@ -601,7 +605,8 @@ export default {
       .get("/api/gramaniladhari/get_profile", {
         params: {
           // id: this.$store.state.user.id
-          id: "W67Qr4BYUkgR2AUworGH"
+          // id: "W67Qr4BYUkgR2AUworGH"
+          docId: this.$store.state.user.email
         }
       })
       .then(response => {
@@ -615,6 +620,17 @@ export default {
         this.personal.nic = response.data.nic;
         this.personal.address = response.data.address;
         this.personal.gender = response.data.gender;
+        this.name = this.personal.firstName + " " + this.personal.lastName;
+
+        this.other.email = this.$store.state.user.email;
+
+        this.general.gid = "GN1004";
+        this.general.division = response.data.division;
+        this.general.divisionCode = response.data.divisionCode;
+        this.general.divSectrateriat = response.data.divSec;
+
+        this.general.divSummary =
+          this.general.division + " - " + this.general.divisionCode;
       })
       .catch(error => {
         console.log(error);
@@ -622,7 +638,40 @@ export default {
   },
   methods: {
     switchEditableMode() {
-      this.isEditable = true;
+      if (this.isEditable == false) {
+        this.editBtnText = "Save";
+      } else {
+        this.editBtnText = "Edit";
+        console.log("Saving");
+
+        this.$v.personal.$touch();
+        var test = true;
+        if (test == true) {
+          console.log("I'm Here**********************");
+          this.$http
+            .post("/api/gramaniladhari/personal/update", {
+              firstName: this.personal.firstName,
+              lastName: this.personal.lastName,
+              nameInFull: this.personal.nameInFull,
+              dob: this.personal.dob,
+              gender: this.personal.gender,
+              nic: this.personal.nic,
+              maritalStatus: this.personal.maritalStatus,
+              address: this.personal.address,
+              email: this.other.email
+            })
+            .then(response => {
+              console.log(response);
+              this.$store.state.questionnaire.firstName = this.firstName;
+              this.$store.state.questionnaire.lastName = this.lastName;
+              this.$store.state.questionnaire.nic = this.nic;
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        }
+      }
+      this.isEditable = !this.isEditable;
     },
     //DataPicker related Methods Begin from Here
     formatDate(date) {
@@ -764,7 +813,7 @@ export default {
       if (!this.$v.personal.nic.$dirty) {
         return errors;
       } else {
-        !this.$v.user.email.required && errors.push("NIC is required");
+        !this.$v.other.email.required && errors.push("NIC is required");
 
         return errors;
       }

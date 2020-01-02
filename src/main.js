@@ -13,9 +13,11 @@ Vue.prototype.$http = Axios.create({
 });
 
 // Adding Authorization Header to every request made to the server by Axios
-const token = store.state.userJWT;
-if (token != "") {
-  Vue.prototype.$http.defaults.headers.common["Authorization"] = token;
+// const token = store.state.userJWT;
+
+const access_token = localStorage.getItem("access_token");
+if (access_token) {
+  Vue.prototype.$http.defaults.headers.common["Authorization"] = access_token;
 }
 
 // For Event Bus -> https://blog.logrocket.com/using-event-bus-in-vue-js-to-pass-data-between-components/

@@ -203,6 +203,10 @@ export default {
           .then(response => {
             console.log(response);
             let params = { firstName: this.firstName, lastName: this.lastName };
+            this.$store.state.questionnaire.firstName = this.firstName;
+            this.$store.state.questionnaire.lastName = this.lastName;
+            this.$store.state.questionnaire.nic = this.nic;
+
             bus.$emit("reg_ok", params);
           })
           .catch(function(error) {

@@ -27,6 +27,7 @@
       <!-- Name in Ful -->
       <v-flex>
         <v-text-field
+          v-model="nameInFull"
           color="primary"
           label="Name in Full"
           required
@@ -54,6 +55,8 @@
             ></v-text-field>
           </template>
           <v-date-picker
+            min="1980-01-01"
+            picker-date="1990-01-01"
             v-model="date"
             @input="menu2 = false"
             no-title
@@ -92,9 +95,10 @@
           </v-flex>
           <v-flex grow>
             <v-radio-group
-              v-model="radioGroup_MaritalStatus"
+              v-model="maritalStatus"
               row
               class="pa-0 ma-0 pt-2"
+              @change="changeState()"
             >
               <v-radio label="Single" value="S"></v-radio>
               <v-radio label="Currently Married" value="CM"></v-radio>
@@ -113,6 +117,7 @@
       <!-- Age at Marriage -->
       <v-flex>
         <v-text-field
+          :disabled="ageAtMarriageState"
           color="primary"
           label="Age at Marriage"
           type="number"
@@ -128,10 +133,16 @@
 <script>
 //Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
-import { required, email, minLength } from "vuelidate/lib/validators";
+import { required, minLength } from "vuelidate/lib/validators";
 import { bus } from "../main";
 
 export default {
+  mixins: [validationMixin],
+  validations: {
+    firstName: { required, minLength: minLength(4) },
+    lastName: { required, minLength: minLength(4) },
+    nameInFull: { required, minLength: minLength(9) }
+  },
   data: () => {
     return {
       date: new Date().toISOString().substr(0, 10),
@@ -145,18 +156,135 @@ export default {
       lastName: "",
       nameInFull: "",
       dob: "",
-      gender: ""
+      gender: "",
+      maritalStatus: "",
+      ageAtMarriage: "",
+      ageAtMarriageState: false
     };
   },
-  computed: {},
-  methods: {},
+  computed: {
+    /**Form Validation and Error Handlin - begin */
+    firstNameErrors() {
+      console.log(this.$v.firstName.$dirty);
+      const errors = [];
+      if (!this.$v.firstName.$dirty) return errors;
+      !this.$v.firstName.minLength &&
+        errors.push("First Name must be at leat 4 charcters");
+      !this.$v.firstName.required && errors.push("First Name is required");
+
+      return errors;
+    },
+    lastNameErrors() {
+      const errors = [];
+      if (!this.$v.lastName.$dirty) return errors;
+      !this.$v.lastName.minLength &&
+        errors.push("Last Name must be at leat 4 charcters");
+      !this.$v.lastName.required && errors.push("Last Name is required");
+      return errors;
+    },
+    nameInFullErrors() {
+      const errors = [];
+      if (!this.$v.nameInFull.$dirty) return errors;
+      !this.$v.nameInFull.minLength &&
+        errors.push("Last Name must be at leat 4 charcters");
+      !this.$v.nameInFull.required && errors.push("Last Name is required");
+      return errors;
+    },
+    dobErrors() {
+      const errors = [];
+      if (!this.$v.dob.$dirty) return errors;
+      !this.$v.dob.minLength &&
+        errors.push("Last Name must be at leat 4 charcters");
+      !this.$v.dob.required && errors.push("Last Name is required");
+      return errors;
+    }
+  },
+  methods: {
+    changeState() {
+      console.log(":)" + this.maritalStatus);
+      if (this.maritalStatus == "S") {
+        this.ageAtMarriageState = true;
+      } else {
+        this.ageAtMarriageState = false;
+      }
+    },
+    //Form Validation
+    submit() {
+      this.$v.$touch();
+    },
+    //This Function is used for check whether the entered Email is already in the database
+    checkEmailAvailable() {
+      if (this.email != "") {
+        this.$http
+          .get("/api/checkEmailAvailable", {
+            params: {
+              email: this.email
+            }
+          })
+          .then(response => {
+            // console.log(response.data.matchFound);
+            if (response.data.matchFound == true) {
+              this.isEmailAvailable = false;
+            } else {
+              this.isEmailAvailable = true;
+            }
+
+            // this.login.$router.push("/");
+            // localStorage.setItem("token", response.token);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    },
+    // To clear the Error of unavailability of the Email
+    clearIsEmailAvailable() {
+      this.isEmailAvailable = true;
+    },
+    //Perform registration on User
+    addGeneralInformation() {
+      console.log("Gen Info Function :)");
+      //Form Validation
+      // this.$v.$touch();
+      var test = true;
+      if (test == true) {
+        bus.$emit("runLoading_genInfo", "");
+
+        console.log("I'm Here**********************");
+        this.$http
+          .post("/api/patient/general_info/add", {
+            nic: this.$store.state.questionnaire.nic,
+            nameInFull: this.nameInFull,
+            dob: this.dob,
+            gender: this.gender,
+            maritalStatus: this.maritalStatus,
+            ageAtMarriage: this.ageAtMarriage
+          })
+          .then(response => {
+            console.log(response);
+
+            // this.$store.state.questionnaire.firstName = this.firstName;
+            // this.$store.state.questionnaire.lastName = this.lastName;
+            bus.$emit("genInfo_ok");
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    }
+  },
   created() {
-    bus.$on("reg_ok", data => {
+    bus.$on("genInfoAndContClicked", () => {
       console.log("I'm Here");
-      this.firstName = data.firstName;
-      this.lastName = data.lastName;
-      this.loadingReg = false;
+      // this.firstName = data.firstName;
+      // this.lastName = data.lastName;
+      this.addGeneralInformation();
+
+      // this.loadingReg = false;
     });
+
+    this.firstName = this.$store.state.questionnaire.firstName;
+    this.lastName = this.$store.state.questionnaire.lastName;
   }
 };
 </script>

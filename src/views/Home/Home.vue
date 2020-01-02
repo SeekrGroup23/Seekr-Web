@@ -4,7 +4,10 @@
       <v-layout column>
         <v-flex shrink>
           <v-toolbar app dense>
-            <v-toolbar-side-icon></v-toolbar-side-icon>
+            <v-toolbar-side-icon
+              class="hidden-md-and-up"
+              @click.stop="drawer = !drawer"
+            ></v-toolbar-side-icon>
             <v-toolbar-title>Seekr</v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-items class="hidden-sm-and-down">
@@ -16,11 +19,107 @@
               <v-btn flat small>About</v-btn>
               <v-btn flat small>Contact</v-btn>
             </v-toolbar-items>
-            <v-btn color="primary" @click="$router.push('/login')" small
+            <v-btn
+              color="primary"
+              @click="$router.push('/login')"
+              small
+              class="hidden-md-and-down"
               >Register/Login</v-btn
             >
           </v-toolbar>
+
+          <!-- Navigation Drawer - Only Visible in Screens Less than Md -->
+          <v-navigation-drawer v-model="drawer" absolute temporary >
+            <v-list class="pa-1">
+              <v-list-tile avatar>
+                <v-list-tile-avatar>
+                  <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+                </v-list-tile-avatar>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>John Leider</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+
+            <v-list class="pt-0" dense>
+              <v-divider></v-divider>
+
+              <v-list-tile >
+                <v-list-tile-action>
+                  <v-icon>home</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Home</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile >
+                <v-list-tile-action>
+                  <v-icon>home</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Data Analytics</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-icon></v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Information Hub</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-icon></v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>About Seekr</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-icon></v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Contact Us</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile >
+                <v-list-tile-action>
+                  <v-icon>home</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Donations</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-divider></v-divider>
+
+              <v-list-tile @click="$router.push('/login')" >
+                <v-list-tile-action>
+                  <v-icon>home</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Login</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
+          </v-navigation-drawer>
         </v-flex>
+        
         <!-- Image Carousal -->
         <v-flex grow>
           <v-layout row fill-height>
@@ -311,16 +410,7 @@ export default {
     return {
       items: [
         {
-          src: "https://cdn.vuetifyjs.com/images/carousel/squirrel.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/sky.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/bird.jpg"
-        },
-        {
-          src: "https://cdn.vuetifyjs.com/images/carousel/planet.jpg"
+          src: require("../../assets/bg.png")
         }
       ],
       icons: [
@@ -329,8 +419,20 @@ export default {
         "fab fa-google-plus",
         "fab fa-linkedin",
         "fab fa-instagram"
-      ]
+      ],
+      drawer: false
     };
+  },
+  computed: {
+    drawerControl: function() {
+      if (this.$vuetify.breakpoint.mdA) {
+        console.log("mdAndUp");
+        return false;
+      } else {
+        console.log("lessThanMd");
+        return true;
+      }
+    }
   }
 };
 </script>

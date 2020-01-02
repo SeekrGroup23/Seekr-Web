@@ -16,153 +16,62 @@
             </v-card-title>
 
             <v-card-text>
-              <v-tabs color="#F5F5F5" slider-color="" fixed-tabs>
-                <v-tab
-                  v-for="n in 2"
-                  :key="n"
-                  ripple
-                  @click="getActiveTabNumber(n)"
-                >
-                  {{ regArray[n - 1] }}</v-tab
-                >
+              <v-layout column>
+                <v-radio-group v-model="donor.category" :mandatory="false" row>
+                  <v-radio label="Individual" value="individual"></v-radio>
+                  <v-radio label="Organization" value="organization"></v-radio>
+                </v-radio-group>
 
-                <v-tab-item :key="1">
-                  <v-layout class="reg-container" column>
-                    <v-text-field
-                      v-model="user.firstName"
-                      :error-messages="firstNameErrors"
-                      label="First Name"
-                      append-icon="account_circle"
-                      required
-                      @input="$v.user.firstName.$touch()"
-                      @blur="$v.user.firstName.$touch()"
-                    ></v-text-field>
+                <v-text-field
+                  v-model="donor.name"
+                  :error-messages="donorNameErrors"
+                  :label="
+                    donor.category == 'individual'
+                      ? 'First Name & Last Name'
+                      : 'Organizarion/Company Name'
+                  "
+                  :append-icon="
+                    donor.category == 'individual' ? 'account_circle' : 'home'
+                  "
+                  required
+                  @input="$v.donor.name.$touch()"
+                  @blur="$v.donor.name.$touch()"
+                ></v-text-field>
 
-                    <v-text-field
-                      v-model="user.lastName"
-                      :error-messages="lastNameErrors"
-                      label="Last Name"
-                      append-icon="account_circle"
-                      required
-                      @input="$v.user.lastName.$touch()"
-                      @blur="$v.user.lastName.$touch()"
-                    ></v-text-field>
+                <v-text-field
+                  v-model="donor.email"
+                  :error-messages="donorEmailErrors"
+                  :label="
+                    donor.category == 'individual'
+                      ? 'Email'
+                      : 'Organizarion/Company Email'
+                  "
+                  append-icon="email"
+                  required
+                  @input="
+                    $v.donor.email.$touch();
+                    clearIsEmailAvailable();
+                  "
+                  @blur="
+                    $v.donor.email.$touch();
+                    checkEmailAvailable();
+                  "
+                ></v-text-field>
 
-                    <v-text-field
-                      v-model="user.email"
-                      :error-messages="emailErrors"
-                      label="Email"
-                      append-icon="email"
-                      required
-                      @input="
-                        $v.user.email.$touch();
-                        clearIsEmailAvailable();
-                      "
-                      @blur="
-                        $v.user.email.$touch();
-                        checkEmailAvailable();
-                      "
-                    ></v-text-field>
-
-                    <v-text-field
-                      v-model="user.password"
-                      :error-messages="passwordErrors"
-                      label="Password"
-                      required
-                      :append-icon="
-                        passwordShow ? 'visibility' : 'visibility_off'
-                      "
-                      :type="passwordShow ? 'text' : 'password'"
-                      hint="At least 8 characters"
-                      counter
-                      @click:append="passwordShow = !passwordShow"
-                      @input="$v.user.password.$touch()"
-                      @blur="$v.user.password.$touch()"
-                    ></v-text-field>
-
-                    <!-- <v-text-field
-                    v-model="paswordConfirmation"
-                    :error-messages="passwordConfirmationErrors"
-                    outline
-                    label="Password Confirmation"
-                    append-icon="lock"
-                    required
-                    @input="$v.passwordConfirmation.$touch()"
-                    @blur="$v.passwordConfirmation.$touch()"
-                  ></v-text-field> -->
-                  </v-layout>
-                </v-tab-item>
-
-                <v-tab-item :key="2">
-                  <v-layout column>
-                    <v-radio-group
-                      v-model="donor.category"
-                      :mandatory="false"
-                      row
-                    >
-                      <v-radio label="Individual" value="individual"></v-radio>
-                      <v-radio
-                        label="Organization"
-                        value="organization"
-                      ></v-radio>
-                    </v-radio-group>
-
-                    <v-text-field
-                      v-model="donor.name"
-                      :error-messages="donorNameErrors"
-                      :label="
-                        donor.category == 'individual'
-                          ? 'First Name & Last Name'
-                          : 'Organizarion/Company Name'
-                      "
-                      :append-icon="
-                        donor.category == 'individual'
-                          ? 'account_circle'
-                          : 'home'
-                      "
-                      required
-                      @input="$v.donor.name.$touch()"
-                      @blur="$v.donor.name.$touch()"
-                    ></v-text-field>
-
-                    <v-text-field
-                      v-model="donor.email"
-                      :error-messages="donorEmailErrors"
-                      :label="
-                        donor.category == 'individual'
-                          ? 'Email'
-                          : 'Organizarion/Company Email'
-                      "
-                      append-icon="email"
-                      required
-                      @input="
-                        $v.donor.email.$touch();
-                        clearIsEmailAvailable();
-                      "
-                      @blur="
-                        $v.donor.email.$touch();
-                        checkEmailAvailable();
-                      "
-                    ></v-text-field>
-
-                    <v-text-field
-                      v-model="donor.password"
-                      :error-messages="donorPasswordErrors"
-                      label="Password"
-                      required
-                      :append-icon="
-                        passwordShow ? 'visibility' : 'visibility_off'
-                      "
-                      :type="passwordShow ? 'text' : 'password'"
-                      hint="At least 8 characters"
-                      counter
-                      @click:append="passwordShow = !passwordShow"
-                      @input="$v.donor.password.$touch()"
-                      @blur="$v.donor.password.$touch()"
-                    ></v-text-field>
-                  </v-layout>
-                </v-tab-item>
-              </v-tabs>
+                <v-text-field
+                  v-model="donor.password"
+                  :error-messages="donorPasswordErrors"
+                  label="Password"
+                  required
+                  :append-icon="passwordShow ? 'visibility' : 'visibility_off'"
+                  :type="passwordShow ? 'text' : 'password'"
+                  hint="At least 8 characters"
+                  counter
+                  @click:append="passwordShow = !passwordShow"
+                  @input="$v.donor.password.$touch()"
+                  @blur="$v.donor.password.$touch()"
+                ></v-text-field>
+              </v-layout>
             </v-card-text>
 
             <v-card-actions>
@@ -217,7 +126,7 @@ export default {
     return {
       regArray: ["User", "Donor"],
 
-      active: 1,
+      active: 2,
       passwordShow: false,
 
       donor: {
@@ -335,7 +244,7 @@ export default {
       if (this.active == 1) {
         if (this.user.email != "") {
           this.$http
-            .get("/api/checkEmailAvailable", {
+            .get("/api/user/checkEmailAvailable", {
               params: {
                 email: this.user.email
               }
@@ -358,7 +267,7 @@ export default {
       } else if (this.active == 2) {
         if (this.donor.email != "") {
           this.$http
-            .get("/api/checkEmailAvailable", {
+            .get("/api/user/checkEmailAvailable", {
               params: {
                 email: this.donor.email
               }
@@ -405,12 +314,15 @@ export default {
             password: this.user.password,
             isPatient: false
           })
-          .then(function(response) {
+          .then(response => {
             console.log(response);
+            this.$router.push("/login");
           })
           .catch(function(error) {
             console.log(error);
           });
+      } else {
+        console.log("Validation Failed");
       }
     },
     //Perform registration on User
@@ -422,15 +334,16 @@ export default {
       if (!this.$v.donor.$invalid) {
         console.log("I'm Here**********************");
         this.$http
-          .post("/api/donor/registration", {
+          .post("/api/donor/create", {
             name: this.donor.name,
             category: this.donor.category,
             email: this.donor.email,
             password: this.donor.password
           })
-          .then(function(response) {
+          .then(response => {
             console.log(response);
             console.log("Success :)");
+            this.$router.push("/login");
           })
           .catch(function(error) {
             console.log(error);

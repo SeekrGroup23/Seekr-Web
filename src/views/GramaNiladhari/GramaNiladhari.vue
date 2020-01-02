@@ -144,7 +144,7 @@
           </v-list-tile-content>
         </v-list-tile>
 
-        <v-list-tile router-link to="gramaniladhari/profile">
+        <v-list-tile router-link to="/gramaniladhari/profile">
           <v-list-tile-action>
             <v-icon>account_circle</v-icon>
           </v-list-tile-action>
@@ -232,6 +232,7 @@ export default {
       // gn_profile: "/gramaniladhari/" + this.$store.state.user.id + "/profile"
     };
   },
+  beforeCreate() {},
   methods: {
     navigateToProfile() {
       this.$router.push(

@@ -5,16 +5,30 @@
         <!-- Row - 1 -->
         <v-layout row wrap>
           <v-flex md3 class="px-3">
-            <dashCard01 title="Testing..." icon="email" value="10"></dashCard01>
+            <dashCard01
+              title="Total Users."
+              icon="supervisor_account
+"
+              value="5"
+            ></dashCard01>
           </v-flex>
           <v-flex md3 class="px-3">
-            <dashCard01 title="Testing..." icon="email" value="10"></dashCard01>
+            <dashCard01
+              title="CKDu Patients..."
+              icon="person_pin
+"
+              value="5"
+            ></dashCard01>
           </v-flex>
           <v-flex md3 class="px-3">
-            <dashCard01 title="Testing..." icon="email" value="10"></dashCard01>
+            <dashCard01 title="Messages" icon="message" value="2"></dashCard01>
           </v-flex>
           <v-flex md3 class="px-3">
-            <dashCard01 title="Testing..." icon="email" value="10"></dashCard01>
+            <dashCard01
+              title="Notification"
+              icon="notification_important"
+              value="10"
+            ></dashCard01>
           </v-flex>
         </v-layout>
 
@@ -100,10 +114,10 @@ export default {
         "Feb",
         "Mar",
         "Apr",
-        "12pm",
-        "3pm",
-        "6pm",
-        "9pm",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
         "Sept",
         "Oct",
         "Nov",

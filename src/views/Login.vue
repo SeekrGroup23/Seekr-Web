@@ -5,7 +5,7 @@
         <toolbar></toolbar>
         <v-layout justify-center>
           <v-flex xs12 sm6 md4 row>
-            <v-card :height="alert ? '550' : '500'" class="mt-4 mt-0">
+            <v-card :height="alert ? '550' : '400'" class="mt-4 mt-0">
               <v-progress-linear
                 v-show="isPending"
                 :indeterminate="isPending"
@@ -57,20 +57,27 @@
                 >
               </v-card-text>
               <v-card-actions>
-                <v-flex class="mx-1 px-1">
-                  <v-btn
-                    v-on:click="login"
-                    class="btn-login mb-2"
-                    Large
-                    color="primary"
-                    >Login</v-btn
-                  >
-                  <p class="mx-1 mt-3">Don't Have an Account?</p>
-
-                  <v-btn v-on:click="toRegisterPage" class="btn-login" Large
-                    >Register</v-btn
-                  >
-                </v-flex>
+                <v-container fluid class="pa-0 ma-0">
+                  <v-layout row class="justify-end mx-2">
+                    <v-btn class="mb-2" small color="">Cancel</v-btn>
+                    <v-btn v-on:click="login" class="mb-2" small color="primary"
+                      >Login</v-btn
+                    >
+                  </v-layout>
+                  <v-divider class="my-3 mx-2"></v-divider>
+                  <v-layout row class="px-2">
+                    <v-layout row>
+                      <v-flex grow>
+                        <h5 class="subheading pt-1">Interested in Helping??</h5>
+                      </v-flex>
+                      <v-flex shrink>
+                        <v-btn v-on:click="toRegisterPage" class="" small
+                          >Register</v-btn
+                        >
+                      </v-flex>
+                    </v-layout>
+                  </v-layout>
+                </v-container>
               </v-card-actions>
             </v-card>
           </v-flex>
@@ -85,7 +92,7 @@
 import { validationMixin } from "vuelidate";
 import { required, email } from "vuelidate/lib/validators";
 import toolbar from "../components/toolbar";
-import jwtDecode from "jwt-decode";
+// import jwtDecode from "jwt-decode";
 
 export default {
   mixins: [validationMixin],
@@ -135,67 +142,87 @@ export default {
       if (this.$v.$invalid) {
         console.log("Error..");
       } else {
-        console.log("Testing....");
         this.isPending = true;
 
-        //Sending the HTTP request - POST to verify user credentials
-        this.$http
-          .post("/api/login", {
-            email: this.email,
-            password: this.password
-          })
-          .then(response => {
-            // Debugging
-            console.log(response);
-            localStorage.setItem("token", response.token);
+        this.$store
+          .dispatch("login", { email: this.email, password: this.password })
+          .then(() => {
+            switch (this.$store.state.user.role) {
+              case "admin":
+                break;
 
-            // Debugging
-            console.log(response.data.token);
+              case "gramaNiladhari":
+                console.log("Router GN");
+                this.$router.push("/gramaniladhari/");
+                break;
+              case "user":
+                break;
 
-            if (response.data.token == "invalid") {
-              this.alert = true;
-            } else {
-              this.alert = false;
-            }
-            // Stop the Linear Progress Indicator
-            this.isPending = false;
-
-            if (response.data.token == "invalid") {
-              alert("Invalid User");
-            } else {
-              //All the user roles should be identified and navigated to corresponding pages
-
-              //  Store the received JWT in the state variavle of Vuex Store "userJWT"
-              this.$store.state.userJWT = response.data.token;
-              // Decoding the Payload fro the userJWT
-              const jwtPayload = jwtDecode(this.$store.state.userJWT);
-              console.log(jwtPayload.user.id);
-              this.$store.state.user.id = jwtPayload.user.id;
-              this.$store.state.user.firstName = jwtPayload.user.firstName;
-              this.$store.state.user.lastName = jwtPayload.user.lastName;
-              this.$store.state.user.email = jwtPayload.user.email;
-              // this.$store.state.user.imageURL = jwtPayload.user.imageURL;
-              this.$store.state.user.role = jwtPayload.user.role;
-
-              switch (this.$store.state.user.role) {
-                case "admin":
-                  break;
-
-                case "gramaNiladhari":
-                  console.log("Router GN");
-                  this.$router.push("/gramaniladhari/");
-                  break;
-                case "user":
-                  break;
-
-                default:
-                  break;
-              }
+              default:
+                break;
             }
           })
-          .catch(function(error) {
-            console.log(error);
-          });
+          .catch(err => console.log(err));
+        /*------------------------------------------------------------------------------------- */
+        // //Sending the HTTP request - POST to verify user credentials
+        // this.$http
+        //   .post("/api/user/login", {
+        //     email: this.email,
+        //     password: this.password
+        //   })
+        //   .then(response => {
+        //     // Debugging
+        //     console.log(response);
+        //     localStorage.setItem("token", response.token);
+
+        //     // Debugging
+        //     console.log(response.data.token);
+
+        //     if (response.data.token == "invalid") {
+        //       this.alert = true;
+        //     } else {
+        //       this.alert = false;
+        //     }
+        //     // Stop the Linear Progress Indicator
+        //     this.isPending = false;
+
+        //     if (response.data.token == "invalid") {
+        //       alert("Invalid User");
+        //     } else {
+        //       //All the user roles should be identified and navigated to corresponding pages
+
+        //       //  Store the received JWT in the state variavle of Vuex Store "userJWT"
+        //       this.$store.state.userJWT = response.data.token;
+        //       console.log("JWT Saved" + this.$store.state.userJWT);
+        //       // Decoding the Payload fro the userJWT
+        //       const jwtPayload = jwtDecode(this.$store.state.userJWT);
+        //       console.log(jwtPayload.user.id);
+        //       this.$store.state.user.id = jwtPayload.user.id;
+        //       this.$store.state.user.firstName = jwtPayload.user.firstName;
+        //       this.$store.state.user.lastName = jwtPayload.user.lastName;
+        //       this.$store.state.user.email = jwtPayload.user.email;
+        //       // this.$store.state.user.imageURL = jwtPayload.user.imageURL;
+        //       this.$store.state.user.role = jwtPayload.user.role;
+
+        //       switch (this.$store.state.user.role) {
+        //         case "admin":
+        //           break;
+
+        //         case "gramaNiladhari":
+        //           console.log("Router GN");
+        //           this.$router.push("/gramaniladhari/");
+        //           break;
+        //         case "user":
+        //           break;
+
+        //         default:
+        //           break;
+        //       }
+        //     }
+        //   })
+        //   .catch(function(error) {
+        //     console.log(error);
+        //   });
 
         // this.isPending = false;
       }
