@@ -3,7 +3,9 @@ import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Deem from "./views/Deem.vue";
 import ADD_Grama from "./views/Admin/AddGrama.vue";
+import Edt_Grama from "./views/Admin/EditGrama.vue";
 import Admin from "./views/Admin/Admin.vue";
+import Admin_Dash from "./views/Admin/AdminDashboard.vue";
 
 Vue.use(Router);
 
@@ -36,6 +38,14 @@ export default new Router({
     {
       path: "/addgrama",
       component: ADD_Grama
+    },
+    {
+      path: "/editgrama",
+      component: Edt_Grama
+    },
+    {
+      path: "/admindash",
+      component: Admin_Dash
     }
   ]
 });

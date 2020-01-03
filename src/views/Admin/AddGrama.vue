@@ -214,7 +214,7 @@
     data () {
       return {
         e1: 0,
-        gramaCount:'',
+        gramaCount:0,
         grama: {
           fName: '',
           lName: '',
@@ -322,13 +322,15 @@
           !this.$v.grama.nicNum.required && errors.push("NIC is required");
           return errors;
         }
-      }
+      },
+      
     },
 
     mounted(){
       this.$http.get('/admin/gramacount').then(response => {
-        console.log(response.data.count);
-        this.gramaCount = response.data.count;
+        //console.log(response.data);
+        this.gramaCount = response.data;
+        console.log(response.data);
       })
     },
     methods: {
@@ -378,7 +380,8 @@
         return 1
       }
 
-    }
+    },
+    
   }
 </script>
 
