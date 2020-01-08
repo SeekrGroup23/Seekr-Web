@@ -26,6 +26,7 @@
             <v-card color="secondary" class="mb-5" dark>
               <v-container fluid wrap>
                 <v-layout column>
+                  
                   <v-flex>
                     <v-layout row wrap class="py-0 my-0">
                       <v-flex class="">
@@ -201,36 +202,32 @@
 
           <v-stepper-content step="3">
             <v-card color="secondary" class="mb-5" dark>
-                <v-container fluid>
-                    <v-layout column>
-                        <v-flex>
-                            <v-text-field
-                          v-model="lastName"
-                          color="primary"
-                          label="Permanent Address"
-                          required
-                        ></v-text-field>
-                        </v-flex>
+              <v-container fluid>
+                <v-layout column>
+                  <v-flex>
+                    <v-text-field
+                      v-model="lastName"
+                      color="primary"
+                      label="Permanent Address"
+                      required
+                    ></v-text-field>
+                  </v-flex>
 
-                        <v-flex>
-                            <v-text-field
-                          v-model="lastName"
-                          color="primary"
-                          label="Temporary Address"
-                          required
-                        ></v-text-field>
-                        </v-flex>
+                  <v-flex>
+                    <v-text-field
+                      v-model="lastName"
+                      color="primary"
+                      label="Temporary Address"
+                      required
+                    ></v-text-field>
+                  </v-flex>
 
-                        <v-flex>
-                             <v-select
-                                :items="gnDivs"
-                                label="Grama Niladhari Division"
-                                >
-                            </v-select>
-                        </v-flex>
-
-                    </v-layout>
-                </v-container>
+                  <v-flex>
+                    <v-select :items="gnDivs" label="Grama Niladhari Division">
+                    </v-select>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-card>
             <v-btn color="primary" @click="e6 = 4">Continue</v-btn>
             <v-btn flat>Cancel</v-btn>
@@ -242,18 +239,18 @@
           </v-stepper-step>
           <v-stepper-content step="4">
             <v-card color="secondary" class="mb-5" dark>
-                <v-container fluid>
-                    <v-layout column>
-                        <v-flex>
-                            <v-textarea
-                            name="input-7-1"
-                            label="Notes"
-                            value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
-                            hint="Notes Regarding Patient"
-                            ></v-textarea>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
+              <v-container fluid>
+                <v-layout column>
+                  <v-flex>
+                    <v-textarea
+                      name="input-7-1"
+                      label="Notes"
+                      value="The Woodman set to work at once, and so sharp was his axe that the tree was soon chopped nearly through."
+                      hint="Notes Regarding Patient"
+                    ></v-textarea>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-card>
             <v-btn color="primary" @click="e6 = 5">Continue</v-btn>
             <v-btn flat>Cancel</v-btn>
@@ -265,27 +262,26 @@
           </v-stepper-step>
           <v-stepper-content step="5">
             <v-card color="secondary" class="mb-5" dark>
-                <v-container fluid>
-                    <v-layout column>
-                        <v-flex>
-                            <v-text-field
-                          v-model="lastName"
-                          color="primary"
-                          label="Telephone No *"
-                          required
-                        ></v-text-field>
-                        </v-flex>
+              <v-container fluid>
+                <v-layout column>
+                  <v-flex>
+                    <v-text-field
+                      v-model="lastName"
+                      color="primary"
+                      label="Telephone No *"
+                      required
+                    ></v-text-field>
+                  </v-flex>
 
-                        <v-flex>
-                            <v-text-field
-                          v-model="lastName"
-                          color="primary"
-                          label="Email"
-                          
-                        ></v-text-field>
-                        </v-flex>
-                    </v-layout>
-                </v-container>
+                  <v-flex>
+                    <v-text-field
+                      v-model="lastName"
+                      color="primary"
+                      label="Email"
+                    ></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-container>
             </v-card>
             <v-btn color="primary">Continue</v-btn>
             <v-btn flat>Cancel</v-btn>

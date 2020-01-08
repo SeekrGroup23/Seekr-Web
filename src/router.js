@@ -17,6 +17,21 @@ import MO_ViewAllPatients from "./views/MedicalOfficer/ViewAllPatients.vue";
 import MO_Profile from "./views/MedicalOfficer/Profile.vue";
 import Admin from "./views/Admin/Admin.vue";
 import Admin_Dashboard from "./views/Admin/Dashboard.vue";
+import Admin_Patients_ViewAll from "./views/Admin/Patients/ViewAll.vue";
+import Admin_Patients_AddNew from "./views/Admin/Patients/AddNew.vue";
+import Admin_MO_AddNew from "./views/Admin/MedicalOfficers/AddNew.vue";
+import Admin_MO_ViewAll from "./views/Admin/MedicalOfficers/ViewAll.vue";
+import Admin_Hospital_ViewAll from "./views/Admin/Hospitals/ViewAll.vue";
+import Admin_Hospital_AddNew from "./views/Admin/Hospitals/AddNew.vue";
+import Admin_Hospital_ViewMap from "./views/Admin/Hospitals/ViewMap.vue";
+import Admin_GN_AddNew from "./views/Admin/GramaNiladhari/AddNew.vue";
+import Admin_GN_ViewAll from "./views/Admin/GramaNiladhari/ViewAll.vue";
+import Admin_Donor_ViewAll from "./views/Admin/Donors/ViewAll.vue";
+import Admin_Donor_AddNew from "./views/Admin/Donors/AddNew.vue";
+import Admin_DataEntry_View from "./views/Admin/DataEntry/ViewAll.vue";
+import Admin_DataEntry_AddNew from "./views/Admin/DataEntry/AddNew.vue";
+import Admin_Admins_AddNew from "./views/Admin/DataEntry/AddNew.vue";
+import Admin_Admins_View from "./views/Admin/DataEntry/ViewAll.vue";
 
 Vue.use(Router);
 
@@ -139,6 +154,66 @@ let router = new Router({
         {
           path: "profile",
           component: MO_Profile
+        },
+        {
+          path: "patients/view",
+          component: Admin_Patients_ViewAll
+        },
+        {
+          path: "patients/add",
+          component: Admin_Patients_AddNew
+        },
+        {
+          path: "medical_officer/view",
+          component: Admin_MO_ViewAll
+        },
+        {
+          path: "medical_officer/add",
+          component: Admin_MO_AddNew
+        },
+        {
+          path: "hospitals/add",
+          component: Admin_Hospital_AddNew
+        },
+        {
+          path: "hospitals/view",
+          component: Admin_Hospital_ViewAll
+        },
+        {
+          path: "hospitals/view_map",
+          component: Admin_Hospital_ViewMap
+        },
+        {
+          path: "grama_niladhari/view",
+          component: Admin_GN_ViewAll
+        },
+        {
+          path: "grama_niladhari/add",
+          component: Admin_GN_AddNew
+        },
+        {
+          path: "donors/view",
+          component: Admin_Donor_ViewAll
+        },
+        {
+          path: "donors/add",
+          component: Admin_Donor_AddNew
+        },
+        {
+          path: "data_entry/view",
+          component: Admin_DataEntry_View
+        },
+        {
+          path: "data_entry/add",
+          component: Admin_DataEntry_AddNew
+        },
+        {
+          path: "admins/view",
+          component: Admin_Admins_View
+        },
+        {
+          path: "admins/add",
+          component: Admin_Admins_AddNew
         }
       ]
     }

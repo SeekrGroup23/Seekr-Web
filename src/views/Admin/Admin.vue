@@ -58,13 +58,23 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile @click="$router.push('/admin/patients/view')">
               <v-list-tile-content>
                 <v-list-tile-title>View All</v-list-tile-title>
               </v-list-tile-content>
 
               <v-list-tile-action>
                 <v-icon>group</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+
+            <v-list-tile @click="$router.push('/admin/patients/add')">
+              <v-list-tile-content>
+                <v-list-tile-title>Add New</v-list-tile-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action>
+                <v-icon>person_add</v-icon>
               </v-list-tile-action>
             </v-list-tile>
           </v-list-group>
@@ -83,7 +93,7 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile @click="$router.push('/medicalofficer/add_patient')">
+            <v-list-tile @click="$router.push('/admin/medical_officer/add')">
               <v-list-tile-content>
                 <v-list-tile-title>Add New</v-list-tile-title>
               </v-list-tile-content>
@@ -93,7 +103,7 @@
               </v-list-tile-action>
             </v-list-tile>
 
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile @click="$router.push('/admin/medical_officer/view')">
               <v-list-tile-content>
                 <v-list-tile-title>View All</v-list-tile-title>
               </v-list-tile-content>
@@ -121,7 +131,7 @@
 
             <v-divider></v-divider>
 
-            <v-list-tile @click="$router.push('/medicalofficer/add_patient')">
+            <v-list-tile @click="$router.push('/admin/hospitals/add')">
               <v-list-tile-content>
                 <v-list-tile-title>Add Hospital</v-list-tile-title>
               </v-list-tile-content>
@@ -131,7 +141,7 @@
               </v-list-tile-action>
             </v-list-tile>
 
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile @click="$router.push('/admin/hospitals/view')">
               <v-list-tile-content>
                 <v-list-tile-title>View All</v-list-tile-title>
               </v-list-tile-content>
@@ -141,7 +151,7 @@
               </v-list-tile-action>
             </v-list-tile>
 
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile @click="$router.push('/admin/hospitals/view_map')">
               <v-list-tile-content>
                 <v-list-tile-title>View in Map</v-list-tile-title>
               </v-list-tile-content>
@@ -167,7 +177,7 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile @click="$router.push('/medicalofficer/add_patient')">
+            <v-list-tile @click="$router.push('/admin/grama_niladhari/add')">
               <v-list-tile-content>
                 <v-list-tile-title>Add New</v-list-tile-title>
               </v-list-tile-content>
@@ -177,7 +187,7 @@
               </v-list-tile-action>
             </v-list-tile>
 
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile @click="$router.push('/admin/grama_niladhari/view')">
               <v-list-tile-content>
                 <v-list-tile-title>View All</v-list-tile-title>
               </v-list-tile-content>
@@ -203,7 +213,7 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile @click="$router.push('/medicalofficer/add_patient')">
+            <v-list-tile @click="$router.push('/admin/donors/add')">
               <v-list-tile-content>
                 <v-list-tile-title>Add New</v-list-tile-title>
               </v-list-tile-content>
@@ -213,7 +223,7 @@
               </v-list-tile-action>
             </v-list-tile>
 
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile @click="$router.push('/admin/donors/view')">
               <v-list-tile-content>
                 <v-list-tile-title>View All</v-list-tile-title>
               </v-list-tile-content>
@@ -239,7 +249,7 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile @click="$router.push('/medicalofficer/add_patient')">
+            <v-list-tile @click="$router.push('/admin/data_entry/add')">
               <v-list-tile-content>
                 <v-list-tile-title>Add New</v-list-tile-title>
               </v-list-tile-content>
@@ -249,7 +259,7 @@
               </v-list-tile-action>
             </v-list-tile>
 
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile @click="$router.push('/admin/data_entry/view')">
               <v-list-tile-content>
                 <v-list-tile-title>View All</v-list-tile-title>
               </v-list-tile-content>
@@ -267,7 +277,7 @@
             <template v-slot:activator>
               <v-list-tile>
                 <v-list-tile-action>
-                  <v-icon>people</v-icon>
+                  <v-icon>sentiment_satisfied_alt</v-icon>
                 </v-list-tile-action>
                 <v-list-tile-content>
                   <v-list-tile-title>Donation Platform</v-list-tile-title>
