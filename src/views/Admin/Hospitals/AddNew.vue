@@ -15,7 +15,7 @@
       wrap
     >
       <v-flex>
-        <v-card>
+        <v-card color="secondary" dark>
           <v-container fluid>
             <v-layout row wrap>
               <v-flex md6 sm12 xs12>
