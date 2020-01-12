@@ -62,14 +62,14 @@
               </td>
               <td class="text-xs-left">{{ props.item.specialty }}</td>
               <td class="text-xs-center">
-                <v-btn icon>
-                  <v-icon small class="mr-2" @click="editItem(props.item)">
-                    edit
+                <v-btn icon flat color="secondary" dark>
+                  <v-icon class="" @click="viewPatient(props.item)">
+                    visibility
                   </v-icon>
                 </v-btn>
 
                 <v-btn icon>
-                  <v-icon small @click="deleteItem(props.item)">
+                  <v-icon @click="deletePatient(props.item.docID)" color="red">
                     delete
                   </v-icon>
                 </v-btn>
@@ -97,6 +97,35 @@
         <v-icon dark>add</v-icon>
       </v-btn>
     </v-layout>
+    <v-layout row justify-center>
+      <v-dialog v-model="dialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Delete Confirmation</v-card-title>
+          <v-card-text
+            >Are you sure that you want to proceed with this
+            action?</v-card-text
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="onClickCancel()"
+              >cancel</v-btn
+            >
+            <v-btn color="red darken-1" flat @click="onClickDelete()" dark small
+              >Delete</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-snackbar
+        v-model="snackbar"
+        :color="snackbarColor"
+        :timeout="snackbarTimeout"
+        right
+        top
+      >
+        {{ snackbarText }}
+      </v-snackbar>
+    </v-layout>
   </v-container>
 </template>
 
@@ -105,6 +134,12 @@ export default {
   data: () => {
     return {
       search: "",
+      dialog: false,
+      deletePointer: null,
+      snackbar: false,
+      snackbarColor: "secondary",
+      snackbarText: "",
+      snackbarTimeout: 2000,
       headers: [
         {
           text: "Registration No.",
@@ -138,33 +173,60 @@ export default {
         },
         { text: "Actions", align: "center", value: "action", sortable: false }
       ],
-      desserts: [
-        {
-          regNo: "45464654",
-
-          firstName: "Frozensdfsdfsdf",
-          lastName: "sdfsdfsddsfsdfsd",
-          hospital: "Male",
-          specialty: 6.0,
-          actions: " "
-        }
-      ],
       medicalOfficers: []
     };
   },
   computed: {},
-  methods: {},
-  created() {
-    this.$http
-      .get("/api/medical_officer/all")
-      .then(res => {
-        console.log(res);
+  methods: {
+    deletePatient(docID) {
+      this.deletePointer = docID;
+      this.dialog = true;
+    },
+    onClickDelete() {
+      this.dialog = false;
+      this.$http
+        .delete("/api/medical_officer/" + this.deletePointer)
+        .then(res => {
+          console.log(res.data);
 
-        this.medicalOfficers = res.data;
-      })
-      .catch(err => {
-        console.log(err);
-      });
+          if (res.data.message == "Success") {
+            this.snackbarColor = "success";
+            this.snackbarText = "Medical Officer Deleted Successfully";
+            this.snackbar = true;
+
+            this.getAllMedicalOfficersData();
+          } else {
+            this.snackbarColor = "warning";
+            this.snackbarText = "Patient Deleted Failed!";
+            this.snackbar = true;
+          }
+        })
+        .catch(err => {
+          this.snackbarColor = "warning";
+          this.snackbarText = "Patient Deleted Failed!";
+          this.snackbar = true;
+          console.log(err);
+        });
+    },
+    onClickCancel() {
+      this.dialog = false;
+      this.deletePointer = null;
+    },
+    getAllMedicalOfficersData() {
+      this.$http
+        .get("/api/medical_officer/all")
+        .then(res => {
+          console.log(res);
+
+          this.medicalOfficers = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
+  created() {
+    this.getAllMedicalOfficersData();
   }
 };
 </script>
