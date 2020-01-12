@@ -179,7 +179,11 @@
                 </v-layout>
               </v-container>
             </v-card>
-            <v-btn color="primary" @click="saveProfessionalInforamtion()"
+            <v-btn
+              color="primary"
+              @click="saveProfessionalInforamtion()"
+              :loading="loading_1"
+              :disabled="loading_1"
               >Continue</v-btn
             >
             <!-- <v-btn flat>Cancel</v-btn> -->
@@ -218,7 +222,13 @@
                 </v-layout>
               </v-container>
             </v-card>
-            <v-btn color="primary" @click="uploadFile()">Continue</v-btn>
+            <v-btn
+              color="primary"
+              :loading="loading_1"
+              :disabled="loading_1"
+              @click="uploadFile()"
+              >Continue</v-btn
+            >
             <!-- <v-btn flat>Cancel</v-btn> -->
           </v-stepper-content>
 
@@ -275,7 +285,13 @@
                 </v-layout>
               </v-container>
             </v-card>
-            <v-btn color="primary" @click="saveContactInfo()">Continue</v-btn>
+            <v-btn
+              color="primary"
+              :loading="loading_1"
+              :disabled="loading_1"
+              @click="saveContactInfo()"
+              >Continue</v-btn
+            >
             <!-- <v-btn flat>Cancel</v-btn> -->
           </v-stepper-content>
 
@@ -297,7 +313,13 @@
                 </v-layout>
               </v-container>
             </v-card>
-            <v-btn color="primary" @click="saveWorkPlace()">Continue</v-btn>
+            <v-btn
+              color="primary"
+              :loading="loading_1"
+              :disabled="loading_1"
+              @click="saveWorkPlace()"
+              >Continue</v-btn
+            >
             <!-- <v-btn flat>Cancel</v-btn> -->
           </v-stepper-content>
         </v-stepper>
@@ -307,7 +329,7 @@
     <v-layout>
       <v-snackbar
         v-model="snackbar"
-        bottom
+        top
         right
         :color="snackbarColor"
         :timeout="snackbarTimeout"
@@ -358,8 +380,8 @@ export default {
     },
     medicalOfficerProfessional: {
       regNo: { required, alphaNum },
-      specialty: { required, alpha },
-      designation: { required, alpha }
+      specialty: { required },
+      designation: { required }
     },
     medicalOfficerContact: {
       permAddress: { required },
@@ -376,14 +398,14 @@ export default {
   },
   data: () => {
     return {
-      e6: 5,
+      e6: 1,
       menu: false,
       menu2: false,
       loading_1: false,
       snackbar: false,
       snackbarText: "",
       snackbarColor: "secondary",
-      snackbarTimeout: 1000,
+      snackbarTimeout: 2000,
       selectedFile: null,
 
       // Data related to General Section
@@ -411,11 +433,11 @@ export default {
       medicalOfficerWorkPlace: {},
       imageURL: require("../../../assets/user.png"),
       hospitals: [],
-      hospital: "",
+      hospital: "-Select-",
       hospitalData: null,
 
       gnDivs: ["Wethar-225"],
-      docID: "iJfogK9Ci5CBHeNTvARi"
+      docID: ""
     };
   },
   computed: {
@@ -489,8 +511,8 @@ export default {
       if (!this.$v.medicalOfficerProfessional.specialty.$dirty) return errors;
       !this.$v.medicalOfficerProfessional.specialty.required &&
         errors.push("Specialty is required");
-      !this.$v.medicalOfficerProfessional.specialty.alpha &&
-        errors.push("Specialty Should Only Contains Letters");
+      // !this.$v.medicalOfficerProfessional.specialty.alpha &&
+      //   errors.push("Specialty Should Only Contains Letters");
       return errors;
     },
     designationErrors() {
@@ -498,8 +520,8 @@ export default {
       if (!this.$v.medicalOfficerProfessional.designation.$dirty) return errors;
       !this.$v.medicalOfficerProfessional.designation.required &&
         errors.push("Designation is required");
-      !this.$v.medicalOfficerProfessional.designation.alpha &&
-        errors.push("Designation Should Only Contains Letters");
+      // !this.$v.medicalOfficerProfessional.designation.alpha &&
+      //   errors.push("Designation Should Only Contains Letters");
       return errors;
     },
     officialTeleNumErrors() {
@@ -551,9 +573,8 @@ export default {
             lastModifiedBy: ""
           })
           .then(res => {
+            console.log(res.data);
             if (res.data.message == "Success") {
-              this.snackbarText = "Patient Created Successfully";
-              this.snackbar = true;
               this.docID = res.data.docID;
               console.log(this.docID);
               this.loading_1 = false;
@@ -572,7 +593,6 @@ export default {
       this.$v.medicalOfficerProfessional.$touch();
       if (!this.$v.medicalOfficerProfessional.$invalid) {
         this.loading_1 = true;
-        this.docID = "sjfsiosdofsdofksdo";
         this.$http
           .put("/api/medical_officer/" + this.docID + "/professional", {
             regNo: this.medicalOfficerProfessional.regNo,
@@ -587,6 +607,8 @@ export default {
               // this.docID = res.data.docID;
               // console.log(this.docID);
               // this.loading_1 = false;
+              this.loading_1 = false;
+
               this.e6 = 3;
             }
           })
@@ -603,14 +625,15 @@ export default {
 
       console.log(URL.createObjectURL(this.selectedFile));
 
-      this.uploadFile();
+      // this.uploadFile();
     },
     uploadFile() {
       let formData = new FormData();
       formData.append("imageFile", this.selectedFile);
       console.log(formData);
       console.log(this.selectedFile);
-      this.docID = "lskdflsdfksdokfods";
+      this.loading_1 = true;
+
       this.$http
         .post(
           "/api/medical_officer/" + this.docID + "/profile_image",
@@ -627,8 +650,18 @@ export default {
         )
         .then(res => {
           console.log(res.data);
+
+          if (res.data.message == "Success") {
+            this.loading_1 = false;
+
+            this.e6 = 4;
+          }
         })
         .catch(err => {
+          this.loading_1 = false;
+          this.snackbarText = "Image Uploading Failed";
+          this.snackbarColor = "warning";
+          this.snackbar = true;
           console.log(err);
         });
     },
@@ -648,6 +681,7 @@ export default {
     },
     // To Save Medical Officer's Contact Information
     saveContactInfo() {
+      this.loading_1 = true;
       this.$http
         .put("/api/medical_officer/" + this.docID + "/contact", {
           officialEmail: this.medicalOfficerContact.officialEmail,
@@ -659,6 +693,7 @@ export default {
         .then(res => {
           console.log(res.data);
           if (res.data.message == "Success") {
+            this.loading_1 = false;
             this.e6 = 5;
           }
         })
@@ -691,18 +726,45 @@ export default {
       });
 
       console.log(tempObj);
-
+      this.loading_1 = true;
       this.$http
         .put("/api/medical_officer/" + this.docID + "/work_place", tempObj)
         .then(res => {
           console.log(res.data);
           if (res.data.message == "Success") {
-            this.e6 = 5;
+            this.snackbarText = "Patient Created Successfully";
+            this.snackbarColor = "secondary";
+            this.snackbar = true;
+            this.loading_1 = false;
+            this.clearAllFields();
+            this.e6 = 1;
           }
         })
         .catch(err => {
           console.log(err);
         });
+    },
+    clearAllFields() {
+      this.medicalOfficerBasic.firstName = "";
+      this.medicalOfficerBasic.lastName = "";
+      this.medicalOfficerBasic.dob = "";
+      this.medicalOfficerBasic.nic = "";
+      this.medicalOfficerBasic.gender = "";
+      this.medicalOfficerBasic.email = "";
+
+      this.medicalOfficerProfessional.regNo = "";
+      this.medicalOfficerProfessional.specialty = "";
+      this.medicalOfficerProfessional.designation = "";
+
+      this.imageURL = require("../../../assets/user.png");
+
+      this.medicalOfficerContact.permAddress = "";
+      this.medicalOfficerContact.tempAddress = "";
+      this.medicalOfficerContact.officialTeleNum = "";
+      this.medicalOfficerContact.officialEmail = "";
+      this.medicalOfficerContact.personalTeleNum = "";
+
+      this.hospital = "-Select-";
     }
   },
   created() {
