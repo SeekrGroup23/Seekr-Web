@@ -18,82 +18,75 @@
         <v-card color="secondary" dark>
           <v-container fluid>
             <v-layout row wrap>
-              <v-flex md6 sm12 xs12>
-                <v-text-field label="Name" v-model="name"></v-text-field>
-              </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-              <v-flex md6 sm12 xs12>
-                <v-text-field
-                  label="Registration No."
-                  v-model="regNo"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
-            <v-layout row wrap>
-              <v-flex md6 sm12 xs12>
-                <v-select
-                  :items="provinces"
-                  label="Province"
-                  v-model="province"
-                ></v-select>
-              </v-flex>
-            </v-layout>
-            <v-layout row>
-              <v-flex md6 sm12 xs12>
-                <v-select
-                  :items="districts"
-                  label="District"
-                  v-model="district"
-                ></v-select>
-              </v-flex>
-            </v-layout>
-            <v-layout row>
-              <v-flex md6 sm12 xs12>
-                <v-select
-                  :items="gnDivs"
-                  label="Grama Niladhari Division Code"
-                  v-model="gnDiv"
-                ></v-select>
-              </v-flex>
-            </v-layout>
+              <v-flex md5 sm12 xs12>
+                <v-layout column>
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field label="Name" v-model="name"></v-text-field>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field
+                      label="Registration No."
+                      v-model="regNo"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-select
+                      :items="provinces"
+                      label="Province"
+                      v-model="province"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-select
+                      :items="districts"
+                      label="District"
+                      v-model="district"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-select
+                      :items="gnDivs"
+                      label="Grama Niladhari Division Code"
+                      v-model="gnDiv"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-select
+                      :items="categories"
+                      label="Type/Category"
+                      v-model="category"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field
+                      label="Address"
+                      v-model="address"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field
+                      label="Latitude"
+                      v-model="latitude"
+                    ></v-text-field>
+                  </v-flex>
 
-            <v-layout row>
-              <v-flex md6 sm12 xs12>
-                <v-select
-                  :items="categories"
-                  label="Type/Category"
-                  v-model="category"
-                ></v-select>
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field
+                      label="Longitude"
+                      v-model="longitude"
+                    ></v-text-field>
+                  </v-flex>
+                </v-layout>
               </v-flex>
-            </v-layout>
-
-            <v-layout row wrap>
-              <v-flex md6 sm12 xs12>
-                <v-text-field label="Address" v-model="address"></v-text-field>
-              </v-flex>
-            </v-layout>
-
-            <v-layout row wrap>
-              <v-flex md6 sm12 xs12>
-                <v-text-field
-                  label="Latitude"
-                  v-model="latitude"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
-
-            <v-layout row wrap>
-              <v-flex md6 sm12 xs12>
-                <v-text-field
-                  label="Longitude"
-                  v-model="longitude"
-                ></v-text-field>
-              </v-flex>
-            </v-layout>
-            <v-layout row class="px-0">
+              <v-divider vertical class="px-4"></v-divider>
               <v-spacer></v-spacer>
-              <v-flex md8 xs12 sm12>
+              <v-flex md6 sm12 xs12 class="">
+                <div id="map"></div>
+              </v-flex>
+            </v-layout>
+            <v-layout column>
+              <v-flex md12 xs12 sm12>
+                <v-spacer></v-spacer>
                 <v-btn color="">Cancel</v-btn>
 
                 <v-btn color="primary" @click="addHospital()">Submit</v-btn>
@@ -122,6 +115,8 @@
 //Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
 import { required, minLength } from "vuelidate/lib/validators";
+import gmapsInit from "../../../utils/gmaps";
+
 export default {
   mixins: [validationMixin],
   validations: {
@@ -233,8 +228,64 @@ export default {
   },
   created() {
     // Load GN Divs From Database Based On Doctor's Hospital Location
+  },
+  async mounted() {
+    try {
+      const google = await gmapsInit();
+      console.log(google);
+
+      const mapContainer = document.querySelector("#map");
+      console.log(mapContainer);
+
+      const map = new google.maps.Map(mapContainer, {
+        center: { lat: 7.4224, lng: 80.8326 },
+
+        zoom: 8
+      });
+
+      var marker = null;
+
+      // This event listener calls addMarker() when the map is clicked.
+      google.maps.event.addListener(map, "click", event => {
+        // alert(
+        //   "Latitude: " +
+        //     event.latLng.lat() +
+        //     " " +
+        //     ", longitude: " +
+        //     event.latLng.lng()
+        // );
+
+        this.latitude = event.latLng.lat();
+        this.longitude = event.latLng.lng();
+
+        // This is to avoid user adding multiple markers to the map while getting the location
+        if (marker == null) {
+          marker = new google.maps.Marker({
+            position: event.latLng
+          });
+
+          // To add the marker to the map, call setMap();
+          marker.setMap(map);
+        } else {
+          // Remove Marker
+          marker.setMap(null);
+          marker = null;
+          this.latitude = "";
+          this.longitude = "";
+        }
+      });
+
+      console.log(map);
+    } catch (error) {
+      console.error("Error >> " + error);
+    }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#map {
+  height: 100%;
+  width: 100%;
+}
+</style>

@@ -45,14 +45,22 @@
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="desserts" :search="search">
+          <v-data-table
+            :headers="headers"
+            :items="medicalOfficers"
+            :search="search"
+          >
             <template v-slot:items="props">
+              <td class="text-xs-left">
+                {{ props.item.doctorRegistrationNo }}
+              </td>
+
               <td class="text-xs-left">{{ props.item.firstName }}</td>
               <td class="text-xs-left">{{ props.item.lastName }}</td>
-              <td class="text-xs-left">{{ props.item.age }}</td>
-              <td class="text-xs-left">{{ props.item.gender }}</td>
-              <td class="text-xs-left">{{ props.item.location }}</td>
-              <td class="text-xs-left">{{ props.item.status }}</td>
+              <td class="text-xs-left">
+                {{ props.item.currentWorking_hospitalName }}
+              </td>
+              <td class="text-xs-left">{{ props.item.specialty }}</td>
               <td class="text-xs-center">
                 <v-btn icon>
                   <v-icon small class="mr-2" @click="editItem(props.item)">
@@ -99,6 +107,12 @@ export default {
       search: "",
       headers: [
         {
+          text: "Registration No.",
+          align: "left",
+          sortable: false,
+          value: "doctorRegistrationNo"
+        },
+        {
           text: "First Name",
           align: "left",
           sortable: true,
@@ -110,27 +124,48 @@ export default {
           value: "lastName",
           sortable: true
         },
-        { text: "Age", align: "left", value: "age", sortable: true },
-        { text: "Gender", align: "left", value: "gender", sortable: false },
-        { text: "Location", align: "left", value: "location", sortable: false },
-        { text: "Status", align: "left", value: "status", sortable: false },
-        { text: "Actions", value: "actions", align: "center", sortable: false }
+        {
+          text: "Hospital",
+          align: "left",
+          value: "currentWorking_hospitalName",
+          sortable: true
+        },
+        {
+          text: "Specialty",
+          align: "left",
+          value: "specialty",
+          sortable: false
+        },
+        { text: "Actions", align: "center", value: "action", sortable: false }
       ],
       desserts: [
         {
+          regNo: "45464654",
+
           firstName: "Frozensdfsdfsdf",
           lastName: "sdfsdfsddsfsdfsd",
-          gender: "Male",
-          age: 6.0,
-          location: 24,
-          status: "General",
+          hospital: "Male",
+          specialty: 6.0,
           actions: " "
         }
-      ]
+      ],
+      medicalOfficers: []
     };
   },
   computed: {},
-  methods: {}
+  methods: {},
+  created() {
+    this.$http
+      .get("/api/medical_officer/all")
+      .then(res => {
+        console.log(res);
+
+        this.medicalOfficers = res.data;
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 };
 </script>
 
