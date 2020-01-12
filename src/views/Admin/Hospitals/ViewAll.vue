@@ -45,14 +45,25 @@
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="desserts" :search="search">
+          <v-data-table :headers="headers" :items="hospitals" :search="search">
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.firstName }}</td>
-              <td class="text-xs-left">{{ props.item.lastName }}</td>
-              <td class="text-xs-left">{{ props.item.age }}</td>
-              <td class="text-xs-left">{{ props.item.gender }}</td>
-              <td class="text-xs-left">{{ props.item.location }}</td>
-              <td class="text-xs-left">{{ props.item.status }}</td>
+              <td class="text-xs-left">{{ props.item.registration_no }}</td>
+              <td class="text-xs-left">{{ props.item.name }}</td>
+              <td class="text-xs-left">{{ props.item.category }}</td>
+              <td class="text-xs-left">{{ props.item.province }}</td>
+              <td class="text-xs-left">{{ props.item.district }}</td>
+              <!-- <td class="text-xs-left">{{ props.item.map }}</td> -->
+              <td class="text-xs-left">
+                <v-btn
+                  small
+                  color="secondary"
+                  dark
+                  @click.stop="showLocationInMap(props.item)"
+                >
+                  View In Map
+                </v-btn>
+              </td>
+
               <td class="text-xs-center">
                 <v-btn icon>
                   <v-icon small class="mr-2" @click="editItem(props.item)">
@@ -89,48 +100,82 @@
         <v-icon dark>add</v-icon>
       </v-btn>
     </v-layout>
+    <v-layout>
+      <v-dialog v-model="mapDialog" max-width="500" @change="alert('sdfsdfsd')">
+        <v-card>
+          <popUpMap :geoData="geoData"></popUpMap>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
+import popUpMap from "../../../components/Gmap_viewHospital";
 export default {
+  components: {
+    popUpMap
+  },
   data: () => {
     return {
       search: "",
       headers: [
         {
-          text: "First Name",
+          text: "Registration No.",
           align: "left",
           sortable: true,
-          value: "firstName"
+          value: "registration_no"
         },
         {
-          text: "Last Name",
+          text: "Name",
           align: "left",
-          value: "lastName",
+          value: "name",
           sortable: true
         },
-        { text: "Age", align: "left", value: "age", sortable: true },
-        { text: "Gender", align: "left", value: "gender", sortable: false },
+        { text: "Category", align: "left", value: "category", sortable: true },
+        { text: "Province", align: "left", value: "province", sortable: false },
+        { text: "District", align: "left", value: "district", sortable: false },
         { text: "Location", align: "left", value: "location", sortable: false },
-        { text: "Status", align: "left", value: "status", sortable: false },
         { text: "Actions", value: "actions", align: "center", sortable: false }
       ],
-      desserts: [
-        {
-          firstName: "Frozensdfsdfsdf",
-          lastName: "sdfsdfsddsfsdfsd",
-          gender: "Male",
-          age: 6.0,
-          location: 24,
-          status: "General",
-          actions: " "
-        }
-      ]
+      hospitals: [],
+      hospital: "",
+      mapDialog: false,
+      geoData: null
     };
   },
   computed: {},
-  methods: {}
+  methods: {
+    showLocationInMap(hospital) {
+      this.mapDialog = true;
+      this.geoData = hospital;
+      // console.log(this.geoCordinates);
+    }
+  },
+  created() {
+    // Get all Hospital Data
+    this.$http
+      .get("/api/hospital")
+      .then(res => {
+        // console.log(res.data);
+        // this.hospitals = res.data;
+
+        res.data.forEach(hospital => {
+          this.hospitals.push({
+            registration_no: hospital.registration_no,
+            name: hospital.name,
+            province: hospital.province,
+            district: hospital.district,
+            docID: hospital.docID,
+            category: hospital.category,
+            geoCordinates: hospital.geoCordinates
+          });
+        });
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 };
 </script>
 
