@@ -41,11 +41,11 @@ export default new Router({
       path: "/admin/",
       children: [
         {
-          path: "addgrama",
+          path: "grama_niladhari/add",
           component: ADD_Grama
         },
         {
-          path: "editgrama",
+          path: "grama_niladhari/view",
           component: Edt_Grama
         },
         {
