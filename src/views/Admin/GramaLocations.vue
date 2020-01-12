@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import gmapsInit from "../utils/gmaps";
+import gmapsInit from "../../utils/gmaps";
 
 export default {
   name: "App",
@@ -40,6 +40,7 @@ export default {
       const google = await gmapsInit();
       const geocoder = new google.maps.Geocoder();
       const map = new google.maps.Map(this.$el);
+      map.setZoom(14);
 
       geocoder.geocode({ address: "Sri Lanka" }, (results, status) => {
         if (status !== "OK" || !results[0]) {

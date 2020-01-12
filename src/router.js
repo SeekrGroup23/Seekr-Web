@@ -4,8 +4,10 @@ import Home from "./views/Home.vue";
 import Deem from "./views/Deem.vue";
 import ADD_Grama from "./views/Admin/AddGrama.vue";
 import Edt_Grama from "./views/Admin/EditGrama.vue";
+import Grama_Loc from "./views/Admin/GramaLocations.vue";
 import Admin from "./views/Admin/Admin.vue";
 import Admin_Dash from "./views/Admin/AdminDashboard.vue";
+import Test from "./views/Test.vue";
 
 Vue.use(Router);
 
@@ -32,20 +34,30 @@ export default new Router({
       component: Deem
     },
     {
+      path: "/test",
+      component: Test
+    },
+    {
       path: "/admin/",
+      children: [
+        {
+          path: "addgrama",
+          component: ADD_Grama
+        },
+        {
+          path: "editgrama",
+          component: Edt_Grama
+        },
+        {
+          path: "gramaloc",
+          component: Grama_Loc
+        },
+        {
+          path: "admindash",
+          component: Admin_Dash
+        }
+      ],
       component: Admin
-    },
-    {
-      path: "/addgrama",
-      component: ADD_Grama
-    },
-    {
-      path: "/editgrama",
-      component: Edt_Grama
-    },
-    {
-      path: "/admindash",
-      component: Admin_Dash
     }
   ]
 });
