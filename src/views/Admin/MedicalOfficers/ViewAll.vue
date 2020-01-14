@@ -197,7 +197,7 @@ export default {
             this.getAllMedicalOfficersData();
           } else {
             this.snackbarColor = "warning";
-            this.snackbarText = "Patient Deleted Failed!";
+            this.snackbarText = "Medical Officer Deleted Failed!";
             this.snackbar = true;
           }
         })

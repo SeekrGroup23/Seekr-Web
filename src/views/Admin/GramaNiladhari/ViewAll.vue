@@ -35,7 +35,7 @@
                     color="primary"
                     class="hidden-sm-and-down"
                     @click="$router.push('/medicalofficer/add_patient')"
-                    >New Patient</v-btn
+                    >Add New</v-btn
                   >
                 </v-flex>
 
@@ -45,23 +45,23 @@
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="desserts" :search="search">
+          <v-data-table :headers="headers" :items="gnData" :search="search">
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.firstName }}</td>
-              <td class="text-xs-left">{{ props.item.lastName }}</td>
-              <td class="text-xs-left">{{ props.item.age }}</td>
-              <td class="text-xs-left">{{ props.item.gender }}</td>
-              <td class="text-xs-left">{{ props.item.location }}</td>
-              <td class="text-xs-left">{{ props.item.status }}</td>
+              <td class="text-xs-left">{{ props.item.regNo }}</td>
+              <td class="text-xs-left">{{ props.item.name }}</td>
+              <td class="text-xs-left">{{ props.item.province }}</td>
+              <td class="text-xs-left">{{ props.item.district }}</td>
+              <td class="text-xs-left">{{ props.item.division }}</td>
+              <td class="text-xs-left">{{ props.item.gnDivision }}</td>
               <td class="text-xs-center">
-                <v-btn icon>
-                  <v-icon small class="mr-2" @click="editItem(props.item)">
-                    edit
+                <v-btn icon @click="viewGramaNiladhari(props.item)">
+                  <v-icon small>
+                    visibility
                   </v-icon>
                 </v-btn>
 
-                <v-btn icon>
-                  <v-icon small @click="deleteItem(props.item)">
+                <v-btn icon @click="deleteGramaNiladhari(props.item)">
+                  <v-icon small color="red">
                     delete
                   </v-icon>
                 </v-btn>
@@ -89,6 +89,35 @@
         <v-icon dark>add</v-icon>
       </v-btn>
     </v-layout>
+    <v-layout row justify-center>
+      <v-dialog v-model="deleteDialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Delete Confirmation</v-card-title>
+          <v-card-text
+            >Are you sure that you want to proceed with this
+            action?</v-card-text
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="onClickCancel()"
+              >cancel</v-btn
+            >
+            <v-btn color="red darken-1" flat @click="onClickDelete()" dark small
+              >Delete</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-snackbar
+        v-model="snackbar"
+        :color="snackbarColor"
+        :timeout="snackbarTimeout"
+        right
+        top
+      >
+        {{ snackbarText }}
+      </v-snackbar>
+    </v-layout>
   </v-container>
 </template>
 
@@ -99,38 +128,105 @@ export default {
       search: "",
       headers: [
         {
-          text: "First Name",
+          text: "Registration No.",
           align: "left",
           sortable: true,
-          value: "firstName"
+          value: "regNo"
         },
         {
-          text: "Last Name",
+          text: "Name",
           align: "left",
-          value: "lastName",
+          value: "name",
           sortable: true
         },
-        { text: "Age", align: "left", value: "age", sortable: true },
-        { text: "Gender", align: "left", value: "gender", sortable: false },
-        { text: "Location", align: "left", value: "location", sortable: false },
-        { text: "Status", align: "left", value: "status", sortable: false },
+        { text: "Province", align: "left", value: "age", sortable: true },
+        { text: "District", align: "left", value: "gender", sortable: false },
+        { text: "Division", align: "left", value: "location", sortable: false },
+        {
+          text: "GN Division",
+          align: "left",
+          value: "status",
+          sortable: false
+        },
         { text: "Actions", value: "actions", align: "center", sortable: false }
       ],
-      desserts: [
-        {
-          firstName: "Frozensdfsdfsdf",
-          lastName: "sdfsdfsddsfsdfsd",
-          gender: "Male",
-          age: 6.0,
-          location: 24,
-          status: "General",
-          actions: " "
-        }
-      ]
+      gnData: [],
+      deleteDialog: false,
+      deletePointer: "",
+      // SnackBar
+      snackbar: false,
+      snackbarText: "",
+      snackbarColor: "",
+      snackbarTimeout: 2000
     };
   },
   computed: {},
-  methods: {}
+  methods: {
+    viewGramaNiladhari() {},
+    deleteGramaNiladhari(gn) {
+      this.deletePointer = gn.docID;
+      this.deleteDialog = true;
+    },
+    onClickCancel() {
+      this.deleteDialog = false;
+      this.deletePointer = "";
+    },
+    onClickDelete() {
+      this.$http
+        .delete("/api/grama_niladhari/" + this.deletePointer, {
+          data: {
+            lastModifiedBy: "admin"
+          }
+        })
+        .then(res => {
+          if (res.data.message == "Success") {
+            this.getGNData();
+            this.snackbarColor = "success";
+            this.snackbarText = "GN Officer Deleted Successfully";
+            this.deleteDialog = false;
+            this.snackbar = true;
+          } else {
+            this.snackbarColor = "red";
+            this.snackbarText = "Grama Niladhari Officer Deleted Failed!";
+            this.snackbar = true;
+            this.deleteDialog = false;
+          }
+        })
+        .catch(err => {
+          this.snackbarColor = "red";
+          this.snackbarText = "Deletion Failed";
+          this.snackbar = true;
+          console.log(err);
+        });
+    },
+    getGNData() {
+      this.$http
+        .get("/api/grama_niladhari/")
+        .then(res => {
+          console.log(res.data);
+          this.gnData = [];
+          res.data.forEach(gn => {
+            this.gnData.push({
+              regNo: gn.regNo,
+              name: gn.firstName + " " + gn.lastName,
+              province: gn.province,
+              district: gn.district,
+              division: gn.division,
+              gnDivision: gn.gnDivision,
+              action: "",
+              docID: gn.docID
+            });
+          });
+          console.log(this.gnData);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
+  created() {
+    this.getGNData();
+  }
 };
 </script>
 

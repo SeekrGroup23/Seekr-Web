@@ -19,34 +19,45 @@
           <!-- Personal Section -->
           <v-stepper-step :complete="e6 > 1" step="1">
             Personal Information
-            <small>Medical Officer's Personal Information</small>
+            <small>Grama Niladhari Officer's Personal Information</small>
           </v-stepper-step>
 
           <v-stepper-content step="1">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card :color="stepperColor" class="mb-5" :dark="isStepperDark">
               <v-container fluid wrap>
                 <v-layout column>
+                  <v-flex class="">
+                    <v-select
+                      v-model="gramaNiladhariBasic.title"
+                      color="primary"
+                      label="Title"
+                      :items="titles"
+                      required
+                      :error-messages="titleErrors"
+                      @blur="$v.gramaNiladhariBasic.title.$touch()"
+                    ></v-select>
+                  </v-flex>
                   <v-flex>
                     <v-layout row wrap class="py-0 my-0">
                       <v-flex class="">
                         <v-text-field
-                          v-model="medicalOfficerBasic.firstName"
+                          v-model="gramaNiladhariBasic.firstName"
                           color="primary"
                           label="First Name"
                           required
                           :error-messages="firstNameErrors"
-                          @blur="$v.medicalOfficerBasic.firstName.$touch()"
+                          @blur="$v.gramaNiladhariBasic.firstName.$touch()"
                         ></v-text-field>
                       </v-flex>
                       <!-- Last Name -->
                       <v-flex>
                         <v-text-field
-                          v-model="medicalOfficerBasic.lastName"
+                          v-model="gramaNiladhariBasic.lastName"
                           color="primary"
                           label="Last Name"
                           required
                           :error-messages="lastNameErrors"
-                          @blur="$v.medicalOfficerBasic.lastName.$touch()"
+                          @blur="$v.gramaNiladhariBasic.lastName.$touch()"
                         ></v-text-field>
                       </v-flex>
                     </v-layout>
@@ -54,24 +65,24 @@
 
                   <v-flex>
                     <v-text-field
-                      v-model="medicalOfficerBasic.email"
+                      v-model="gramaNiladhariBasic.email"
                       color="primary"
                       label="Email"
                       required
                       :error-messages="emailErrors"
-                      @blur="$v.medicalOfficerBasic.email.$touch()"
+                      @blur="$v.gramaNiladhariBasic.email.$touch()"
                     ></v-text-field>
                   </v-flex>
 
                   <!-- NIC -->
                   <v-flex>
                     <v-text-field
-                      v-model="medicalOfficerBasic.nic"
+                      v-model="gramaNiladhariBasic.nic"
                       color="primary"
                       label="NIC"
                       required
                       :error-messages="nicErrors"
-                      @blur="$v.medicalOfficerBasic.nic.$touch()"
+                      @blur="$v.gramaNiladhariBasic.nic.$touch()"
                     ></v-text-field>
                   </v-flex>
                   <v-flex>
@@ -88,18 +99,18 @@
                     >
                       <template v-slot:activator="{ on }">
                         <v-text-field
-                          v-model="medicalOfficerBasic.dob"
+                          v-model="gramaNiladhariBasic.dob"
                           label="Date of Birth"
                           readonly
                           v-on="on"
                           :error-messages="dobErrors"
-                          @blur="$v.medicalOfficerBasic.dob.$touch()"
+                          @blur="$v.gramaNiladhariBasic.dob.$touch()"
                         ></v-text-field>
                       </template>
                       <v-date-picker
                         min="1980-01-01"
                         picker-date="1990-01-01"
-                        v-model="medicalOfficerBasic.dob"
+                        v-model="gramaNiladhariBasic.dob"
                         @input="menu2 = false"
                         no-title
                       ></v-date-picker>
@@ -113,7 +124,7 @@
                       </v-flex>
                       <v-flex grow class="pl-3">
                         <v-radio-group
-                          v-model="medicalOfficerBasic.gender"
+                          v-model="gramaNiladhariBasic.gender"
                           row
                           class="pa-0 ma-0"
                         >
@@ -144,37 +155,61 @@
           <v-stepper-step :complete="e6 > 2" step="2"
             >Professional Information
             <small
-              >Medical Officer's Professional Information</small
+              >Grama Niladhari Officer's Professional Information</small
             ></v-stepper-step
           >
 
           <v-stepper-content step="2">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card :color="stepperColor" class="mb-5" :dark="isStepperDark">
               <v-container fluid>
                 <v-layout column>
                   <v-flex class="py-1">
                     <v-text-field
                       label="Registration No."
-                      v-model="medicalOfficerProfessional.regNo"
+                      v-model="gramaNiladhariProfessional.regNo"
                       :error-messages="regNoErrors"
-                      @blur="$v.medicalOfficerProfessional.regNo.$touch()"
+                      @blur="$v.gramaNiladhariProfessional.regNo.$touch()"
                     ></v-text-field>
                   </v-flex>
                   <v-flex class="py-1">
-                    <v-text-field
-                      label="Specialty"
-                      v-model="medicalOfficerProfessional.specialty"
-                      :error-messages="specialtyErrors"
-                      @blur="$v.medicalOfficerProfessional.specialty.$touch()"
-                    ></v-text-field>
+                    <v-select
+                      label="Province"
+                      :items="provinces"
+                      @change="getDistricts()"
+                      v-model="gramaNiladhariProfessional.province"
+                      :error-messages="provinceErrors"
+                      @blur="$v.gramaNiladhariProfessional.province.$touch()"
+                    ></v-select>
                   </v-flex>
                   <v-flex class="py-1">
-                    <v-text-field
-                      label="Designation"
-                      v-model="medicalOfficerProfessional.designation"
-                      :error-messages="designationErrors"
-                      @blur="$v.medicalOfficerProfessional.designation.$touch()"
-                    ></v-text-field>
+                    <v-select
+                      label="District"
+                      @change="getDivisions()"
+                      :items="districts"
+                      v-model="gramaNiladhariProfessional.district"
+                      :error-messages="districtErrors"
+                      @blur="$v.gramaNiladhariProfessional.district.$touch()"
+                    ></v-select>
+                  </v-flex>
+
+                  <v-flex class="py-1">
+                    <v-select
+                      label="Division"
+                      v-model="gramaNiladhariProfessional.division"
+                      :error-messages="divisionErrors"
+                      @change="getGnDivisions()"
+                      :items="divisions"
+                      @blur="$v.gramaNiladhariProfessional.division.$touch()"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex class="py-1">
+                    <v-select
+                      label="Grama Niladhari Division"
+                      v-model="gramaNiladhariProfessional.gnDivision"
+                      :error-messages="gnDivisionErrors"
+                      :items="gnDivisions"
+                      @blur="$v.gramaNiladhariProfessional.gnDivision.$touch()"
+                    ></v-select>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -192,7 +227,7 @@
           >
 
           <v-stepper-content step="3">
-            <v-card color="secondary" class="mb-5">
+            <v-card :color="stepperColor" class="mb-5" :dark="isStepperDark">
               <v-container fluid>
                 <v-layout row wrap>
                   <v-flex class="py-1" md3 sm6 xs12>
@@ -229,75 +264,53 @@
           </v-stepper-step>
 
           <v-stepper-content step="4">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card :color="stepperColor" class="mb-5" :dark="isStepperDark">
               <v-container fluid>
                 <v-layout column>
                   <v-flex>
                     <v-text-field
                       label="Official Email*"
-                      v-model="medicalOfficerContact.officialEmail"
+                      v-model="gramaNiladhariContact.officialEmail"
                       :error-messages="officialEmailErrors"
-                      @blur="$v.medicalOfficerContact.officialEmail.$touch()"
+                      @blur="$v.gramaNiladhariContact.officialEmail.$touch()"
                     ></v-text-field>
                   </v-flex>
 
                   <v-flex>
                     <v-text-field
                       label="Permenant Address*"
-                      v-model="medicalOfficerContact.permAddress"
+                      v-model="gramaNiladhariContact.permAddress"
                       :error-messages="permAddressErros"
-                      @blur="$v.medicalOfficerContact.permAddress.$touch()"
+                      @blur="$v.gramaNiladhariContact.permAddress.$touch()"
                     ></v-text-field>
                   </v-flex>
 
                   <v-flex>
                     <v-text-field
                       label="Temporary Address"
-                      v-model="medicalOfficerContact.tempAddress"
+                      v-model="gramaNiladhariContact.tempAddress"
                     ></v-text-field>
                   </v-flex>
 
                   <v-flex>
                     <v-text-field
                       label="Official Telephone Number*"
-                      v-model="medicalOfficerContact.officialTeleNum"
+                      v-model="gramaNiladhariContact.officialTeleNum"
                       :error-messages="officialTeleNumErrors"
-                      @blur="$v.medicalOfficerContact.officialTeleNum.$touch()"
+                      @blur="$v.gramaNiladhariContact.officialTeleNum.$touch()"
                     ></v-text-field>
                   </v-flex>
 
                   <v-flex>
                     <v-text-field
                       label="Personal Telephone Number"
-                      v-model="medicalOfficerContact.personalTeleNum"
+                      v-model="gramaNiladhariContact.personalTeleNum"
                     ></v-text-field>
                   </v-flex>
                 </v-layout>
               </v-container>
             </v-card>
             <v-btn color="primary" @click="saveContactInfo()">Continue</v-btn>
-            <!-- <v-btn flat>Cancel</v-btn> -->
-          </v-stepper-content>
-
-          <v-stepper-step step="5"
-            >Work Place Assignment
-            <small>Assign Medical Officer to a Hospital</small>
-          </v-stepper-step>
-          <v-stepper-content step="5">
-            <v-card color="secondary" class="mb-5" dark>
-              <v-container fluid>
-                <v-layout column>
-                  <v-flex>
-                    <v-select
-                      label="Hospital"
-                      :items="hospitals"
-                      v-model="hospital"
-                    ></v-select>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card>
-            <v-btn color="primary" @click="saveWorkPlace()">Continue</v-btn>
             <!-- <v-btn flat>Cancel</v-btn> -->
           </v-stepper-content>
         </v-stepper>
@@ -307,7 +320,7 @@
     <v-layout>
       <v-snackbar
         v-model="snackbar"
-        bottom
+        top
         right
         :color="snackbarColor"
         :timeout="snackbarTimeout"
@@ -348,20 +361,23 @@ import {
 export default {
   mixins: [validationMixin],
   validations: {
-    medicalOfficerBasic: {
+    gramaNiladhariBasic: {
       firstName: { required, minLength: minLength(4), alpha },
       lastName: { required, minLength: minLength(4), alpha },
       nic: { required, alphaNum },
       dob: { required },
       gender: { required, alpha },
-      email: { required, email }
+      email: { required, email },
+      title: { required }
     },
-    medicalOfficerProfessional: {
+    gramaNiladhariProfessional: {
       regNo: { required, alphaNum },
-      specialty: { required, alpha },
-      designation: { required, alpha }
+      division: { required },
+      province: { required },
+      district: { required },
+      gnDivision: { required }
     },
-    medicalOfficerContact: {
+    gramaNiladhariContact: {
       permAddress: { required },
       tempAddress: {},
       officialTeleNum: {
@@ -376,18 +392,22 @@ export default {
   },
   data: () => {
     return {
-      e6: 5,
+      e6: 1,
       menu: false,
       menu2: false,
       loading_1: false,
       snackbar: false,
       snackbarText: "",
       snackbarColor: "secondary",
-      snackbarTimeout: 1000,
+      snackbarTimeout: 2000,
       selectedFile: null,
+      titles: ["Mr.", "Mrs.", "Ms."],
+      // Control Stepper Card Attributes
+      stepperColor: "",
+      isStepperDark: false,
 
       // Data related to General Section
-      medicalOfficerBasic: {
+      gramaNiladhariBasic: {
         firstName: "",
         lastName: "",
         email: "",
@@ -395,12 +415,15 @@ export default {
         dob: new Date().toISOString().substr(0, 10),
         gender: "Male"
       },
-      medicalOfficerProfessional: {
+      gramaNiladhariProfessional: {
         regNo: "",
-        specialty: "",
-        designation: ""
+        gnDivision: "",
+        division: "",
+        province: "",
+        district: "",
+        officeLocation: ""
       },
-      medicalOfficerContact: {
+      gramaNiladhariContact: {
         permAddress: "",
         tempAddress: "",
         officialTeleNum: "",
@@ -414,62 +437,79 @@ export default {
       hospital: "",
       hospitalData: null,
 
-      gnDivs: ["Wethar-225"],
-      docID: "iJfogK9Ci5CBHeNTvARi"
+      gnDivisions: ["Wethar-225"],
+      docID: "",
+      provinces: [
+        "Western",
+        "Eastern",
+        "Southern",
+        "Nothern",
+        "Uva",
+        "North-Central",
+        "Sabaragamuwa",
+        "Central",
+        "North-Western"
+      ],
+      districts: [],
+      divisions: [],
+      provDistMap: new Map(),
+      distGnMap: new Map(),
+      divGnDivMap: new Map(),
+      districtDivisionMap: new Map()
     };
   },
   computed: {
     /**Form Validation and Error Handling - begin */
     firstNameErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerBasic.firstName.$dirty) return errors;
-      !this.$v.medicalOfficerBasic.firstName.minLength &&
+      if (!this.$v.gramaNiladhariBasic.firstName.$dirty) return errors;
+      !this.$v.gramaNiladhariBasic.firstName.minLength &&
         errors.push("First Name must be at leat 4 charcters");
-      !this.$v.medicalOfficerBasic.firstName.required &&
+      !this.$v.gramaNiladhariBasic.firstName.required &&
         errors.push("First Name is required");
-      !this.$v.medicalOfficerBasic.firstName.alpha &&
+      !this.$v.gramaNiladhariBasic.firstName.alpha &&
         errors.push("First Name Should Only Contains Letters");
 
       return errors;
     },
     lastNameErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerBasic.lastName.$dirty) return errors;
-      !this.$v.medicalOfficerBasic.lastName.minLength &&
+      if (!this.$v.gramaNiladhariBasic.lastName.$dirty) return errors;
+      !this.$v.gramaNiladhariBasic.lastName.minLength &&
         errors.push("Last Name must be at leat 4 charcters");
-      !this.$v.medicalOfficerBasic.lastName.required &&
+      !this.$v.gramaNiladhariBasic.lastName.required &&
         errors.push("Last Name is required");
-      !this.$v.medicalOfficerBasic.lastName.alpha &&
+      !this.$v.gramaNiladhariBasic.lastName.alpha &&
         errors.push("Last Name Should Only Contains Letters");
       return errors;
     },
     dobErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerBasic.dob.$dirty) return errors;
-      !this.$v.medicalOfficerBasic.dob.required &&
+      if (!this.$v.gramaNiladhariBasic.dob.$dirty) return errors;
+      !this.$v.gramaNiladhariBasic.dob.required &&
         errors.push("Date of Birth is required");
       return errors;
     },
     emailErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerBasic.email.$dirty) return errors;
-      !this.$v.medicalOfficerBasic.email.required &&
+      if (!this.$v.gramaNiladhariBasic.email.$dirty) return errors;
+      !this.$v.gramaNiladhariBasic.email.required &&
         errors.push("Email is required");
-      !this.$v.medicalOfficerBasic.email.email && errors.push("Invalid Email");
+      !this.$v.gramaNiladhariBasic.email.email && errors.push("Invalid Email");
       return errors;
     },
     nicErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerBasic.nic.$dirty) return errors;
-      !this.$v.medicalOfficerBasic.nic.required &&
+      if (!this.$v.gramaNiladhariBasic.nic.$dirty) return errors;
+      !this.$v.gramaNiladhariBasic.nic.required &&
         errors.push("NIC is required");
-      !this.$v.medicalOfficerBasic.nic.alphaNum &&
+      !this.$v.gramaNiladhariBasic.nic.alphaNum &&
         errors.push("Invalid Character(s)");
-      // !this.$vgh.medicalOfficerBasic.nic.nicValidator &&
+      // !this.$vgh.gramaNiladhariBasic.nic.nicValidator &&
       //   errors.push("Invalid NIC");
       if (
-        this.medicalOfficerBasic.nic != "" &&
-        !this.nicValidator(this.medicalOfficerBasic.nic)
+        this.gramaNiladhariBasic.nic != "" &&
+        !this.nicValidator(this.gramaNiladhariBasic.nic)
       ) {
         errors.push("Invalid NIC");
       }
@@ -477,83 +517,119 @@ export default {
     },
     regNoErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerProfessional.regNo.$dirty) return errors;
-      !this.$v.medicalOfficerProfessional.regNo.required &&
+      if (!this.$v.gramaNiladhariProfessional.regNo.$dirty) return errors;
+      !this.$v.gramaNiladhariProfessional.regNo.required &&
         errors.push("Registration No. is required");
-      !this.$v.medicalOfficerProfessional.regNo.alphaNum &&
+      !this.$v.gramaNiladhariProfessional.regNo.alphaNum &&
         errors.push("Registration No. Should Not Contain Special Characters");
       return errors;
     },
     specialtyErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerProfessional.specialty.$dirty) return errors;
-      !this.$v.medicalOfficerProfessional.specialty.required &&
+      if (!this.$v.gramaNiladhariProfessional.specialty.$dirty) return errors;
+      !this.$v.gramaNiladhariProfessional.specialty.required &&
         errors.push("Specialty is required");
-      !this.$v.medicalOfficerProfessional.specialty.alpha &&
+      !this.$v.gramaNiladhariProfessional.specialty.alpha &&
         errors.push("Specialty Should Only Contains Letters");
       return errors;
     },
     designationErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerProfessional.designation.$dirty) return errors;
-      !this.$v.medicalOfficerProfessional.designation.required &&
+      if (!this.$v.gramaNiladhariProfessional.designation.$dirty) return errors;
+      !this.$v.gramaNiladhariProfessional.designation.required &&
         errors.push("Designation is required");
-      !this.$v.medicalOfficerProfessional.designation.alpha &&
+      !this.$v.gramaNiladhariProfessional.designation.alpha &&
         errors.push("Designation Should Only Contains Letters");
       return errors;
     },
     officialTeleNumErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerContact.officialTeleNum.$dirty) return errors;
-      !this.$v.medicalOfficerContact.officialTeleNum.required &&
+      if (!this.$v.gramaNiladhariContact.officialTeleNum.$dirty) return errors;
+      !this.$v.gramaNiladhariContact.officialTeleNum.required &&
         errors.push("Official Telephone Number is required");
-      !this.$v.medicalOfficerContact.officialTeleNum.numeric &&
+      !this.$v.gramaNiladhariContact.officialTeleNum.numeric &&
         errors.push("Telephone Number Should Only Contains Numbers");
-      !this.$v.medicalOfficerContact.officialTeleNum.minLength &&
+      !this.$v.gramaNiladhariContact.officialTeleNum.minLength &&
         errors.push("Invalid Telephone Number");
-      !this.$v.medicalOfficerContact.officialTeleNum.maxLength &&
+      !this.$v.gramaNiladhariContact.officialTeleNum.maxLength &&
         errors.push("Invalid Telephone Number");
       return errors;
     },
     permAddressErros() {
       const errors = [];
-      if (!this.$v.medicalOfficerContact.permAddress.$dirty) return errors;
-      !this.$v.medicalOfficerContact.permAddress.required &&
+      if (!this.$v.gramaNiladhariContact.permAddress.$dirty) return errors;
+      !this.$v.gramaNiladhariContact.permAddress.required &&
         errors.push("Permanent Address is required");
       return errors;
     },
     officialEmailErrors() {
       const errors = [];
-      if (!this.$v.medicalOfficerContact.officialEmail.$dirty) return errors;
-      !this.$v.medicalOfficerContact.officialEmail.required &&
+      if (!this.$v.gramaNiladhariContact.officialEmail.$dirty) return errors;
+      !this.$v.gramaNiladhariContact.officialEmail.required &&
         errors.push("Official Email is required");
-      !this.$v.medicalOfficerContact.officialEmail.email &&
+      !this.$v.gramaNiladhariContact.officialEmail.email &&
         errors.push("Invalid Email");
+      return errors;
+    },
+    titleErrors() {
+      const errors = [];
+      if (!this.$v.gramaNiladhariBasic.title.$dirty) return errors;
+      !this.$v.gramaNiladhariBasic.title.required &&
+        errors.push("Official Email is required");
+      return errors;
+    },
+    divisionErrors() {
+      const errors = [];
+      if (!this.$v.gramaNiladhariProfessional.division.$dirty) return errors;
+      !this.$v.gramaNiladhariProfessional.division.required &&
+        errors.push("Division is required");
+      return errors;
+    },
+    provinceErrors() {
+      const errors = [];
+      if (!this.$v.gramaNiladhariProfessional.province.$dirty) return errors;
+      !this.$v.gramaNiladhariProfessional.province.required &&
+        errors.push("Province is required");
+      return errors;
+    },
+    districtErrors() {
+      const errors = [];
+      if (!this.$v.gramaNiladhariProfessional.district.$dirty) return errors;
+      !this.$v.gramaNiladhariProfessional.district.required &&
+        errors.push("District is required");
+      return errors;
+    },
+    gnDivisionErrors() {
+      const errors = [];
+      if (!this.$v.gramaNiladhariProfessional.gnDivision.$dirty) return errors;
+      !this.$v.gramaNiladhariProfessional.gnDivision.required &&
+        errors.push("Grama Niladhari Division is required");
       return errors;
     }
   },
   methods: {
     // To Save MO's Basic Information
     saveBasicInformation() {
-      this.$v.medicalOfficerBasic.$touch();
-      if (!this.$v.medicalOfficerBasic.$invalid) {
+      this.$v.gramaNiladhariBasic.$touch();
+      if (!this.$v.gramaNiladhariBasic.$invalid) {
         this.loading_1 = true;
         this.$http
-          .post("/api/medical_officer/create", {
-            firstName: this.medicalOfficerBasic.firstName,
-            lastName: this.medicalOfficerBasic.lastName,
-            dob: this.medicalOfficerBasic.dob,
-            nic: this.medicalOfficerBasic.nic,
+          .post("/api/grama_niladhari/create", {
+            firstName: this.gramaNiladhariBasic.firstName,
+            lastName: this.gramaNiladhariBasic.lastName,
+            dob: this.gramaNiladhariBasic.dob,
+            nic: this.gramaNiladhariBasic.nic,
             createdBy: "",
-            gender: this.medicalOfficerBasic.gender,
-            email: this.medicalOfficerBasic.email,
-            password: "doctor@123",
+            title: this.gramaNiladhariBasic.title,
+            gender: this.gramaNiladhariBasic.gender,
+            email: this.gramaNiladhariBasic.email,
+            password: "gn@123",
             lastModifiedBy: ""
           })
           .then(res => {
             if (res.data.message == "Success") {
-              this.snackbarText = "Patient Created Successfully";
-              this.snackbar = true;
+              // this.snackbarText = "Patient Created Successfully";
+              // this.snackbar = true;
               this.docID = res.data.docID;
               console.log(this.docID);
               this.loading_1 = false;
@@ -567,17 +643,19 @@ export default {
         console.log("Forma Validation Failed");
       }
     },
-    // To Save MO's Professional Information
+    // To Save GNO's Professional Information
     saveProfessionalInforamtion() {
-      this.$v.medicalOfficerProfessional.$touch();
-      if (!this.$v.medicalOfficerProfessional.$invalid) {
+      this.$v.gramaNiladhariProfessional.$touch();
+      if (!this.$v.gramaNiladhariProfessional.$invalid) {
         this.loading_1 = true;
-        this.docID = "sjfsiosdofsdofksdo";
         this.$http
-          .put("/api/medical_officer/" + this.docID + "/professional", {
-            regNo: this.medicalOfficerProfessional.regNo,
-            specialty: this.medicalOfficerProfessional.specialty,
-            designation: this.medicalOfficerProfessional.designation
+          .put("/api/grama_niladhari/" + this.docID + "/professional", {
+            regNo: this.gramaNiladhariProfessional.regNo,
+            province: this.gramaNiladhariProfessional.province,
+            district: this.gramaNiladhariProfessional.district,
+            division: this.gramaNiladhariProfessional.division,
+            gnDivision: this.gramaNiladhariProfessional.gnDivision,
+            lastModifiedBy: "null"
           })
           .then(res => {
             console.log(res.data);
@@ -603,17 +681,18 @@ export default {
 
       console.log(URL.createObjectURL(this.selectedFile));
 
-      this.uploadFile();
+      // this.uploadFile();
     },
     uploadFile() {
       let formData = new FormData();
       formData.append("imageFile", this.selectedFile);
       console.log(formData);
-      console.log(this.selectedFile);
-      this.docID = "lskdflsdfksdokfods";
+      // console.log(this.selectedFile);
+      this.loading_1 = true;
+
       this.$http
         .post(
-          "/api/medical_officer/" + this.docID + "/profile_image",
+          "/api/grama_niladhari/" + this.docID + "/profile_image",
           formData,
           {
             onUploadProgress: uploadEvent => {
@@ -622,11 +701,21 @@ export default {
                   Math.round((uploadEvent.loaded / uploadEvent.total) * 100) +
                   "%"
               );
+
+              if (
+                Math.round((uploadEvent.loaded / uploadEvent.total) * 100) ==
+                100
+              ) {
+                this.loading_1 = false;
+              }
             }
           }
         )
         .then(res => {
           console.log(res.data);
+          if (res.data.message == "Success") {
+            this.e6 = 4;
+          }
         })
         .catch(err => {
           console.log(err);
@@ -648,66 +737,134 @@ export default {
     },
     // To Save Medical Officer's Contact Information
     saveContactInfo() {
-      this.$http
-        .put("/api/medical_officer/" + this.docID + "/contact", {
-          officialEmail: this.medicalOfficerContact.officialEmail,
-          tempAddress: this.medicalOfficerContact.tempAddress,
-          permAddress: this.medicalOfficerContact.permAddress,
-          officialTeleNum: this.medicalOfficerContact.officialTeleNum,
-          privateTeleNum: this.medicalOfficerContact.personalTeleNum
-        })
-        .then(res => {
-          console.log(res.data);
-          if (res.data.message == "Success") {
-            this.e6 = 5;
-          }
-        })
-        .catch(err => {
-          console.log(err);
+      this.$v.gramaNiladhariContact.$touch();
+      if (!this.$v.gramaNiladhariContact.$invalid) {
+        console.log({
+          officialEmail: this.gramaNiladhariContact.officialEmail,
+          tempAddress: this.gramaNiladhariContact.tempAddress,
+          permAddress: this.gramaNiladhariContact.permAddress,
+          officialTeleNum: this.gramaNiladhariContact.officialTeleNum,
+          privateTeleNum: this.gramaNiladhariContact.personalTeleNum,
+          lastModifiedBy: "null"
         });
-    },
-    // To Get All Hospitals as a List
-    getAllHospitals() {
-      this.$http
-        .get("/api/hospital/all/list")
-        .then(res => {
-          this.hospitalData = res.data;
-          res.data.forEach(data => {
-            this.hospitals.push(data.name);
+        this.loading_1 = true;
+        this.$http
+          .put("/api/grama_niladhari/" + this.docID + "/contact", {
+            officialEmail: this.gramaNiladhariContact.officialEmail,
+            tempAddress: this.gramaNiladhariContact.tempAddress,
+            permAddress: this.gramaNiladhariContact.permAddress,
+            officialTeleNum: this.gramaNiladhariContact.officialTeleNum,
+            privateTeleNum: this.gramaNiladhariContact.personalTeleNum,
+            lastModifiedBy: "null"
+          })
+          .then(res => {
+            console.log(res.data);
+            if (res.data.message == "Success") {
+              this.loading_1 = false;
+              this.snackbarText = "Grama Niladhari Officer Added Successfully";
+              this.snackbarTimeout = 2000;
+              this.snackbar = true;
+              this.e6 = 1;
+              this.clearAllFields();
+            }
+          })
+          .catch(err => {
+            console.log(err);
           });
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      }
     },
-    // To Save Work Place
-    saveWorkPlace() {
-      let tempObj;
+    clearAllFields() {
+      this.gramaNiladhariBasic.firstName = "";
+      this.gramaNiladhariBasic.lastName = "";
+      this.gramaNiladhariBasic.email = "";
+      this.gramaNiladhariBasic.nic = "";
+      this.gramaNiladhariBasic.dob = new Date().toISOString().substr(0, 10);
+      this.gramaNiladhariBasic.gender = "Male";
 
-      this.hospitalData.forEach(h => {
-        if (h.name == this.hospital) {
-          tempObj = h;
-        }
-      });
+      this.gramaNiladhariProfessional.regNo = "";
+      this.gramaNiladhariProfessional.gnDivision = "";
+      this.gramaNiladhariProfessional.division = "";
+      this.gramaNiladhariProfessional.province = "";
+      this.gramaNiladhariProfessional.district = "";
+      this.gramaNiladhariProfessional.officeLocation = "";
 
-      console.log(tempObj);
+      this.gramaNiladhariContact.permAddress = "";
+      this.gramaNiladhariContact.tempAddress = "";
+      this.gramaNiladhariContact.officialTeleNum = "";
+      this.gramaNiladhariContact.personalTeleNum = "";
+      this.gramaNiladhariContact.officialEmail = "";
+      this.$v.gramaNiladhariBasic.$reset();
+      this.$v.gramaNiladhariProfessional.$reset();
+      this.$v.gramaNiladhariContact.$reset();
 
-      this.$http
-        .put("/api/medical_officer/" + this.docID + "/work_place", tempObj)
-        .then(res => {
-          console.log(res.data);
-          if (res.data.message == "Success") {
-            this.e6 = 5;
-          }
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      this.imageURL = require("../../../assets/user.png");
+    },
+
+    // When User Select the Province, the Districts within that Provice should be loaded to the v-select
+    getDistricts() {
+      this.districts = this.provDistMap.get(
+        this.gramaNiladhariProfessional.province
+      );
+      console.log(
+        this.provDistMap.get(this.gramaNiladhariProfessional.province.toString)
+      );
+    },
+    // When User Select the District, the GN Divisions within that District should be loaded to the v-select
+    getGnDivisions() {
+      this.gnDivisions = this.divGnDivMap.get(
+        this.gramaNiladhariProfessional.division
+      );
+    },
+    getDivisions() {
+      this.divisions = this.districtDivisionMap.get(
+        this.gramaNiladhariProfessional.district
+      );
     }
   },
   created() {
     // Load GN Divs From Database Based On Doctor's Hospital Location
-    this.getAllHospitals();
+
+    // Assigning Values to the Provice-District Map
+
+    this.$http
+      .get("/api/metadata/metadata_01")
+      .then(res => {
+        // Convert the Plain Object to a MAP Object
+        this.provDistMap = new Map(Object.entries(res.data.province_district));
+        this.districtDivisionMap = new Map(
+          Object.entries(res.data.district_division)
+        );
+        this.divGnDivMap = new Map(
+          Object.entries(res.data.division_gndivision)
+        );
+
+        console.log(">>>>>>>>>>>>>");
+        console.log(this.districtDivisionMap);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+    // this.provDistMap.set("Western", ["Colombo", "Kaluthara", "Gampaha"]);
+    // this.provDistMap.set("Northern", [
+    //   "Jaffna",
+    //   "Mannar",
+    //   "Mullaitivu",
+    //   "Vavuniya"
+    // ]);
+    // this.provDistMap.set("North-Western", ["Puttalam", "Kurunegala"]);
+    // this.provDistMap.set("North-Central", ["Jafna", "Mulativu", ""]);
+    // this.provDistMap.set("Eastern", ["Anuradhapura", "Polonnaruwa"]);
+    // this.provDistMap.set("Central	", ["Matale", "Kandy", "Nuwara Eliya"]);
+    // this.provDistMap.set("Sabaragamuwa", ["Kegalle", "Ratnapura"]);
+    // this.provDistMap.set("Eastern", ["Trincomalee", "Batticaloa", "Ampara"]);
+    // this.provDistMap.set("Uva", ["Badulla", "Monaragala"]);
+    // this.provDistMap.set("Southern", ["Hambantota", "Matara", "Galle"]);
+
+    // Assigning Values to the DIstrict-GN Division Map
+    this.distGnMap.set("Homagama", ["Wethara-255", "Kirigampaumunuwa-123"]);
+    this.distGnMap.set("Kesbawa", ["Polgasowita-234", "Halpita-sdf"]);
+
+    // console.log(this.districts);
   }
 };
 </script>
