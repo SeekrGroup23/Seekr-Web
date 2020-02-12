@@ -35,17 +35,44 @@
                     color="primary"
                     class="hidden-sm-and-down"
                     @click="$router.push('/medicalofficer/add_patient')"
-                    >New Patient</v-btn
+                    >Add New</v-btn
                   >
                 </v-flex>
 
                 <v-flex shrink xs2 md1 class="pl-5 align-self-end">
-                  <v-btn flat icon><v-icon>more_vert</v-icon></v-btn>
+                  <v-menu
+                    left
+                    origin="center center"
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on">
+                        <v-icon>more_vert</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <v-list dense>
+                      <v-list-tile>
+                        <v-list-tile-title>Dark Mode</v-list-tile-title>
+
+                        <v-list-tile-action class="pl-3">
+                          <v-switch v-model="isDark" color="primary"></v-switch>
+                        </v-list-tile-action>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                  <!-- <v-btn flat icon><v-icon>more_vert</v-icon></v-btn> -->
                 </v-flex>
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="hospitals" :search="search">
+          <v-data-table
+            :headers="headers"
+            :items="hospitals"
+            :search="search"
+            :loading="tableLoading"
+            :dark="isDark"
+          >
             <template v-slot:items="props">
               <td class="text-xs-left">{{ props.item.registration_no }}</td>
               <td class="text-xs-left">{{ props.item.name }}</td>
@@ -65,14 +92,14 @@
               </td>
 
               <td class="text-xs-center">
-                <v-btn icon>
-                  <v-icon small class="mr-2" @click="editItem(props.item)">
+                <v-btn icon @click="editItem(props.item)">
+                  <v-icon small class="">
                     edit
                   </v-icon>
                 </v-btn>
 
-                <v-btn icon>
-                  <v-icon small @click="deleteItem(props.item)">
+                <v-btn icon @click="deleteItem(props.item)">
+                  <v-icon small color="red">
                     delete
                   </v-icon>
                 </v-btn>
@@ -101,7 +128,7 @@
       </v-btn>
     </v-layout>
     <v-layout>
-      <v-dialog v-model="mapDialog" max-width="500" @change="alert('sdfsdfsd')">
+      <v-dialog v-model="mapDialog" max-width="500">
         <v-card>
           <popUpMap :geoData="geoData"></popUpMap>
         </v-card>
@@ -118,7 +145,10 @@ export default {
   },
   data: () => {
     return {
+      // Data Table
       search: "",
+      tableLoading: false,
+      isDark: false,
       headers: [
         {
           text: "Registration No.",
@@ -150,31 +180,36 @@ export default {
       this.mapDialog = true;
       this.geoData = hospital;
       // console.log(this.geoCordinates);
+    },
+    getHospitalData() {
+      this.tableLoading = true;
+      // Get all Hospital Data
+      this.$http
+        .get("/api/hospital")
+        .then(res => {
+          // console.log(res.data);
+          // this.hospitals = res.data;
+
+          res.data.forEach(hospital => {
+            this.hospitals.push({
+              registration_no: hospital.registration_no,
+              name: hospital.name,
+              province: hospital.province,
+              district: hospital.district,
+              docID: hospital.docID,
+              category: hospital.category,
+              geoCordinates: hospital.geoCordinates
+            });
+          });
+          this.tableLoading = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   created() {
-    // Get all Hospital Data
-    this.$http
-      .get("/api/hospital")
-      .then(res => {
-        // console.log(res.data);
-        // this.hospitals = res.data;
-
-        res.data.forEach(hospital => {
-          this.hospitals.push({
-            registration_no: hospital.registration_no,
-            name: hospital.name,
-            province: hospital.province,
-            district: hospital.district,
-            docID: hospital.docID,
-            category: hospital.category,
-            geoCordinates: hospital.geoCordinates
-          });
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    this.getHospitalData();
   }
 };
 </script>

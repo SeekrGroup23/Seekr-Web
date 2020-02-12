@@ -45,7 +45,12 @@
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="gnData" :search="search">
+          <v-data-table
+            :headers="headers"
+            :items="gnData"
+            :search="search"
+            :loading="tableLoading"
+          >
             <template v-slot:items="props">
               <td class="text-xs-left">{{ props.item.regNo }}</td>
               <td class="text-xs-left">{{ props.item.name }}</td>
@@ -126,6 +131,8 @@ export default {
   data: () => {
     return {
       search: "",
+      // Data Table
+      tableLoading: false,
       headers: [
         {
           text: "Registration No.",
@@ -200,6 +207,7 @@ export default {
         });
     },
     getGNData() {
+      this.tableLoading = true;
       this.$http
         .get("/api/grama_niladhari/")
         .then(res => {
@@ -217,6 +225,8 @@ export default {
               docID: gn.docID
             });
           });
+          this.tableLoading = false;
+
           console.log(this.gnData);
         })
         .catch(err => {

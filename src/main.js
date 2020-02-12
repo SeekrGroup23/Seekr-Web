@@ -17,7 +17,8 @@ Vue.prototype.$http = Axios.create({
 
 const access_token = localStorage.getItem("access_token");
 if (access_token) {
-  Vue.prototype.$http.defaults.headers.common["Authorization"] = access_token;
+  Vue.prototype.$http.defaults.headers.common["Authorization"] =
+    "Bearer " + access_token;
 }
 
 // For Event Bus -> https://blog.logrocket.com/using-event-bus-in-vue-js-to-pass-data-between-components/

@@ -32,6 +32,7 @@ import Admin_DataEntry_View from "./views/Admin/DataEntry/ViewAll.vue";
 import Admin_DataEntry_AddNew from "./views/Admin/DataEntry/AddNew.vue";
 import Admin_Admins_AddNew from "./views/Admin/DataEntry/AddNew.vue";
 import Admin_Admins_View from "./views/Admin/DataEntry/ViewAll.vue";
+import MO_ViewPatient from "./views/MedicalOfficer/ViewPatient.vue";
 
 Vue.use(Router);
 
@@ -119,7 +120,10 @@ let router = new Router({
       children: [
         {
           path: "",
-          component: MO_Dashboard
+          component: MO_Dashboard,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "add_patient",
@@ -132,6 +136,10 @@ let router = new Router({
         {
           path: "profile",
           component: MO_Profile
+        },
+        {
+          path: "patient/:id",
+          component: MO_ViewPatient
         }
       ]
     },

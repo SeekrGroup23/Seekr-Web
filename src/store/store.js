@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import router from "../router";
 
 Vue.use(Vuex);
 
@@ -91,6 +92,15 @@ export default new Vuex.Store({
             localStorage.removeItem("token");
             reject(err);
           });
+      });
+    },
+    logout({ commit }) {
+      return new Promise((resolve, reject) => {
+        commit("logout");
+        localStorage.removeItem("access_token");
+        delete axios.defaults.headers.common["Authorization"];
+        router.push("/login");
+        resolve();
       });
     }
   },

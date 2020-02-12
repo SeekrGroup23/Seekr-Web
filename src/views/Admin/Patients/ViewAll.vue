@@ -45,27 +45,38 @@
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="patients" :search="search">
+          <v-data-table
+            :headers="headers"
+            :items="patients"
+            :search="search"
+            :loading="loadingTable"
+            @click:row="onClickTableRow"
+          >
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.firstName }}</td>
-              <td class="text-xs-left">{{ props.item.lastName }}</td>
-              <td class="text-xs-left">{{ props.item.age }}</td>
-              <td class="text-xs-left">{{ props.item.gender }}</td>
-              <td class="text-xs-left">{{ props.item.location }}</td>
-              <td class="text-xs-left">{{ props.item.status }}</td>
-              <td class="text-xs-center">
-                <v-btn icon flat color="secondary" dark>
-                  <v-icon class="" @click="viewPatient(props.item)">
-                    visibility
-                  </v-icon>
-                </v-btn>
+              <tr @click="onClickTableRow(props.item)">
+                <td class="text-xs-left">{{ props.item.firstName }}</td>
+                <td class="text-xs-left">{{ props.item.lastName }}</td>
+                <td class="text-xs-left">{{ props.item.age }}</td>
+                <td class="text-xs-left">{{ props.item.gender }}</td>
+                <td class="text-xs-left">{{ props.item.location }}</td>
+                <td class="text-xs-left">{{ props.item.status }}</td>
+                <td class="text-xs-center">
+                  <v-btn icon flat color="secondary" dark>
+                    <v-icon class="" @click="viewPatient(props.item)">
+                      visibility
+                    </v-icon>
+                  </v-btn>
 
-                <v-btn icon>
-                  <v-icon @click="deletePatient(props.item.docID)" color="red">
-                    delete
-                  </v-icon>
-                </v-btn>
-              </td>
+                  <v-btn icon>
+                    <v-icon
+                      @click="deletePatient(props.item.docID)"
+                      color="red"
+                    >
+                      delete
+                    </v-icon>
+                  </v-btn>
+                </td>
+              </tr>
             </template>
             <template v-slot:no-results>
               <v-alert :value="true" color="error" icon="warning">
@@ -133,6 +144,7 @@ export default {
       snackbarText: "",
       timeout: 2000,
       search: "",
+      loadingTable: false,
       headers: [
         {
           text: "First Name",
@@ -200,11 +212,15 @@ export default {
           console.log(err);
         });
     },
+    onClickTableRow(event) {
+      console.log(event);
+    },
     onClickCancel() {
       this.dialog = false;
       this.deletePointer = null;
     },
     getAllPatientData() {
+      this.loadingTable = true;
       this.patients = [];
       this.$http
         .get("/api/patient/all")
@@ -224,6 +240,7 @@ export default {
               status: patient.state,
               docID: patient.docID
             });
+            this.loadingTable = false;
           });
         })
         .catch(err => {

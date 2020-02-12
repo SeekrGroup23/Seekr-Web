@@ -78,12 +78,13 @@
             </v-list-tile>
           </v-list-group>
           <v-divider></v-divider>
-          <v-list-tile @click="$router.push('/medicalofficer/profile')">
+
+          <v-list-tile @click="$router.push('/medicalofficer/clinic')">
             <v-list-tile-action>
-              <v-icon>account_circle</v-icon>
+              <v-icon>local_hospital</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>Profile</v-list-tile-title>
+              <v-list-tile-title>Clinical</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
           <v-divider></v-divider>
@@ -96,7 +97,17 @@
             </v-list-tile-content>
           </v-list-tile>
           <v-divider></v-divider>
-          <v-list-tile>
+
+          <v-list-tile @click="$router.push('/medicalofficer/profile')">
+            <v-list-tile-action>
+              <v-icon>account_circle</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Profile</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile @click="deleteConfirmation = true">
             <v-list-tile-action>
               <v-icon>exit_to_app</v-icon>
             </v-list-tile-action>
@@ -138,6 +149,22 @@
     <v-content>
       <v-container class="py-0 ma-0 containerRouterView" fluid>
         <router-view></router-view>
+        <v-dialog v-model="deleteConfirmation" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Logout Confirmation</v-card-title>
+            <v-card-text>Do you want to proceed with this action?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="green darken-1"
+                flat
+                @click="deleteConfirmation = false"
+                >Cancel</v-btn
+              >
+              <v-btn color="red darken-1" flat @click="logout()">Logout</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-content>
     <v-footer color="" fixed app></v-footer>
@@ -149,6 +176,7 @@ export default {
   data: () => {
     return {
       drawer: true,
+      deleteConfirmation: false,
       items: [
         {
           action: "local_activity",
@@ -211,7 +239,24 @@ export default {
     };
   },
   beforeCreate() {},
-  methods: {}
+  created() {
+    console.log("Created>>>>>>>>>>>.");
+
+    this.$http.interceptors.response.use(undefined, function(err) {
+      return new Promise(() => {
+        if (err.status === 403 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch("logout");
+          console.log("Logout Dis");
+        }
+        throw err;
+      });
+    });
+  },
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    }
+  }
 };
 </script>
 

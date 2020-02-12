@@ -45,14 +45,38 @@
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="desserts" :search="search">
+          <v-data-table
+            :headers="headers"
+            :items="patients"
+            :search="search"
+            :loading="loadingTable"
+            @click:row="onClickTableRow"
+          >
             <template v-slot:items="props">
-              <td>{{ props.item.name }}</td>
-              <td class="text-xs-right">{{ props.item.calories }}</td>
-              <td class="text-xs-right">{{ props.item.fat }}</td>
-              <td class="text-xs-right">{{ props.item.carbs }}</td>
-              <td class="text-xs-right">{{ props.item.protein }}</td>
-              <td class="text-xs-right">{{ props.item.iron }}</td>
+              <tr @click="onClickTableRow(props.item)">
+                <td class="text-xs-left">{{ props.item.firstName }}</td>
+                <td class="text-xs-left">{{ props.item.lastName }}</td>
+                <td class="text-xs-left">{{ props.item.age }}</td>
+                <td class="text-xs-left">{{ props.item.gender }}</td>
+                <td class="text-xs-left">{{ props.item.location }}</td>
+                <td class="text-xs-left">{{ props.item.status }}</td>
+                <td class="text-xs-center">
+                  <v-btn icon flat color="secondary" dark>
+                    <v-icon class="" @click="viewPatient(props.item)">
+                      visibility
+                    </v-icon>
+                  </v-btn>
+
+                  <v-btn icon>
+                    <v-icon
+                      @click="deletePatient(props.item.docID)"
+                      color="red"
+                    >
+                      delete
+                    </v-icon>
+                  </v-btn>
+                </td>
+              </tr>
             </template>
             <template v-slot:no-results>
               <v-alert :value="true" color="error" icon="warning">
@@ -76,6 +100,36 @@
         <v-icon dark>add</v-icon>
       </v-btn>
     </v-layout>
+
+    <v-layout row justify-center>
+      <v-dialog v-model="dialog" persistent max-width="290">
+        <v-card>
+          <v-card-title class="headline">Delete Confirmation</v-card-title>
+          <v-card-text
+            >Are you sure that you want to proceed with this
+            action?</v-card-text
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="green darken-1" flat @click="onClickCancel()"
+              >cancel</v-btn
+            >
+            <v-btn color="red darken-1" flat @click="onClickDelete()" dark small
+              >Delete</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-snackbar
+        v-model="snackbar"
+        :color="snackbarColor"
+        :timeout="timeout"
+        right
+        bottom
+      >
+        {{ snackbarText }}
+      </v-snackbar>
+    </v-layout>
   </v-container>
 </template>
 
@@ -83,106 +137,125 @@
 export default {
   data: () => {
     return {
+      dialog: false,
+      deletePointer: null,
+      snackbar: false,
+      snackbarColor: "secondary",
+      snackbarText: "",
+      timeout: 2000,
       search: "",
+      loadingTable: false,
       headers: [
         {
-          text: "Dessert (100g serving)",
+          text: "First Name",
           align: "left",
-          sortable: false,
-          value: "name"
+          sortable: true,
+          value: "firstName"
         },
-        { text: "Calories", value: "calories" },
-        { text: "Fat (g)", value: "fat" },
-        { text: "Carbs (g)", value: "carbs" },
-        { text: "Protein (g)", value: "protein" },
-        { text: "Iron (%)", value: "iron" }
+        {
+          text: "Last Name",
+          align: "left",
+          value: "lastName",
+          sortable: true
+        },
+        { text: "Age", align: "left", value: "age", sortable: true },
+        { text: "Gender", align: "left", value: "gender", sortable: false },
+        { text: "Location", align: "left", value: "location", sortable: false },
+        { text: "Status", align: "left", value: "status", sortable: false },
+        { text: "Actions", value: "actions", align: "center", sortable: false }
       ],
-      desserts: [
-        {
-          name: "Frozen Yogurt",
-          calories: 159,
-          fat: 6.0,
-          carbs: 24,
-          protein: 4.0,
-          iron: "1%"
-        },
-        {
-          name: "Ice cream sandwich",
-          calories: 237,
-          fat: 9.0,
-          carbs: 37,
-          protein: 4.3,
-          iron: "1%"
-        },
-        {
-          name: "Eclair",
-          calories: 262,
-          fat: 16.0,
-          carbs: 23,
-          protein: 6.0,
-          iron: "7%"
-        },
-        {
-          name: "Cupcake",
-          calories: 305,
-          fat: 3.7,
-          carbs: 67,
-          protein: 4.3,
-          iron: "8%"
-        },
-        {
-          name: "Gingerbread",
-          calories: 356,
-          fat: 16.0,
-          carbs: 49,
-          protein: 3.9,
-          iron: "16%"
-        },
-        {
-          name: "Jelly bean",
-          calories: 375,
-          fat: 0.0,
-          carbs: 94,
-          protein: 0.0,
-          iron: "0%"
-        },
-        {
-          name: "Lollipop",
-          calories: 392,
-          fat: 0.2,
-          carbs: 98,
-          protein: 0,
-          iron: "2%"
-        },
-        {
-          name: "Honeycomb",
-          calories: 408,
-          fat: 3.2,
-          carbs: 87,
-          protein: 6.5,
-          iron: "45%"
-        },
-        {
-          name: "Donut",
-          calories: 452,
-          fat: 25.0,
-          carbs: 51,
-          protein: 4.9,
-          iron: "22%"
-        },
-        {
-          name: "KitKat",
-          calories: 518,
-          fat: 26.0,
-          carbs: 65,
-          protein: 7,
-          iron: "6%"
-        }
-      ]
+      patients: []
     };
   },
   computed: {},
-  methods: {}
+  methods: {
+    getAge(dateString) {
+      console.log(dateString);
+
+      var today = new Date();
+      var birthDate = new Date(dateString);
+      console.log(birthDate);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    },
+    deletePatient(docID) {
+      this.deletePointer = docID;
+      this.dialog = true;
+    },
+    onClickDelete() {
+      this.dialog = false;
+      this.$http
+        .delete("/api/patient/" + this.deletePointer)
+        .then(res => {
+          console.log(res.data);
+
+          if (res.data.message == "Success") {
+            this.snackbarColor = "success";
+            this.snackbarText = "Patient Deleted Successfully";
+            this.snackbar = true;
+
+            this.getAllPatientData();
+          } else {
+            this.snackbarColor = "warning";
+            this.snackbarText = "Patient Deleted Failed!";
+            this.snackbar = true;
+          }
+        })
+        .catch(err => {
+          this.snackbarColor = "warning";
+          this.snackbarText = "Patient Deleted Failed!";
+          this.snackbar = true;
+          console.log(err);
+        });
+    },
+    onClickTableRow(event) {
+      console.log(event);
+    },
+    onClickCancel() {
+      this.dialog = false;
+      this.deletePointer = null;
+    },
+    getAllPatientData() {
+      console.log("Token >>>>>>>>>>>> " + localStorage.getItem("access_token"));
+      this.loadingTable = true;
+      this.patients = [];
+      this.$http
+        .get("/api/patient/all")
+        .then(res => {
+          if (res.data == "") {
+            this.patients = [];
+          }
+          var tempArray = res.data;
+
+          tempArray.forEach(patient => {
+            this.patients.push({
+              firstName: patient.firstName,
+              lastName: patient.lastName,
+              age: this.getAge(patient.dob),
+              gender: patient.gender,
+              location: patient.location,
+              status: patient.state,
+              docID: patient.docID
+            });
+            this.loadingTable = false;
+          });
+        })
+        .catch(err => {
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+
+            // console.log(err);
+          }
+        });
+    }
+  },
+  mounted() {
+    this.getAllPatientData();
+  }
 };
 </script>
 

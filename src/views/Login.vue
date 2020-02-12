@@ -152,13 +152,15 @@ export default {
                 break;
 
               case "gramaNiladhari":
-                console.log("Router GN");
                 this.$router.push("/gramaniladhari/");
                 break;
-              case "user":
+              case "medical_officer":
+                this.$router.push("/medicalofficer/");
                 break;
 
               default:
+                this.alert = true;
+                this.isPending = false;
                 break;
             }
           })

@@ -3,7 +3,7 @@
     <v-layout column>
       <v-flex>
         <h4 class="display-1 font-weight-medium" color="secondary">
-          My Profile
+          Patient's Profile
         </h4>
       </v-flex>
     </v-layout>
@@ -14,11 +14,8 @@
             <v-layout row wrap class="justify-start align-start">
               <v-flex class=" pa-2" md2 sm4 xs12>
                 <v-layout column wrap class="justify-center align-start">
-                  <v-avatar size="150" color="grey lighten-4" class="ml-2">
-                    <img
-                      src="https://vuetifyjs.com/apple-touch-icon-180x180.png"
-                      alt="avatar"
-                    />
+                  <v-avatar size="150" color="green" class="ml-2">
+                    <span class="white--text display-1">NP</span>
                   </v-avatar>
                 </v-layout>
                 <v-divider class="hidden-sm-and-up mt-2"></v-divider>
@@ -29,16 +26,16 @@
                   <v-layout class="align-start" column>
                     <!-- <h5 class="title">Dr. Nimal Perera</h5> -->
                     <div class="title font-weight-light pb-2">
-                      Dr. Nimal Perera
+                      Nimal Perera
                     </div>
                     <div class="subheading font-weight-light pb-2">
-                      Kidney Specialist
+                      Wethara, Homagama
                     </div>
                     <div class="subheading font-weight-light pb-1">
-                      Test Teaching Hospital
+                      57 Yrs.
                     </div>
                     <div class="subheading font-weight-light pb-2">
-                      np@gmail.com
+                      PID0001
                     </div>
                   </v-layout>
                 </v-container>
@@ -51,14 +48,164 @@
           </v-container>
         </v-card>
       </v-flex>
+      <!-- <v-flex>
+        <v-layout
+          row
+          justify-space-around
+          align-content-start
+          class="py-4 px-0"
+          wrap
+        >
+        </v-layout>
+      </v-flex> -->
 
       <v-flex class="py-4">
         <v-layout column>
           <v-tabs slider-color="secondary">
+            <v-tab>Dashboard</v-tab>
             <v-tab>Personal</v-tab>
-            <v-tab>Official</v-tab>
-            <v-tab>Image</v-tab>
-            <v-tab>Settings</v-tab>
+            <v-tab>Medical</v-tab>
+            <v-tab>Reports</v-tab>
+            <v-tab>Clinical</v-tab>
+            <v-tab>Prescriptions</v-tab>
+
+            <!-- Dashboard Tab -->
+            <v-tab-item>
+              <v-card flat color="grey lighten-3">
+                <v-container fluid>
+                  <v-layout
+                    row
+                    justify-space-between
+                    align-content-start
+                    justify-start
+                    align-start
+                    class="py-2 px-0"
+                    wrap
+                  >
+                    <!-- No. of Visits -->
+                    <v-card width="288" height="100" class="my-2" hover flat>
+                      <v-container fluid class="pa-0 ma-0">
+                        <v-layout row>
+                          <v-flex shrink>
+                            <v-card
+                              height="100"
+                              color="primary "
+                              dark
+                              width="100"
+                              flat
+                            >
+                              <v-container>
+                                <v-icon size="50">home</v-icon>
+                              </v-container>
+                            </v-card>
+                          </v-flex>
+                          <v-flex class="py-2 px-2">
+                            <h6 class="subheading">No. of Clinical Visits</h6>
+                            <span class="subheading font-weight-medium"
+                              >00</span
+                            >
+                            <v-layout column class="mt-2">
+                              <v-divider></v-divider>
+                              <h6 class="subheading pt-1 ">View Details</h6>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card>
+
+                    <v-card width="288" height="100" class="my-2" hover flat>
+                      <v-container fluid class="pa-0 ma-0">
+                        <v-layout row>
+                          <v-flex shrink>
+                            <v-card
+                              height="100"
+                              color="secondary "
+                              dark
+                              width="100"
+                              flat
+                            >
+                              <v-container>
+                                <v-icon size="50">home</v-icon>
+                              </v-container>
+                            </v-card>
+                          </v-flex>
+                          <v-flex class="py-2 px-2">
+                            <h6 class="subheading">Patient's Condition</h6>
+                            <span class="subheading font-weight-medium"
+                              >00</span
+                            >
+                            <v-layout column class="mt-2">
+                              <v-divider></v-divider>
+                              <h6 class="subheading pt-1 ">View Details</h6>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card>
+
+                    <v-card width="288" height="100" class="my-2" hover flat>
+                      <v-container fluid class="pa-0 ma-0">
+                        <v-layout row>
+                          <v-flex shrink>
+                            <v-card
+                              height="100"
+                              color="secondary "
+                              dark
+                              width="100"
+                              flat
+                            >
+                              <v-container>
+                                <v-icon size="50">home</v-icon>
+                              </v-container>
+                            </v-card>
+                          </v-flex>
+                          <v-flex class="py-2 px-2">
+                            <h6 class="subheading">Last Visited</h6>
+                            <span class="subheading font-weight-medium"
+                              >00</span
+                            >
+                            <v-layout column class="mt-2">
+                              <v-divider></v-divider>
+                              <h6 class="subheading pt-1 ">View Details</h6>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card>
+
+                    <v-card width="288" height="100" class="my-2" hover flat>
+                      <v-container fluid class="pa-0 ma-0">
+                        <v-layout row>
+                          <v-flex shrink>
+                            <v-card
+                              height="100"
+                              color="secondary "
+                              dark
+                              width="100"
+                              flat
+                            >
+                              <v-container>
+                                <v-icon size="50">home</v-icon>
+                              </v-container>
+                            </v-card>
+                          </v-flex>
+                          <v-flex class="py-2 px-2">
+                            <h6 class="subheading">Other</h6>
+                            <span class="subheading font-weight-medium"
+                              >00</span
+                            >
+                            <v-layout column class="mt-2">
+                              <v-divider></v-divider>
+                              <h6 class="subheading pt-1 ">View Details</h6>
+                            </v-layout>
+                          </v-flex>
+                        </v-layout>
+                      </v-container>
+                    </v-card>
+                  </v-layout>
+                </v-container>
+              </v-card>
+            </v-tab-item>
 
             <!-- Personal Tab -->
             <v-tab-item>
@@ -287,6 +434,15 @@
                       </v-expansion-panel>
                     </v-column>
                   </v-row>
+                </v-container>
+              </v-card>
+            </v-tab-item>
+
+            <!-- Prescriptions Tab -->
+            <v-tab-item>
+              <v-card flat color="grey lighten-3">
+                <v-container fluid>
+                  <v-layout column> </v-layout>
                 </v-container>
               </v-card>
             </v-tab-item>

@@ -49,6 +49,7 @@
             :headers="headers"
             :items="medicalOfficers"
             :search="search"
+            :loading="tableLoading"
           >
             <template v-slot:items="props">
               <td class="text-xs-left">
@@ -62,14 +63,20 @@
               </td>
               <td class="text-xs-left">{{ props.item.specialty }}</td>
               <td class="text-xs-center">
-                <v-btn icon flat color="secondary" dark>
-                  <v-icon class="" @click="viewPatient(props.item)">
+                <v-btn
+                  icon
+                  flat
+                  color="secondary"
+                  dark
+                  @click="viewPatient(props.item)"
+                >
+                  <v-icon class="">
                     visibility
                   </v-icon>
                 </v-btn>
 
-                <v-btn icon>
-                  <v-icon @click="deletePatient(props.item.docID)" color="red">
+                <v-btn icon @click="deletePatient(props.item.docID)">
+                  <v-icon color="red">
                     delete
                   </v-icon>
                 </v-btn>
@@ -136,6 +143,9 @@ export default {
       search: "",
       dialog: false,
       deletePointer: null,
+      tableLoading: false,
+
+      // Snackbar
       snackbar: false,
       snackbarColor: "secondary",
       snackbarText: "",
@@ -213,12 +223,14 @@ export default {
       this.deletePointer = null;
     },
     getAllMedicalOfficersData() {
+      this.tableLoading = true;
       this.$http
         .get("/api/medical_officer/all")
         .then(res => {
           console.log(res);
 
           this.medicalOfficers = res.data;
+          this.tableLoading = false;
         })
         .catch(err => {
           console.log(err);
