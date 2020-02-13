@@ -140,7 +140,7 @@ export default {
       this.$v.$touch();
 
       if (this.$v.$invalid) {
-        console.log("Error..");
+        console.log("Validation Error");
       } else {
         this.isPending = true;
 
@@ -155,6 +155,16 @@ export default {
                 this.$router.push("/gramaniladhari/");
                 break;
               case "medical_officer":
+                this.$router.push("/medicalofficer/");
+                break;
+
+              case "Donor":
+                this.$http
+                  .get(
+                    "/api/donor/isEmailVerified/" + this.$store.state.user.id
+                  )
+                  .then(res => {})
+                  .catch();
                 this.$router.push("/medicalofficer/");
                 break;
 

@@ -62,7 +62,7 @@
                 <td class="text-xs-left">{{ props.item.status }}</td>
                 <td class="text-xs-center">
                   <v-btn icon flat color="secondary" dark>
-                    <v-icon class="" @click="viewPatient(props.item)">
+                    <v-icon class="" @click="viewPatient(props.item.docID)">
                       visibility
                     </v-icon>
                   </v-btn>
@@ -220,7 +220,12 @@ export default {
       this.deletePointer = null;
     },
     getAllPatientData() {
-      console.log("Token >>>>>>>>>>>> " + localStorage.getItem("access_token"));
+      console.log(
+        "Token >>>>>>>>>>>> " +
+          localStorage.getItem("access_token") +
+          "\n AH $HTTP >> " +
+          this.$http.defaults.headers.common["Authorization"]
+      );
       this.loadingTable = true;
       this.patients = [];
       this.$http
@@ -246,11 +251,14 @@ export default {
         })
         .catch(err => {
           if (err.response.status == 403) {
-            this.$store.dispatch("logout");
+            // this.$store.dispatch("logout");
 
-            // console.log(err);
+            console.log("I'm Here >> " + err);
           }
         });
+    },
+    viewPatient(docID) {
+      this.$router.push("/medicalofficer/patient/" + docID);
     }
   },
   mounted() {

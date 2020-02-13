@@ -12,12 +12,24 @@ Vue.prototype.$http = Axios.create({
   baseURL: "http://localhost:5000"
 });
 
+// this.$http.interceptors.response.use(undefined, function(err) {
+//   return new Promise(() => {
+//     if (err.status === 403 && err.config && !err.config.__isRetryRequest) {
+//       this.$store.dispatch("logout");
+//       console.log("Logout Dis");
+//     }
+//     throw err;
+//   });
+// });
+
 // Adding Authorization Header to every request made to the server by Axios
 // const token = store.state.userJWT;
 
 const access_token = localStorage.getItem("access_token");
+
 if (access_token) {
-  Vue.prototype.$http.defaults.headers.common["Authorization"] =
+  console.log("In Main >> Setting AH");
+  Vue.prototype.$http.defaults.headers.common["authorization"] =
     "Bearer " + access_token;
 }
 

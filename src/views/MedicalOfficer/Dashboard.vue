@@ -15,11 +15,17 @@
       wrap
     >
       <!-- Verified CKDu Patients -->
-      <v-card width="300" height="100" class="my-2" hover >
+      <v-card width="300" height="100" class="my-2" hover>
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex shrink>
-              <v-card height="100" color="purple lighten-2" dark width="100" flat>
+              <v-card
+                height="100"
+                color="purple lighten-2"
+                dark
+                width="100"
+                flat
+              >
                 <v-container>
                   <v-icon size="50">home</v-icon>
                 </v-container>
@@ -42,7 +48,13 @@
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex>
-              <v-card height="100" color="indigo lighten-2" dark width="100" flat>
+              <v-card
+                height="100"
+                color="indigo lighten-2"
+                dark
+                width="100"
+                flat
+              >
                 <v-container>
                   <v-icon size="50">home</v-icon>
                 </v-container>
@@ -106,8 +118,6 @@
           </v-layout>
         </v-container>
       </v-card>
-
-
     </v-layout>
 
     <v-divider></v-divider>
@@ -120,6 +130,11 @@
 export default {
   data: () => {
     return {};
+  },
+  created() {
+    console.log(
+      "From Dashboard >> " + this.$http.defaults.headers.common["Authorization"]
+    );
   },
   computed: {},
   methods: {}

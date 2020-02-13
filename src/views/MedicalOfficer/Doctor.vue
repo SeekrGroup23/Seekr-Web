@@ -239,19 +239,7 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {
-    console.log("Created>>>>>>>>>>>.");
-
-    this.$http.interceptors.response.use(undefined, function(err) {
-      return new Promise(() => {
-        if (err.status === 403 && err.config && !err.config.__isRetryRequest) {
-          this.$store.dispatch("logout");
-          console.log("Logout Dis");
-        }
-        throw err;
-      });
-    });
-  },
+  created() {},
   methods: {
     logout() {
       this.$store.dispatch("logout");
