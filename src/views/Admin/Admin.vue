@@ -1,18 +1,11 @@
 <template>
   <v-app>
-    <v-navigation-drawer
-      v-model="drawer"
-      absolute
-      dark
-      app
-      width="280"
-      hidden-md-and-down
-    >
+    <v-navigation-drawer v-model="drawer" absolute dark app width="280" hidden-md-and-down>
       <v-card flat color="secondary">
-        <v-container class="pa-0 " fluid>
-          <v-layout class="" row>
+        <v-container class="pa-0" fluid>
+          <v-layout class row>
             <v-flex md12>
-              <v-card flat dark color="" height="48">
+              <v-card flat dark color height="48">
                 <v-layout class="pa-0 ma-0 px-3" row>
                   <v-flex>
                     <v-img
@@ -333,6 +326,37 @@
               </v-list-tile-action>
             </v-list-tile>
 
+            <v-list-tile @click="$router.push('admin/Information_hub/create_post')">
+              <v-list-tile-content>
+                <v-list-tile-title>Create Post</v-list-tile-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action>
+                <v-icon>person_add</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+
+            <v-list-tile @click="$router.push('admin/Information_hub/show_post')">
+              <v-list-tile-content>
+                <v-list-tile-title>show Post</v-list-tile-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action>
+                <v-icon>person_add</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+
+            <v-list-tile @click="$router.push('admin/Information_hub/news')">
+              <v-list-tile-content>
+                <v-list-tile-title>news</v-list-tile-title>
+              </v-list-tile-content>
+
+              <v-list-tile-action>
+                <v-icon>person_add</v-icon>
+              </v-list-tile-action>
+            </v-list-tile>
+
+
             <v-list-tile @click="$router.push('/medicalofficer/patients')">
               <v-list-tile-content>
                 <v-list-tile-title>View Posts</v-list-tile-title>
@@ -383,10 +407,7 @@
 
     <v-toolbar fixed app dense>
       <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
-      <v-toolbar-side-icon
-        class="hidden-md-and-up"
-        @click.stop="drawer = !drawer"
-      ></v-toolbar-side-icon>
+      <v-toolbar-side-icon class="hidden-md-and-up" @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title>System Administrator</v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -395,9 +416,7 @@
           <template v-slot:badge>
             <span>6</span>
           </template>
-          <v-icon color="secondary" size="26">
-            notifications
-          </v-icon>
+          <v-icon color="secondary" size="26">notifications</v-icon>
         </v-badge>
       </v-btn>
 
@@ -413,7 +432,7 @@
         <router-view></router-view>
       </v-container>
     </v-content>
-    <v-footer color="" fixed app></v-footer>
+    <v-footer color fixed app></v-footer>
   </v-app>
 </template>
 
