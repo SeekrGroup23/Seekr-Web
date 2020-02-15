@@ -3,7 +3,7 @@
     <v-layout column>
       <v-flex>
         <h4 class="display-1 font-weight-medium" color="secondary">
-          Patient's Profile
+          Clinic
         </h4>
       </v-flex>
     </v-layout>

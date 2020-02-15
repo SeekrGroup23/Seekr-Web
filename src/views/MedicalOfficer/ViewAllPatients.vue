@@ -251,7 +251,7 @@ export default {
         })
         .catch(err => {
           if (err.response.status == 403) {
-            // this.$store.dispatch("logout");
+            this.$store.dispatch("logout");
 
             console.log("I'm Here >> " + err);
           }

@@ -28,7 +28,6 @@ Vue.prototype.$http = Axios.create({
 const access_token = localStorage.getItem("access_token");
 
 if (access_token) {
-  console.log("In Main >> Setting AH");
   Vue.prototype.$http.defaults.headers.common["authorization"] =
     "Bearer " + access_token;
 }

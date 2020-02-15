@@ -15,6 +15,8 @@ import MO_Dashboard from "./views/MedicalOfficer/Dashboard.vue";
 import MO_AddPatient from "./views/MedicalOfficer/AddPatient.vue";
 import MO_ViewAllPatients from "./views/MedicalOfficer/ViewAllPatients.vue";
 import MO_Profile from "./views/MedicalOfficer/Profile.vue";
+import MO_Clinic from "./views/MedicalOfficer/Clinic.vue";
+
 import Admin from "./views/Admin/Admin.vue";
 import Admin_Dashboard from "./views/Admin/Dashboard.vue";
 import Admin_Patients_ViewAll from "./views/Admin/Patients/ViewAll.vue";
@@ -138,8 +140,13 @@ let router = new Router({
           component: MO_Profile
         },
         {
+          path: "clinic",
+          component: MO_Clinic
+        },
+        {
           path: "patient/:id",
-          component: MO_ViewPatient
+          component: MO_ViewPatient,
+          props: true
         }
       ]
     },

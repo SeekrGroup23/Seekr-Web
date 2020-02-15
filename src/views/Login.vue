@@ -151,7 +151,7 @@ export default {
               case "admin":
                 break;
 
-              case "gramaNiladhari":
+              case "Grama_Niladhari":
                 this.$router.push("/gramaniladhari/");
                 break;
               case "medical_officer":
@@ -159,13 +159,13 @@ export default {
                 break;
 
               case "Donor":
-                this.$http
-                  .get(
-                    "/api/donor/isEmailVerified/" + this.$store.state.user.id
-                  )
-                  .then(res => {})
-                  .catch();
-                this.$router.push("/medicalofficer/");
+                // this.$http
+                //   .get(
+                //     "/api/donor/isEmailVerified/" + this.$store.state.user.id
+                //   )
+                //   .then(res => {})
+                //   .catch();
+                // this.$router.push("/medicalofficer/");
                 break;
 
               default:

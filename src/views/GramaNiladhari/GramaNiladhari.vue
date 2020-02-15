@@ -1,205 +1,182 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" fixed app permanent dark>
-      <!-- <v-container class="py-2">
-        <v-layout row>
-          <v-flex> <h5 class="subheading py-1">Grama Niladhari</h5> </v-flex>
-        </v-layout>
-      </v-container>
-      <v-divider></v-divider> -->
+    <v-navigation-drawer
+      v-model="drawer"
+      absolute
+      dark
+      app
+      width="280"
+      hidden-md-and-down
+    >
+      <v-card flat color="secondary">
+        <v-container class="pa-0 " fluid>
+          <v-layout class="" row>
+            <v-flex md12>
+              <v-card flat dark color="" height="48">
+                <v-layout class="pa-0 ma-0 px-3" row>
+                  <v-flex>
+                    <v-img
+                      src=""
+                      aspect-ratio="1"
+                      height="42"
+                      width="42"
+                      shrink
+                    ></v-img>
+                  </v-flex>
+                  <v-flex grow class="py-2">
+                    <h5 class="headline">Seekr</h5>
+                  </v-flex>
+                </v-layout>
+              </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+        <v-divider class="my-0 py-0"></v-divider>
 
-      <v-container class="pa-0 " fluid>
-        <v-layout class="" row>
-          <v-flex md12>
-            <v-card flat dark color="">
-              <v-layout class="pa-0 ma-0 py-4 px-3" row>
-                <v-flex md3>
-                  <v-avatar size="60px" color="grey lighten-4">
-                    <img
-                      src="https://vuetifyjs.com/apple-touch-icon-180x180.png"
-                      alt="avatar"
-                    />
-                  </v-avatar>
-                </v-flex>
-                <v-flex class="pl-2" md9>
-                  <h6 class="subheading">Pasindu Dewapriya</h6>
-                  <h6 class="body-1">pd@gmail.com</h6>
-                  <h6 class="body-1">Wethara - 453</h6>
-
-                  <!-- <v-avatar size="50px" color="grey lighten-4">
-              <img
-                src="https://vuetifyjs.com/apple-touch-icon-180x180.png"
-                alt="avatar"
-              />
-            </v-avatar> -->
-                </v-flex>
-              </v-layout>
-            </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>
-      <v-divider></v-divider>
-
-      <!-- List Items Begin From Here -->
-      <v-list dense>
-        <v-list-tile router-link to="/gramaniladhari">
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Dashboard</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-group prepend-icon="account_circle" value="true">
-          <template v-slot:activator>
-            <v-list-tile>
-              <v-list-tile-title>CKDu Patient</v-list-tile-title>
-            </v-list-tile>
-          </template>
-          <v-list-tile router-link to="/gramaniladhari/patients">
+        <!-- List Items Begin From Here -->
+        <v-list dense>
+          <v-list-tile @click="$router.push('/medicalofficer')">
             <v-list-tile-action>
-              <!-- <v-icon>home</v-icon> -->
+              <v-icon>home</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
-              <v-list-tile-title>View All</v-list-tile-title>
+              <v-list-tile-title>Dashboard</v-list-tile-title>
             </v-list-tile-content>
           </v-list-tile>
+          <v-divider></v-divider>
 
-          <v-list-tile router-link to="/gramaniladhari/questionnaire">
-            <v-list-tile-action>
-              <!-- <v-icon>home</v-icon> -->
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Add New</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+          <v-list-group>
+            <template v-slot:activator>
+              <v-list-tile>
+                <v-list-tile-action>
+                  <v-icon>people</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Patients</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+            </template>
 
-          <v-list-tile>
-            <v-list-tile-action>
-              <!-- <v-icon>home</v-icon> -->
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Find</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+            <v-list-tile @click="$router.push('/medicalofficer/add_patient')">
+              <v-list-tile-content>
+                <v-list-tile-title>Add Patient</v-list-tile-title>
+              </v-list-tile-content>
 
-          <!-- <v-list-tile v-for="(admin, i) in admins" :key="i">
-              <v-list-tile-title v-text="admin[0]"></v-list-tile-title>
               <v-list-tile-action>
-                <v-icon v-text="admin[1]"></v-icon>
+                <v-icon>person_add</v-icon>
               </v-list-tile-action>
-            </v-list-tile> -->
-        </v-list-group>
-
-        <!-- All Users -->
-
-        <v-list-group prepend-icon="account_circle" value="true">
-          <template v-slot:activator>
-            <v-list-tile>
-              <v-list-tile-title>All Users</v-list-tile-title>
             </v-list-tile>
-          </template>
-          <v-list-tile router-link to="/gramaniladhari/users">
-            <v-list-tile-action>
-              <!-- <v-icon>home</v-icon> -->
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>View All</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
 
-          <v-list-tile>
-            <v-list-tile-action>
-              <!-- <v-icon>home</v-icon> -->
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Add New</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
+            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+              <v-list-tile-content>
+                <v-list-tile-title>View All</v-list-tile-title>
+              </v-list-tile-content>
 
-          <v-list-tile>
-            <v-list-tile-action>
-              <!-- <v-icon>home</v-icon> -->
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Find</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-
-          <!-- <v-list-tile v-for="(admin, i) in admins" :key="i">
-              <v-list-tile-title v-text="admin[0]"></v-list-tile-title>
               <v-list-tile-action>
-                <v-icon v-text="admin[1]"></v-icon>
+                <v-icon>group</v-icon>
               </v-list-tile-action>
-            </v-list-tile> -->
-        </v-list-group>
+            </v-list-tile>
+          </v-list-group>
+          <v-divider></v-divider>
 
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>home</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Messages</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          <v-list-tile @click="$router.push('/medicalofficer/clinic')">
+            <v-list-tile-action>
+              <v-icon>local_hospital</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Clinical</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile>
+            <v-list-tile-action>
+              <v-icon>notification_important</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Notifications</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
 
-        <v-list-tile router-link to="/gramaniladhari/profile">
-          <v-list-tile-action>
-            <v-icon>account_circle</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Profile</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-
-        <v-list-tile>
-          <v-list-tile-action>
-            <v-icon>contact_mail</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-            <v-list-tile-title>Log Out</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
+          <v-list-tile @click="$router.push('/medicalofficer/profile')">
+            <v-list-tile-action>
+              <v-icon>account_circle</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Profile</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+          <v-divider></v-divider>
+          <v-list-tile @click="deleteConfirmation = true">
+            <v-list-tile-action>
+              <v-icon>exit_to_app</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+              <v-list-tile-title>Logout</v-list-tile-title>
+            </v-list-tile-content>
+          </v-list-tile>
+        </v-list>
+      </v-card>
     </v-navigation-drawer>
+
     <v-toolbar fixed app dense>
       <!-- <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon> -->
-      <v-toolbar-title>Seekr</v-toolbar-title>
+      <v-toolbar-side-icon
+        class="hidden-md-and-up"
+        @click.stop="drawer = !drawer"
+      ></v-toolbar-side-icon>
+      <v-toolbar-title>Grama Niladhari</v-toolbar-title>
       <v-spacer></v-spacer>
 
-      <v-btn icon class="ma-4">
+      <v-btn icon class="mt-2">
         <v-badge color="primary" right overlap>
           <template v-slot:badge>
-            <!-- <v-icon dark small>
-              done
-            </v-icon> -->
             <span>6</span>
           </template>
-          <v-icon color="secondary" large>
+          <v-icon color="secondary" size="26">
             notifications
           </v-icon>
         </v-badge>
       </v-btn>
 
-      <v-btn icon class="mr-2">
-        <v-badge color="primary" right overlap>
-          <template v-slot:badge>
-            <!-- <v-icon dark small>
-              done
-            </v-icon> -->
-            <span>6</span>
-          </template>
-          <v-icon color="secondary" large>
-            email
-          </v-icon>
-        </v-badge>
-      </v-btn>
+      <v-menu offset-y dense transition="slide-x-transition">
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on" class="mr-2">
+            <v-avatar size="35">
+              <img :src="image" alt="" />
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-tile @click="$router.push('/medicalofficer/profile')">
+            <v-list-tile-title>Profile</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="deleteConfirmation()">
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-toolbar>
 
     <v-content>
       <v-container class="py-0 ma-0 containerRouterView" fluid>
         <router-view></router-view>
+        <v-dialog v-model="deleteConfirmation" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Logout Confirmation</v-card-title>
+            <v-card-text>Do you want to proceed with this action?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="green darken-1"
+                flat
+                @click="deleteConfirmation = false"
+                >Cancel</v-btn
+              >
+              <v-btn color="red darken-1" flat @click="logout()">Logout</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-content>
     <v-footer color="" fixed app></v-footer>
@@ -210,8 +187,53 @@
 export default {
   data: () => {
     return {
-      drawer: false,
+      drawer: true,
+      deleteConfirmation: false,
+      imageURL: "",
+      image: null,
       items: [
+        {
+          action: "local_activity",
+          title: "Attractions",
+          items: [{ title: "List Item" }]
+        },
+        {
+          action: "restaurant",
+          title: "Dining",
+          active: true,
+          items: [
+            { title: "Breakfast & brunch" },
+            { title: "New American" },
+            { title: "Sushi" }
+          ]
+        },
+        {
+          action: "school",
+          title: "Education",
+          items: [{ title: "List Item" }]
+        },
+        {
+          action: "directions_run",
+          title: "Family",
+          items: [{ title: "List Item" }]
+        },
+        {
+          action: "healing",
+          title: "Health",
+          items: [{ title: "List Item" }]
+        },
+        {
+          action: "content_cut",
+          title: "Office",
+          items: [{ title: "List Item" }]
+        },
+        {
+          action: "local_offer",
+          title: "Promotions",
+          items: [{ title: "List Item" }]
+        }
+      ],
+      items_x: [
         {
           text: "Dashboard",
           disabled: false,
@@ -228,16 +250,40 @@ export default {
           href: "breadcrumbs_link_2"
         }
       ]
-
-      // gn_profile: "/gramaniladhari/" + this.$store.state.user.id + "/profile"
     };
   },
   beforeCreate() {},
+  created() {
+    this.getProfile();
+  },
   methods: {
-    navigateToProfile() {
-      this.$router.push(
-        "/gramaniladhari/" + this.$store.state.user.id + "/profile"
-      );
+    logout() {
+      this.$store.dispatch("logout");
+    },
+    getImageFromServer(imageURL) {
+      this.$http
+        .post("api/common/get_image", {
+          imageURL: imageURL
+        })
+        .then(res => {
+          if (res.data != null) {
+            // Display the Image converted into Base64 - Decoding
+            this.image = "data:image/jpeg;base64, " + res.data.img;
+            console.log(this.image);
+          }
+        })
+        .catch();
+    },
+    getProfile() {
+      // moID = "this.$store.state.user.id";
+      this.$http
+        .get("/api/medical_officer/get_profile/" + "6eldkITMHuSiAebMfKuz")
+        .then(res => {
+          this.imageURL = res.data.imageURL;
+          console.log(this.imageURL);
+          this.getImageFromServer(this.imageURL);
+        })
+        .catch();
     }
   }
 };

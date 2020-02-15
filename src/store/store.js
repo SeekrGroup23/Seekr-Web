@@ -60,9 +60,9 @@ export default new Vuex.Store({
           method: "POST"
         })
           .then(response => {
+            console.log(response.data.token);
             const token = response.data.token;
             // const user = response.data.user;
-
             if (response.data.token != "invalid") {
               //  Store the received JWT in the state variavle of Vuex Store "userJWT"
               this.state.userJWT = response.data.token;

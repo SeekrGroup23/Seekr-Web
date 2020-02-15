@@ -1,158 +1,144 @@
 <template>
-  <v-container class="pt-5 px-4" fluid>
-    <v-layout>
+  <v-container class="px-0 mx-0" fluid>
+    <v-layout column>
       <v-flex>
-        <!-- Row - 1 -->
-        <v-layout row wrap>
-          <v-flex md3 class="px-3">
-            <dashCard01
-              title="Total Users."
-              icon="supervisor_account
-"
-              value="5"
-            ></dashCard01>
-          </v-flex>
-          <v-flex md3 class="px-3">
-            <dashCard01
-              title="CKDu Patients..."
-              icon="person_pin
-"
-              value="5"
-            ></dashCard01>
-          </v-flex>
-          <v-flex md3 class="px-3">
-            <dashCard01 title="Messages" icon="message" value="2"></dashCard01>
-          </v-flex>
-          <v-flex md3 class="px-3">
-            <dashCard01
-              title="Notification"
-              icon="notification_important"
-              value="10"
-            ></dashCard01>
-          </v-flex>
-        </v-layout>
-
-        <!-- Row - 2 -->
-        <v-layout class="my-5" row justify-space-between>
-          <!-- <v-flex class="px-3" md3>
-            <v-card> sdfsd</v-card>
-          </v-flex> -->
-          <v-flex class="px-3" md12>
-            <v-card dark color="primary">
-              <v-container class="ma-0 pa-0" fluid>
-                <v-layout row>
-                  <v-flex grow class="pa-3">
-                    <h6 class="title">
-                      Monthly Count of CKDu Patients
-                    </h6>
-                  </v-flex>
-                  <v-spacer></v-spacer>
-                  <v-flex shrink>
-                    <v-btn icon align-end>
-                      <v-icon>more_vert</v-icon>
-                    </v-btn>
-                  </v-flex>
-                </v-layout>
-                <v-divider></v-divider>
-                <v-layout row>
-                  <v-flex md12>
-                    <v-card flat color="primary">
-                      <v-sparkline
-                        :labels="labels"
-                        :value="value"
-                        color="white"
-                        line-width="1"
-                        padding="16"
-                        auto-draw
-                        height="100"
-                        show-labels
-                        smooth
-                      ></v-sparkline>
-                    </v-card>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card>
-          </v-flex>
-          <!-- <v-flex class="px-3" md3>
-            <v-card class="pa-0">
-              <v-date-picker
-                class="dataPicker"
-                v-model="currDate"
-                :show-current="false"
-                readonly
-                full-width
-              ></v-date-picker>
-            </v-card>
-          </v-flex> -->
-        </v-layout>
-
-        <!-- Row - 3 -->
-        <v-layout row>
-          <v-flex>
-            <div id="chart"></div>
-          </v-flex>
-        </v-layout>
+        <h4 class="display-1 font-weight-medium" color="secondary">
+          Dashboard
+        </h4>
       </v-flex>
     </v-layout>
+    <v-layout
+      row
+      justify-space-between
+      align-content-start
+      class="py-4 px-2"
+      wrap
+    >
+      <!-- Verified CKDu Patients -->
+      <v-card width="300" height="100" class="my-2" hover>
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card
+                height="100"
+                color="purple lighten-2"
+                dark
+                width="100"
+                flat
+              >
+                <v-container>
+                  <v-icon size="50">home</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex class="py-2 px-2">
+              <h6 class="subheading">Verifed CKDu Patients</h6>
+              <span class="subheading font-weight-medium">00</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Details</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+
+      <!-- Suspected CKDu Patients -->
+      <v-card width="300" height="100" class="my-2" hover>
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex>
+              <v-card
+                height="100"
+                color="indigo lighten-2"
+                dark
+                width="100"
+                flat
+              >
+                <v-container>
+                  <v-icon size="50">home</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex class="py-2 px-2">
+              <h6 class="subheading">Suspected CKDu Patients</h6>
+              <h6 class="subheading"></h6>
+              <span class="subheading font-weight-medium">00</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Details</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+
+      <!-- Critical Patients -->
+      <v-card width="300" height="100" class="my-2 " hover>
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex>
+              <v-card height="100" color="red lighten-2" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">home</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex class="py-2 px-2">
+              <h6 class="subheading">Critical CKDu Patients</h6>
+              <span class="subheading font-weight-medium">00</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Details</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+
+      <!-- Total Patients -->
+      <v-card width="300" height="100" class="my-2 " hover>
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex>
+              <v-card height="100" color="teal lighten-2" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">home</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex class="py-2 px-2">
+              <h6 class="subheading">Total CKDu Patients</h6>
+              <span class="subheading font-weight-medium">00</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Details</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+    </v-layout>
+
+    <v-divider></v-divider>
+
+    <v-layout> </v-layout>
   </v-container>
 </template>
 
 <script>
-import dashCard01 from "../../components/Card_Dashboard_A.vue";
-import ApexCharts from "apexcharts";
-
 export default {
-  components: {
-    dashCard01: dashCard01
-  },
   data: () => {
-    return {
-      currDate: new Date().toISOString().substr(0, 10),
-      labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sept",
-        "Oct",
-        "Nov",
-        "Dec"
-      ],
-      value: [200, 675, 410, 390, 310, 460, 250, 240, 310, 460, 250, 240]
-    };
+    return {};
   },
-  mounted: () => {
-    console.log("Dashboard Page Loaded");
-    var options = {
-      chart: {
-        type: "line"
-      },
-      series: [
-        {
-          name: "sales",
-          data: [30, 40, 35, 50, 49, 60, 70, 91, 125]
-        }
-      ],
-      xaxis: {
-        categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998, 1999]
-      }
-    };
-
-    var chart = new ApexCharts(document.querySelector("#chart"), options);
-
-    chart.render();
-  }
+  created() {
+    console.log(
+      "From Dashboard >> " + this.$http.defaults.headers.common["Authorization"]
+    );
+  },
+  computed: {},
+  methods: {}
 };
 </script>
 
-<style scoped>
-#chart {
-  max-width: 650px;
-  margin: 35px auto;
-}
-</style>
+<style scoped></style>

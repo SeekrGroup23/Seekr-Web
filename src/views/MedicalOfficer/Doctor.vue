@@ -16,7 +16,7 @@
                 <v-layout class="pa-0 ma-0 px-3" row>
                   <v-flex>
                     <v-img
-                      src="https://cdn3.iconfinder.com/data/icons/picons-social/57/56-apple-512.png"
+                      src=""
                       aspect-ratio="1"
                       height="42"
                       width="42"
@@ -139,11 +139,23 @@
         </v-badge>
       </v-btn>
 
-      <v-btn icon class="mr-2">
-        <v-avatar size="35">
-          <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
-        </v-avatar>
-      </v-btn>
+      <v-menu offset-y dense transition="slide-x-transition">
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on" class="mr-2">
+            <v-avatar size="35">
+              <img :src="image" alt="" />
+            </v-avatar>
+          </v-btn>
+        </template>
+        <v-list>
+          <v-list-tile @click="$router.push('/medicalofficer/profile')">
+            <v-list-tile-title>Profile</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click="deleteConfirmation()">
+            <v-list-tile-title>Logout</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
     </v-toolbar>
 
     <v-content>
@@ -177,6 +189,8 @@ export default {
     return {
       drawer: true,
       deleteConfirmation: false,
+      imageURL: "",
+      image: null,
       items: [
         {
           action: "local_activity",
@@ -239,10 +253,37 @@ export default {
     };
   },
   beforeCreate() {},
-  created() {},
+  created() {
+    this.getProfile();
+  },
   methods: {
     logout() {
       this.$store.dispatch("logout");
+    },
+    getImageFromServer(imageURL) {
+      this.$http
+        .post("api/common/get_image", {
+          imageURL: imageURL
+        })
+        .then(res => {
+          if (res.data != null) {
+            // Display the Image converted into Base64 - Decoding
+            this.image = "data:image/jpeg;base64, " + res.data.img;
+            console.log(this.image);
+          }
+        })
+        .catch();
+    },
+    getProfile() {
+      // moID = "this.$store.state.user.id";
+      this.$http
+        .get("/api/medical_officer/get_profile/" + "6eldkITMHuSiAebMfKuz")
+        .then(res => {
+          this.imageURL = res.data.imageURL;
+          console.log(this.imageURL);
+          this.getImageFromServer(this.imageURL);
+        })
+        .catch();
     }
   }
 };
