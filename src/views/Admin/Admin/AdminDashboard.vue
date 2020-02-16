@@ -5,11 +5,170 @@
       wrap
       justify-space-between
       align-content-start
-      class="py-4 px-4"
+      class="py-0 px-2"
     >
+      <!-- Suspected CKDu Patients Count -->
+      <v-card
+        router-link
+        to="patients/view"
+        width="300"
+        height="120"
+        class="my-2 mx-auto"
+        hover
+        dark
+      >
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card height="120" color="amber accent-4" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">person</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex align="text-center" class="py-2 px-2">
+              <h6 class="subheading">Registerd Patients</h6>
+              <span class="subheading font-weight-medium">{{
+                patientCount
+              }}</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Details</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+      <!-- Hospitals -->
+      <v-card
+        router-link
+        to="hospital/map"
+        width="300"
+        height="120"
+        class="my-2 mx-auto"
+        hover
+        dark
+      >
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card height="120" color="green darken-3" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">local_hospital</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex align="text-center" class="py-2 px-2">
+              <h6 class="subheading">Registerd Hospitals</h6>
+              <span class="subheading font-weight-medium">{{
+                hospitalCount
+              }}</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Details</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+      <!-- Registerd GramaNiladhari -->
+      <v-card
+        router-link
+        to="grama_niladhari/view"
+        width="300"
+        height="120"
+        color="red lighten-2"
+        class="my-2 mx-auto"
+        hover
+        dark
+      >
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card height="120" color="red lighten-2" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">person</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex align="text-center" class="py-2 px-2">
+              <h6 class="subheading">Registerd Grama Niladhari</h6>
+              <span class="subheading font-weight-medium">{{
+                gramaCount
+              }}</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View All</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+      <!-- Donations -->
       <v-card
         router-link
         to="editgrama"
+        width="300"
+        height="120"
+        class="my-2 mx-auto"
+        hover
+        dark
+      >
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card height="120" color="cyan darken-4" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">monetization_on</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex align="text-center" class="py-2 px-2">
+              <h6 class="subheading">Total Donors</h6>
+              <span class="subheading font-weight-medium">{{
+                donorCount
+              }}</span>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Map</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+      <!-- Analytics -->
+      <v-card
+        router-link
+        to="summary/charts"
+        width="300"
+        height="120"
+        class="my-2 mx-auto"
+        hover
+        dark
+      >
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card height="120" color="red lighten-2" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">trending_up</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex align="text-center" class="py-2 px-2">
+              <h6 class="subheading">Analytics</h6>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <h6 class="subheading pt-1 ">View Charts</h6>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+
+      <v-card
+        router-link
+        to="summary/report"
         width="300"
         height="120"
         color="red lighten-2"
@@ -27,92 +186,27 @@
               </v-card>
             </v-flex>
             <v-flex align="text-center" class="py-2 px-2">
-              <h6 class="subheading">Top Affected Areas</h6>
+              <h6 class="subheading">Generate a Report</h6>
               <v-layout column class="mt-2">
                 <v-divider></v-divider>
-                <h6 class="subheading pt-1 ">View Map</h6>
+                <h6 class="subheading pt-1 "></h6>
               </v-layout>
             </v-flex>
           </v-layout>
         </v-container>
       </v-card>
-      <v-card
-        router-link
-        to="editgrama"
-        width="300"
-        height="120"
-        class="my-2 mx-auto"
-        hover
-      >
-        <v-container fluid class="pa-0 ma-0">
-          <v-layout row>
-            <v-flex shrink>
-              <v-card
-                height="120"
-                color="purple lighten-2"
-                dark
-                width="100"
-                flat
-              >
-                <v-container>
-                  <v-icon size="50">person</v-icon>
-                </v-container>
-              </v-card>
-            </v-flex>
-            <v-flex align="text-center" class="py-2 px-2">
-              <h6 class="subheading">Registerd GramaNiladhari</h6>
-              <span class="subheading font-weight-medium">{{
-                gramaCount
-              }}</span>
-              <v-layout column class="mt-2">
-                <v-divider></v-divider>
-                <h6 class="subheading pt-1 ">View Details</h6>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-      <v-card
-        router-link
-        to="editgrama"
-        width="300"
-        height="120"
-        class="my-2 mx-auto"
-        hover
-      >
-        <v-container fluid class="pa-0 ma-0">
-          <v-layout row>
-            <v-flex shrink>
-              <v-card
-                height="120"
-                color="purple lighten-2"
-                dark
-                width="100"
-                flat
-              >
-                <v-container>
-                  <v-icon size="50">person</v-icon>
-                </v-container>
-              </v-card>
-            </v-flex>
-            <v-flex align="text-center" class="py-2 px-2">
-              <h6 class="subheading">Registerd GramaNiladhari</h6>
-              <span class="subheading font-weight-medium">{{
-                gramaCount
-              }}</span>
-              <v-layout column class="mt-2">
-                <v-divider></v-divider>
-                <h6 class="subheading pt-1 ">View Details</h6>
-              </v-layout>
-            </v-flex>
-          </v-layout>
-        </v-container>
-      </v-card>
-
+    </v-layout>
+    <v-layout
+      row
+      wrap
+      justify-space-between
+      align-content-start
+      class="py-0 px-0"
+    >
       <v-flex lg12 sm12 xs12>
-        <v-card height="400" class="my-2 mx-2">
+        <v-card height="500" class="my-4 mx-2">
           <v-card-title class="headline">
-            <span class="title font-weight-light">Site Visits</span>
+            <span class="title font-weight-light">Top 5 Patient Areas</span>
           </v-card-title>
           <v-card-text>
             <v-container grid list-md>
@@ -121,7 +215,7 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <v-flex lg4 sm12 xs12>
+      <!-- <v-flex lg4 sm12 xs12>
         <v-card class="mx-2" height="480px" color="#C62828" dark>
           <v-card-title class="headline">
             <span class="title font-weight-light">Top Affected Areas</span>
@@ -248,7 +342,7 @@
             </v-layout>
           </v-timeline-item>
         </v-timeline>
-      </v-flex>
+      </v-flex> -->
 
       <!-- <v-flex lg3 sm6 xs12>
           <v-card color="cyan darken-3" class="white--text" height="200px" dark>
@@ -283,6 +377,15 @@ import ApexCharts from "apexcharts";
 export default {
   data() {
     return {
+      gramaCount: 0,
+      patientCount: 0,
+      hospitalCount: 0,
+      donorCount: 0,
+      areaCount: [],
+      gramad: [123, 456, 789, 452],
+      gramaPC: [],
+      gramaPN: [],
+      h: " ",
       sparklineData: [
         47,
         45,
@@ -355,7 +458,37 @@ export default {
   methods: {
     open(event) {
       alert(event.title);
+    },
+    patientAreaCount() {
+      this.$http
+        .get("/api/admin/districtpatientcount")
+        .then(res => {
+          //console.log(res.data[0][0]);
+          this.areaCount = [];
+          this.areaCount = res.data;
+          var i;
+          for (i = 0; i < 25; i++) {
+            //this.h = this.areaCount[i][0];
+            this.gramaPN.push(this.areaCount[i][0].toString());
+            //console.log(this.h);
+          }
+          //console.log(typeof this.gramaPN[0]);
+          this.gramaPN = Object.values(this.gramaPN);
+          console.log(this.gramaPN);
+          for (i = 0; i < 25; i++) {
+            this.h = this.areaCount[i][1];
+            this.gramaPC.push(this.h);
+          }
+          //console.log(this.gramaPN);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
+  },
+
+  created() {
+    this.patientAreaCount();
   },
 
   // data for the sparklines that appear below header area
@@ -377,7 +510,7 @@ export default {
       },
       series: [
         {
-          data: [159, 237, 279]
+          data: this.gramad
         }
       ],
       yaxis: {
@@ -404,7 +537,7 @@ export default {
     var options = {
       chart: {
         type: "line",
-        height: 300,
+        height: 350,
         shadow: {
           enabled: false,
           color: "#bbb",
@@ -421,11 +554,38 @@ export default {
       series: [
         {
           name: "patients",
-          data: [159, 237, 279, 82]
+          data: this.gramaPC
         }
       ],
       xaxis: {
-        categories: ["Anuradhapura", "Polonnaruwa", "Trincomalee", "Monaragala"]
+        //categories: this.gramaPN
+        categories: [
+          "Ampara",
+          "Anuradhapura",
+          "Badulla",
+          "Batticaloa",
+          "Colombo",
+          "Galle",
+          "Gampaha",
+          "Hambantota",
+          "Jaffna",
+          "Kalutara",
+          "Kandy",
+          "Kegalle",
+          "Kilinochchi",
+          "Kurunegala",
+          "Mannar",
+          "Matale",
+          "Matara",
+          "Monaragala",
+          "Mullaitivu",
+          "Nuwara Eliya",
+          "Polonnaruwa",
+          "Puttalam",
+          "Ratnapura",
+          "Trincomalee",
+          "Vavuniya"
+        ]
       },
       fill: {
         type: "gradient",
@@ -447,8 +607,11 @@ export default {
         strokeWidth: 2,
 
         hover: {
-          size: 7
+          size: 10
         }
+      },
+      theme: {
+        mode: "dark"
       }
     };
     var pie = {
@@ -487,9 +650,44 @@ export default {
     chart.render();
     var sp = new ApexCharts(document.querySelector("#sp"), spark2);
     sp.render();
-    var pie = new ApexCharts(document.querySelector("#pie"), pie);
+    var piec = new ApexCharts(document.querySelector("#pie"), pie);
+    // eslint-disable-next-line no-unused-vars
     const paper = chart.paper();
-    pie.render();
+    piec.render();
+
+    this.$http.get("/api/admin/gramacount").then(response => {
+      //console.log(response.data);
+      this.gramaCount = response.data;
+      console.log(response.data);
+    });
+
+    this.$http.get("/api/admin/patientcount").then(response => {
+      //console.log(response.data);
+      this.patientCount = response.data;
+      console.log(response.data);
+    });
+
+    this.$http.get("/api/admin/hospitalcount").then(response => {
+      //console.log(response.data);
+      this.hospitalCount = response.data;
+      console.log(response.data);
+    });
+
+    this.$http.get("/api/admin/donorcount").then(response => {
+      //console.log(response.data);
+      this.donorCount = response.data;
+      console.log(response.data);
+    });
+
+    /*  this.$http.get("/api/admin/districtpatientcount").then(response => {
+      //console.log(response.data);
+      this.areaCount = response.data;
+      this.areaCount.forEach(element => {
+        this.gramaPC.push(this.areaCount(element));
+        this.gramaPN.push(element);
+      });
+      console.log(this.areaCount);
+    }); */
   }
 };
 </script>

@@ -2,11 +2,20 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./views/Home.vue";
 import Deem from "./views/Deem.vue";
-import ADD_Grama from "./views/Admin/AddGrama.vue";
-import Edt_Grama from "./views/Admin/EditGrama.vue";
-import Grama_Loc from "./views/Admin/GramaLocations.vue";
-import Admin from "./views/Admin/Admin.vue";
-import Admin_Dash from "./views/Admin/AdminDashboard.vue";
+import ADD_Grama from "./views/Admin/GramaNiladhari/AddGrama.vue";
+import Edt_Grama from "./views/Admin/GramaNiladhari/EditGrama.vue";
+import Grama_Loc from "./views/Admin/GramaNiladhari/GramaLocations.vue";
+import Admin from "./views/Admin/Admin/Admin.vue";
+import Admin_Dash from "./views/Admin/Admin/AdminDashboard.vue";
+import Admin_view_Patients from "./views/Admin/Admin/ViewPatients.vue";
+import Admin_view_Hospitals from "./views/Admin/Admin/ViewHospitalMap.vue";
+import Summary_Charts from "./views/Admin/Admin/ViewCharts.vue";
+import Summary_Report from "./views/Admin/Admin/SummaryReport.vue";
+import GramaNiladhari from "./views/GramaNiladhari/GramaNiladhari.vue";
+import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
+import GN_PatientLocation from "./views/GramaNiladhari/PatientLocations.vue";
+import DE_AddNew from "./views/Admin/DataEntry/AddNew.vue";
+import DE_View from "./views/Admin/DataEntry/View.vue";
 import Test from "./views/Test.vue";
 
 Vue.use(Router);
@@ -49,15 +58,56 @@ export default new Router({
           component: Edt_Grama
         },
         {
-          path: "gramaloc",
+          path: "grama_niladhari/gramaloc",
           component: Grama_Loc
         },
         {
-          path: "admindash",
+          path: "data_entry/add",
+          component: DE_AddNew
+        },
+        {
+          path: "data_entry/view",
+          component: DE_View
+        },
+        {
+          path: "patients/view",
+          component: Admin_view_Patients
+        },
+        {
+          path: "hospital/map",
+          component: Admin_view_Hospitals
+        },
+        {
+          path: "summary/charts",
+          component: Summary_Charts
+        },
+        {
+          path: "summary/report",
+          component: Summary_Report
+        },
+        {
+          path: "",
           component: Admin_Dash
         }
       ],
       component: Admin
+    },
+    {
+      path: "/gramaniladhari/",
+      children: [
+        {
+          path: "",
+          component: GN_Dashboard,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: "patientlocation",
+          component: GN_PatientLocation
+        }
+      ],
+      component: GramaNiladhari
     }
   ]
 });

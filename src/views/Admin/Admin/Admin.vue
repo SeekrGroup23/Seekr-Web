@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer
       v-model="drawer"
-      absolute
+      fixed
       dark
       app
       width="280"
@@ -35,7 +35,7 @@
 
         <!-- List Items Begin From Here -->
         <v-list dense>
-          <v-list-tile @click="$router.push('/admin/admindash')">
+          <v-list-tile @click="$router.push('/admin/')">
             <v-list-tile-action>
               <v-icon>dashboard</v-icon>
             </v-list-tile-action>
