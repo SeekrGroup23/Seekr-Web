@@ -277,7 +277,7 @@ export default {
     getProfile() {
       // moID = "this.$store.state.user.id";
       this.$http
-        .get("/api/medical_officer/get_profile/" + "6eldkITMHuSiAebMfKuz")
+        .get("/api/medical_officer/get_profile/" + this.$store.state.user.id)
         .then(res => {
           this.imageURL = res.data.imageURL;
           console.log(this.imageURL);

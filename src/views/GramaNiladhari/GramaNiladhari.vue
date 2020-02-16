@@ -35,7 +35,7 @@
 
         <!-- List Items Begin From Here -->
         <v-list dense>
-          <v-list-tile @click="$router.push('/medicalofficer')">
+          <v-list-tile @click="$router.push('/gramaniladhari')">
             <v-list-tile-action>
               <v-icon>home</v-icon>
             </v-list-tile-action>
@@ -57,17 +57,9 @@
               </v-list-tile>
             </template>
 
-            <v-list-tile @click="$router.push('/medicalofficer/add_patient')">
-              <v-list-tile-content>
-                <v-list-tile-title>Add Patient</v-list-tile-title>
-              </v-list-tile-content>
-
-              <v-list-tile-action>
-                <v-icon>person_add</v-icon>
-              </v-list-tile-action>
-            </v-list-tile>
-
-            <v-list-tile @click="$router.push('/medicalofficer/patients')">
+            <v-list-tile
+              @click="$router.push('/gramaniladhari/view_all_patients')"
+            >
               <v-list-tile-content>
                 <v-list-tile-title>View All</v-list-tile-title>
               </v-list-tile-content>
@@ -79,15 +71,6 @@
           </v-list-group>
           <v-divider></v-divider>
 
-          <v-list-tile @click="$router.push('/medicalofficer/clinic')">
-            <v-list-tile-action>
-              <v-icon>local_hospital</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-              <v-list-tile-title>Clinical</v-list-tile-title>
-            </v-list-tile-content>
-          </v-list-tile>
-          <v-divider></v-divider>
           <v-list-tile>
             <v-list-tile-action>
               <v-icon>notification_important</v-icon>
@@ -98,7 +81,7 @@
           </v-list-tile>
           <v-divider></v-divider>
 
-          <v-list-tile @click="$router.push('/medicalofficer/profile')">
+          <v-list-tile @click="$router.push('/gramaniladhari/profile')">
             <v-list-tile-action>
               <v-icon>account_circle</v-icon>
             </v-list-tile-action>
@@ -184,6 +167,8 @@
 </template>
 
 <script>
+import jwtDecode from "jwt-decode";
+
 export default {
   data: () => {
     return {
@@ -191,6 +176,7 @@ export default {
       deleteConfirmation: false,
       imageURL: "",
       image: null,
+      gnID: "",
       items: [
         {
           action: "local_activity",
@@ -254,6 +240,18 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.$store.state.userJWT = localStorage.getItem("access_token");
+    // Decoding the Payload from the userJWT
+    const jwtPayload = jwtDecode(this.$store.state.userJWT);
+    this.$store.state.user.id = jwtPayload.user.id;
+    this.$store.state.user.firstName = jwtPayload.user.firstName;
+    this.$store.state.user.lastName = jwtPayload.user.lastName;
+    this.$store.state.user.email = jwtPayload.user.email;
+    // this.$store.state.user.imageURL = jwtPayload.user.imageURL;
+    this.$store.state.user.role = jwtPayload.user.role;
+
+    this.gnID = this.$store.state.user.id;
+    // console.log("ID: " + this.gnID);
     this.getProfile();
   },
   methods: {
@@ -269,7 +267,7 @@ export default {
           if (res.data != null) {
             // Display the Image converted into Base64 - Decoding
             this.image = "data:image/jpeg;base64, " + res.data.img;
-            console.log(this.image);
+            // console.log(this.image);
           }
         })
         .catch();
@@ -277,10 +275,12 @@ export default {
     getProfile() {
       // moID = "this.$store.state.user.id";
       this.$http
-        .get("/api/medical_officer/get_profile/" + "6eldkITMHuSiAebMfKuz")
+        .get("/api/grama_niladhari/" + this.gnID)
         .then(res => {
           this.imageURL = res.data.imageURL;
-          console.log(this.imageURL);
+          this.$store.state.gnDivision = res.data.gnDivision;
+
+          // console.log(">>>>>>>>>>>" + this.$store.state.gnDivision);
           this.getImageFromServer(this.imageURL);
         })
         .catch();

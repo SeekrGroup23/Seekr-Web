@@ -15,7 +15,7 @@
       wrap
     >
       <v-flex>
-        <v-card color="secondary" dark>
+        <v-card color="">
           <v-container fluid>
             <v-layout row wrap>
               <v-flex md5 sm12 xs12>
@@ -216,7 +216,7 @@ export default {
           lastModifiedBy: ""
         })
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.message == "Success") {
             this.snackbarTimeout = 1500;
             this.snackbarText = "Hospital Added Successfully";
@@ -267,10 +267,10 @@ export default {
   async mounted() {
     try {
       const google = await gmapsInit();
-      console.log(google);
+      // console.log(google);
 
       const mapContainer = document.querySelector("#map");
-      console.log(mapContainer);
+      // console.log(mapContainer);
 
       const map = new google.maps.Map(mapContainer, {
         center: { lat: 7.4224, lng: 80.8326 },
@@ -310,9 +310,9 @@ export default {
         }
       });
 
-      console.log(map);
+      // console.log(map);
     } catch (error) {
-      console.error("Error >> " + error);
+      // console.error("Error >> " + error);
     }
   }
 };

@@ -12,6 +12,7 @@ export default new Vuex.Store({
     accessToken: localStorage.getItem("access_token") || "",
     currentUser: {},
     userJWT: "",
+    gnDivision: "",
     user: {
       id: "",
       firstName: "",

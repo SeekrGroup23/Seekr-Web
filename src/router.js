@@ -1,6 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
 import store from "./store/store";
+
 import Home from "./views/Home/Home.vue";
 import Login from "./views/Login.vue";
 import Register from "./views/Register.vue";
@@ -8,7 +9,10 @@ import GramaNiladhari from "./views/GramaNiladhari/GramaNiladhari.vue";
 import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
 import GN_Profile from "./views/GramaNiladhari/Profile.vue";
 import GN_Patients from "./views/GramaNiladhari/Patients.vue";
+import GN_ViewAllPatients from "./views/GramaNiladhari/ViewAllPatients.vue";
+
 import User_Profile from "./views/User/Profile.vue";
+
 import Questionnaire from "./views/Questionnaire/Questionnaire_A.vue";
 import MedicalOfficer from "./views/MedicalOfficer/Doctor.vue";
 import MO_Dashboard from "./views/MedicalOfficer/Dashboard.vue";
@@ -101,6 +105,13 @@ let router = new Router({
         {
           path: "user_profile",
           component: User_Profile,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: "view_all_patients",
+          component: GN_ViewAllPatients,
           meta: {
             requiresAuth: true
           }

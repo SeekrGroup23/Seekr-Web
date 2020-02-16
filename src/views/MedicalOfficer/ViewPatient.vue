@@ -314,18 +314,50 @@
                     <v-flex>
                       <!-- <div>This Section Contains Personal Inforamtion</div> -->
                     </v-flex>
+                    <v-flex md12>
+                      <v-layout row class="align-center justify-end">
+                        <div>
+                          This Section Contains Medical-Related Inforamtion
+                        </div>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          :color="medicalEditBtnColor"
+                          :dark="isDark"
+                          @click="onClickMedicalEdit()"
+                          small
+                          >{{ medicalEditBtnText }}</v-btn
+                        >
+                        <!-- <v-btn small :disabled="!isEditable"
+                          >Save Changes</v-btn
+                        > -->
+                      </v-layout>
+                    </v-flex>
+                    <v-divider class="mt-4"></v-divider>
 
                     <v-flex>
-                      <v-text-field
+                      <v-select
+                        v-model="patient.bloodGroup"
+                        label="Blood Groups"
+                        :items="bloodGroups"
+                        :readonly="!isMedicalEditable"
+                      ></v-select>
+                    </v-flex>
+
+                    <v-flex>
+                      <v-select
                         v-model="patient.state"
                         label="State"
-                      ></v-text-field>
+                        :items="['Suspected CKDu', 'Verified CKDu']"
+                        :readonly="!isMedicalEditable"
+                      ></v-select>
                     </v-flex>
                     <v-flex>
-                      <v-text-field
+                      <v-select
                         v-model="patient.condition"
                         label="Condition"
-                      ></v-text-field>
+                        :items="['Early Stage', 'Intermediate', 'Critical']"
+                        :readonly="!isMedicalEditable"
+                      ></v-select>
                     </v-flex>
 
                     <v-flex>
@@ -337,27 +369,111 @@
                           v-model="patient.nonTransmittedDiseases"
                           value="Diabetes"
                           label="Diabetes"
-                          readonly
+                          :readonly="!isMedicalEditable"
                         ></v-checkbox>
                         <v-checkbox
                           v-model="patient.nonTransmittedDiseases"
                           label="High Blood Pressure"
                           value="High Blood Pressure"
-                          readonly
+                          :readonly="!isMedicalEditable"
                         ></v-checkbox>
                         <v-checkbox
                           v-model="patient.nonTransmittedDiseases"
                           label="Cardiovascular Diseases"
                           value="Cardiovascular Diseases"
-                          readonly
+                          :readonly="!isMedicalEditable"
                         ></v-checkbox>
                         <v-checkbox
                           v-model="patient.nonTransmittedDiseases"
                           label="Overweight/Obesity"
                           value="Overweight/Obesity"
-                          readonly
+                          :readonly="!isMedicalEditable"
                         ></v-checkbox>
                       </v-layout>
+                    </v-flex>
+
+                    <v-divider></v-divider>
+
+                    <v-layout row class="pt-3">
+                      <v-flex shrink>
+                        <h5 class="subheading">
+                          Bitten By Snakes or Venomous Animals/Insects
+                        </h5>
+                      </v-flex>
+                      <v-flex grow class="ml-4" wrap>
+                        <v-radio-group
+                          v-model="patient.snakeBites"
+                          row
+                          class="pa-0 ma-0"
+                          :readonly="!isMedicalEditable"
+                          @change="test()"
+                        >
+                          <v-radio label="Yes" :value="true"></v-radio>
+                          <v-radio label="No" :value="false"></v-radio>
+                        </v-radio-group>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-divider></v-divider>
+
+                    <v-layout row class="pt-3" wrap>
+                      <v-flex shrink>
+                        <h5 class="subheading">Smoking Status</h5>
+                      </v-flex>
+                      <v-flex grow class="ml-4">
+                        <v-radio-group
+                          v-model="patient.smokingStatus"
+                          row
+                          class="pa-0 ma-0"
+                          :readonly="!isMedicalEditable"
+                        >
+                          <v-radio label="None" value="None"></v-radio>
+                          <v-radio
+                            label="Mild Smoker"
+                            value="Mild Smoker"
+                          ></v-radio>
+                          <v-radio
+                            label="Heavy Smoker"
+                            value="Heavy Smoker"
+                          ></v-radio>
+                        </v-radio-group>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-divider></v-divider>
+                    <v-layout row class="pt-3" wrap>
+                      <v-flex shrink>
+                        <h5 class="subheading">Alchohol Usage</h5>
+                      </v-flex>
+                      <v-flex grow class="ml-4">
+                        <v-radio-group
+                          v-model="patient.alchoholUsage"
+                          :readonly="!isMedicalEditable"
+                          row
+                          class="pa-0 ma-0"
+                          @change="test()"
+                        >
+                          <v-radio label="None" value="None"></v-radio>
+                          <v-radio
+                            label="Mild Drinker"
+                            value="Mild Drinker"
+                          ></v-radio>
+                          <v-radio
+                            label="Heavy Drinker"
+                            value="Heavy Drinker"
+                          ></v-radio>
+                        </v-radio-group>
+                      </v-flex>
+                    </v-layout>
+
+                    <v-flex>
+                      <v-textarea
+                        outline
+                        v-model="patient.specialNotes"
+                        label="Doctor's Notes"
+                        :value="patient.specialNotes"
+                        :readonly="!isMedicalEditable"
+                      ></v-textarea>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -483,6 +599,27 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
+
+        <v-dialog v-model="medicalSaveConfirmation" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Save Changes</v-card-title>
+            <v-card-text
+              >Do you want save these changes permenantly?</v-card-text
+            >
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="green darken-1"
+                flat
+                @click="medicalSaveConfirmation = false"
+                >Cancel</v-btn
+              >
+              <v-btn color="green darken-1" flat @click="saveMedicalInfo()"
+                >Okay</v-btn
+              >
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-snackbar v-model="snackBar" right :timeout="snackBarTimeout" top>
           {{ snackBarText }}
           <v-btn color="red" flat @click="snackbar = false">
@@ -503,7 +640,11 @@ export default {
     return {
       imageURL: require("../../assets/user.png"),
       isEditable: false,
+      isMedicalEditable: false,
       editBtnText: "Edit",
+      medicalEditBtnText: "Edit",
+      medicalEditBtnColor: "",
+      medicalSaveConfirmation: false,
       btnEditColor: "",
       isDark: false,
       saveConfirmation: false,
@@ -524,8 +665,14 @@ export default {
         condition: "",
         state: "",
         contact_teleNum: "",
-        nonTransmittedDiseases: []
-      }
+        nonTransmittedDiseases: [],
+        specialNotes: "",
+        snakeBites: false,
+        smokingStatus: "None",
+        alchoholUsage: "None",
+        bloodGroup: ""
+      },
+      bloodGroups: ["AB+", "A+", "B+", "O+", "AB-", "A-", "B-", "O-"]
     };
   },
   computed: {},
@@ -551,10 +698,28 @@ export default {
         this.isDark = true;
       }
     },
+    onClickMedicalEdit() {
+      if (this.isMedicalEditable) {
+        // Save
+        this.isMedicalEditable = false;
+        this.medicalEditBtnText = "Edit";
+        this.medicalEditBtnColor = "";
+        this.medicalSaveConfirmation = true;
+        this.isDark = false;
+      } else {
+        // Edit
+        this.isMedicalEditable = true;
+        this.medicalEditBtnText = "Save Changes";
+        this.medicalEditBtnColor = "primary";
+        this.isDark = true;
+      }
+    },
+    test() {
+      console.log(this.patient.snakeBites);
+    },
 
     savePersonalInfo() {
       this.saveConfirmation = false;
-      this.moID = "6eldkITMHuSiAebMfKuz";
       this.savePending = true;
       this.$http
         .put("api/patient/" + this.id + "/personal", {
@@ -580,6 +745,40 @@ export default {
         })
         .catch();
     },
+    saveMedicalInfo() {
+      this.medicalSaveConfirmation = false;
+      this.savePending = true;
+      console.log({
+        bloodGroup: this.patient.bloodGroup,
+        state: this.patient.state,
+        condition: this.patient.condition,
+        specialNotes: this.patient.specialNotes,
+        smokingStatus: this.patient.smokingStatus,
+        alchoholUsage: this.patient.alchoholUsage,
+        snakeBites: this.patient.snakeBites,
+        nonTransmittedDiseases: this.patient.nonTransmittedDiseases
+      });
+      this.$http
+        .put("api/patient/" + this.id + "/medical", {
+          bloodGroup: this.patient.bloodGroup,
+          state: this.patient.state,
+          condition: this.patient.condition,
+          specialNotes: this.patient.specialNotes,
+          smokingStatus: this.patient.smokingStatus,
+          alchoholUsage: this.patient.alchoholUsage,
+          snakeBites: this.patient.snakeBites,
+          nonTransmittedDiseases: this.patient.nonTransmittedDiseases
+        })
+        .then(res => {
+          if (res.data.message == "Success") {
+            console.log("Updated");
+            this.savePending = false;
+            this.snackBar = true;
+            this.snackBarText = "Medical Information Updated Successfully";
+          }
+        })
+        .catch();
+    },
     getPatientProfile() {
       this.$http
         .get("/api/patient/profile/" + this.id)
@@ -601,6 +800,13 @@ export default {
           this.patient.nic = res.data.nic;
           this.patient.patientID = "PID_" + res.data.nic;
           this.patient.nonTransmittedDiseases = res.data.nonTransmittedDiseases;
+          this.patient.specialNotes = res.data.specialNotes;
+          this.patient.bloodGroup = res.data.bloodGroup;
+          this.patient.snakeBites =
+            res.data.snakeBites == "" ? "None" : res.data.snakeBites;
+          this.patient.smokingStatus =
+            res.data.smokingStatus == "" ? "None" : res.data.smokingStatus;
+          this.patient.alchoholUsage = res.data.alchoholUsage;
 
           // this.patient.firstName = res.data.firstName;
         })

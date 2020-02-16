@@ -8,44 +8,10 @@
       </v-flex>
       <v-flex>
         <v-stepper v-model="e13" vertical non-linear>
-          <!-- Step - 0 -->
-          <v-stepper-step step="1" :complete="regCompleted">
-            Registration
-          </v-stepper-step>
+          <!-- Step 3 -->
+          <v-stepper-step step="1" complete>Family</v-stepper-step>
 
           <v-stepper-content step="1">
-            <v-card color="grey lighten-4" flat class="mb-5">
-              <Registration></Registration>
-            </v-card>
-            <v-btn
-              :loading="loadingReg"
-              :disabled="loadingReg"
-              color="primary"
-              @click="registerAndCont()"
-              >Register & Continue</v-btn
-            >
-            <v-btn flat>Cancel</v-btn>
-          </v-stepper-content>
-
-          <!-- Step 2 -->
-          <v-stepper-step step="2" complete>
-            General Information
-          </v-stepper-step>
-
-          <v-stepper-content step="2">
-            <v-card color="grey lighten-4" flat class="mb-5">
-              <GeneralInformation></GeneralInformation
-            ></v-card>
-            <v-btn color="primary" @click="genInfoAndCont()"
-              >Save & Continue</v-btn
-            >
-            <v-btn flat>Cancel</v-btn>
-          </v-stepper-content>
-
-          <!-- Step 3 -->
-          <v-stepper-step step="3" complete>Family</v-stepper-step>
-
-          <v-stepper-content step="3">
             <v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
             <v-btn color="primary" @click="e13 = 3">Continue</v-btn>
             <v-btn flat>Cancel</v-btn>
@@ -103,19 +69,14 @@
 </template>
 
 <script>
-import GeneralInformation from "../../components/Questionnaire_GeneralInfo";
-import Registration from "../../components/Questionnaire_Registration";
 import { bus } from "../../main";
 
 export default {
-  components: {
-    GeneralInformation,
-    Registration
-  },
+  components: {},
 
   data: () => {
     return {
-      e13: 1,
+      e13: 4,
       loadingReg: false,
       regCompleted: false
     };

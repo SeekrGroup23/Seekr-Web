@@ -748,7 +748,7 @@ export default {
             this.snackbarTimeout = 2500;
             this.snackbarText = "Patient Added Successfully";
             this.snackbar = true;
-
+            this.setAnalytics();
             this.resetFileds();
           }
         })
@@ -756,6 +756,7 @@ export default {
           console.log(err);
         });
     },
+    // To save Loaction and Address
     saveLocationAndAddress() {
       this.$v.patientLocationAndAddress.$touch();
       if (!this.$v.patientLocationAndAddress.$invalid) {
@@ -898,6 +899,18 @@ export default {
           );
           console.log(this.divisionGnDivisionMap);
         })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    // Analytics
+    setAnalytics() {
+      // Load GN Divs From Database Based On Doctor's Hospital Location
+      this.$http
+        .post("/api/analytics/patients/count", {
+          patientID: this.docID
+        })
+        .then(() => {})
         .catch(err => {
           console.log(err);
         });

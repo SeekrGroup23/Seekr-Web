@@ -121,13 +121,20 @@
     </v-layout>
 
     <v-divider></v-divider>
-
+    <v-layout>
+      <gmap_patients></gmap_patients>
+    </v-layout>
     <v-layout> </v-layout>
   </v-container>
 </template>
 
 <script>
+import gmap_patients from "../../components/Gmap_viewPatients";
+
 export default {
+  components: {
+    gmap_patients: gmap_patients
+  },
   data: () => {
     return {};
   },

@@ -59,7 +59,13 @@
               <v-card-actions>
                 <v-container fluid class="pa-0 ma-0">
                   <v-layout row class="justify-end mx-2">
-                    <v-btn class="mb-2" small color="">Cancel</v-btn>
+                    <v-btn
+                      class="mb-2"
+                      small
+                      color=""
+                      @click="$router.push('/')"
+                      >Cancel</v-btn
+                    >
                     <v-btn v-on:click="login" class="mb-2" small color="primary"
                       >Login</v-btn
                     >
