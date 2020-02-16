@@ -30,14 +30,7 @@
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-flex md3> </v-flex>
-                <v-flex shrink align-self-end md2 class="pl-5">
-                  <v-btn
-                    color="primary"
-                    class="hidden-sm-and-down"
-                    @click="$router.push('/medicalofficer/add_patient')"
-                    >New Patient</v-btn
-                  >
-                </v-flex>
+                <v-flex shrink align-self-end md2 class="pl-5"> </v-flex>
 
                 <v-flex shrink xs2 md1 class="pl-5 align-self-end">
                   <v-btn flat icon><v-icon>more_vert</v-icon></v-btn>
@@ -62,17 +55,8 @@
                 <td class="text-xs-left">{{ props.item.status }}</td>
                 <td class="text-xs-center">
                   <v-btn icon flat color="secondary" dark>
-                    <v-icon class="" @click="viewPatient(props.item)">
-                      visibility
-                    </v-icon>
-                  </v-btn>
-
-                  <v-btn icon>
-                    <v-icon
-                      @click="deletePatient(props.item.docID)"
-                      color="red"
-                    >
-                      delete
+                    <v-icon class="" @click="setLocation(props.item)">
+                      add_location
                     </v-icon>
                   </v-btn>
                 </td>
@@ -130,10 +114,65 @@
         {{ snackbarText }}
       </v-snackbar>
     </v-layout>
+    <v-layout row justify-center>
+      <v-dialog v-model="locationDialog" persistent width="800px">
+        <v-card color="">
+          <v-container fluid>
+            <v-layout row wrap>
+              <v-flex md3 sm12 xs12>
+                <v-layout column>
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field label="Name" v-model="name"></v-text-field>
+                  </v-flex>
+
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field
+                      label="Address"
+                      v-model="address"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field
+                      label="Latitude"
+                      v-model="latitude"
+                    ></v-text-field>
+                  </v-flex>
+
+                  <v-flex md6 sm12 xs12>
+                    <v-text-field
+                      label="Longitude"
+                      v-model="longitude"
+                    ></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-flex>
+              <v-divider vertical class="px-4"></v-divider>
+              <v-spacer></v-spacer>
+              <v-flex md8 sm12 xs12 class="">
+                <div id="map"></div>
+              </v-flex>
+            </v-layout>
+            <v-layout column>
+              <v-flex md12 xs12 sm12>
+                <v-spacer></v-spacer>
+                <v-btn @click="locationDialog = false" color="" small
+                  >Cancel</v-btn
+                >
+
+                <v-btn color="primary" @click="saveLocation()" small
+                  >Save</v-btn
+                >
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
+import gmapsInit from "../../utils/gmaps";
 export default {
   data: () => {
     return {
@@ -144,6 +183,7 @@ export default {
       snackbarText: "",
       timeout: 2000,
       search: "",
+      locationDialog: false,
       loadingTable: false,
       headers: [
         {
@@ -164,53 +204,58 @@ export default {
         { text: "Status", align: "left", value: "status", sortable: false },
         { text: "Actions", value: "actions", align: "center", sortable: false }
       ],
-      patients: []
+      patients: [],
+      latitude: "",
+      longitude: "",
+      name: "",
+      address: "",
+      currentPatient: ""
     };
   },
   computed: {},
   methods: {
-    getAge(dateString) {
-      console.log(dateString);
+    setLocation(patient) {
+      this.locationDialog = true;
+      this.name = patient.firstName + " " + patient.lastName;
+      this.address = patient.address;
+      this.currentPatient = patient.docID;
+    },
+    saveLocation() {
+      this.$http
+        .put("/api/patient/" + this.currentPatient + "/geo_location", {
+          latitude: this.latitude,
+          longitude: this.longitude
+        })
+        .then(res => {
+          if (res.data.message == "Success") {
+            console.log("Success" + this.currentPatient);
+            this.locationDialog = false;
 
+            this.patients.forEach(patient => {
+              if (patient.docID == this.currentPatient) {
+                this.patients[this.patients.indexOf(patient)].location =
+                  "Confirmed";
+              }
+            });
+
+            this.currentPatient = "";
+            this.latitude = "";
+            this.longitude = "";
+          }
+        })
+        .catch();
+    },
+
+    // To Calculate Age Using the DOB
+    getAge(dateString) {
       var today = new Date();
       var birthDate = new Date(dateString);
-      console.log(birthDate);
       var age = today.getFullYear() - birthDate.getFullYear();
       var m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
       return age;
-    },
-    deletePatient(docID) {
-      this.deletePointer = docID;
-      this.dialog = true;
-    },
-    onClickDelete() {
-      this.dialog = false;
-      this.$http
-        .delete("/api/patient/" + this.deletePointer)
-        .then(res => {
-          console.log(res.data);
-
-          if (res.data.message == "Success") {
-            this.snackbarColor = "success";
-            this.snackbarText = "Patient Deleted Successfully";
-            this.snackbar = true;
-
-            this.getAllPatientData();
-          } else {
-            this.snackbarColor = "warning";
-            this.snackbarText = "Patient Deleted Failed!";
-            this.snackbar = true;
-          }
-        })
-        .catch(err => {
-          this.snackbarColor = "warning";
-          this.snackbarText = "Patient Deleted Failed!";
-          this.snackbar = true;
-          console.log(err);
-        });
     },
     onClickTableRow(event) {
       console.log(event);
@@ -223,8 +268,9 @@ export default {
       this.loadingTable = true;
       this.patients = [];
       this.$http
-        .get("/api/patient/all")
+        .get("/api/patient/all/" + this.$store.state.gnDivision)
         .then(res => {
+          //   console.log(res.data + " " + this.$store.state.gnDivision);
           if (res.data == "") {
             this.patients = [];
           }
@@ -236,22 +282,69 @@ export default {
               lastName: patient.lastName,
               age: this.getAge(patient.dob),
               gender: patient.gender,
-              location: patient.location,
+              location:
+                patient.geoCordinates == null ? "Not Confirmed" : "Confirmed",
               status: patient.state,
-              docID: patient.docID
+              docID: patient.docID,
+              address: patient.address_perm
             });
             this.loadingTable = false;
           });
         })
         .catch(err => {
-          console.log("Error" + err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     }
   },
-  mounted() {
+  async mounted() {
+    try {
+      const google = await gmapsInit();
+      const mapContainer = document.querySelector("#map");
+      console.log("MapCont");
+
+      console.log(mapContainer);
+      const map = new google.maps.Map(mapContainer, {
+        center: { lat: 7.4224, lng: 80.8326 },
+        zoom: 8
+      });
+
+      var marker = null;
+      // This event listener calls addMarker() when the map is clicked.
+      google.maps.event.addListener(map, "click", event => {
+        this.latitude = event.latLng.lat();
+        this.longitude = event.latLng.lng();
+
+        // This is to avoid user adding multiple markers to the map while getting the location
+        if (marker == null) {
+          marker = new google.maps.Marker({
+            position: event.latLng
+          });
+
+          // To add the marker to the map, call setMap();
+          marker.setMap(map);
+        } else {
+          // Remove Marker
+          marker.setMap(null);
+          marker = null;
+          this.latitude = "";
+          this.longitude = "";
+        }
+      });
+    } catch (error) {
+      console.error("Error >> " + error);
+    }
+  },
+  created() {
     this.getAllPatientData();
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#map {
+  height: 100%;
+  width: 100%;
+}
+</style>

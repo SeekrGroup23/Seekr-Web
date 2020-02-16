@@ -35,33 +35,71 @@
                     color="primary"
                     class="hidden-sm-and-down"
                     @click="$router.push('/medicalofficer/add_patient')"
-                    >New Patient</v-btn
+                    >Add New</v-btn
                   >
                 </v-flex>
 
                 <v-flex shrink xs2 md1 class="pl-5 align-self-end">
-                  <v-btn flat icon><v-icon>more_vert</v-icon></v-btn>
+                  <v-menu
+                    left
+                    origin="center center"
+                    transition="scale-transition"
+                  >
+                    <template v-slot:activator="{ on }">
+                      <v-btn icon v-on="on">
+                        <v-icon>more_vert</v-icon>
+                      </v-btn>
+                    </template>
+
+                    <v-list dense>
+                      <v-list-tile>
+                        <v-list-tile-title>Dark Mode</v-list-tile-title>
+
+                        <v-list-tile-action class="pl-3">
+                          <v-switch v-model="isDark" color="primary"></v-switch>
+                        </v-list-tile-action>
+                      </v-list-tile>
+                    </v-list>
+                  </v-menu>
+                  <!-- <v-btn flat icon><v-icon>more_vert</v-icon></v-btn> -->
                 </v-flex>
               </v-layout>
             </v-container>
           </v-card-title>
-          <v-data-table :headers="headers" :items="desserts" :search="search">
+          <v-data-table
+            :headers="headers"
+            :items="hospitals"
+            :search="search"
+            :loading="tableLoading"
+            :dark="isDark"
+          >
             <template v-slot:items="props">
-              <td class="text-xs-left">{{ props.item.firstName }}</td>
-              <td class="text-xs-left">{{ props.item.lastName }}</td>
-              <td class="text-xs-left">{{ props.item.age }}</td>
-              <td class="text-xs-left">{{ props.item.gender }}</td>
-              <td class="text-xs-left">{{ props.item.location }}</td>
-              <td class="text-xs-left">{{ props.item.status }}</td>
+              <td class="text-xs-left">{{ props.item.registration_no }}</td>
+              <td class="text-xs-left">{{ props.item.name }}</td>
+              <td class="text-xs-left">{{ props.item.category }}</td>
+              <td class="text-xs-left">{{ props.item.province }}</td>
+              <td class="text-xs-left">{{ props.item.district }}</td>
+              <!-- <td class="text-xs-left">{{ props.item.map }}</td> -->
+              <td class="text-xs-left">
+                <v-btn
+                  small
+                  color="secondary"
+                  dark
+                  @click.stop="showLocationInMap(props.item)"
+                >
+                  View In Map
+                </v-btn>
+              </td>
+
               <td class="text-xs-center">
-                <v-btn icon>
-                  <v-icon small class="mr-2" @click="editItem(props.item)">
+                <v-btn icon @click="editItem(props.item)">
+                  <v-icon small class="">
                     edit
                   </v-icon>
                 </v-btn>
 
-                <v-btn icon>
-                  <v-icon small @click="deleteItem(props.item)">
+                <v-btn icon @click="deleteItem(props.item)">
+                  <v-icon small color="red">
                     delete
                   </v-icon>
                 </v-btn>
@@ -89,48 +127,90 @@
         <v-icon dark>add</v-icon>
       </v-btn>
     </v-layout>
+    <v-layout>
+      <v-dialog v-model="mapDialog" max-width="500">
+        <v-card>
+          <popUpMap :geoData="geoData"></popUpMap>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </v-container>
 </template>
 
 <script>
+import popUpMap from "../../../components/Gmap_viewHospital";
 export default {
+  components: {
+    popUpMap
+  },
   data: () => {
     return {
+      // Data Table
       search: "",
+      tableLoading: false,
+      isDark: false,
       headers: [
         {
-          text: "First Name",
+          text: "Registration No.",
           align: "left",
           sortable: true,
-          value: "firstName"
+          value: "registration_no"
         },
         {
-          text: "Last Name",
+          text: "Name",
           align: "left",
-          value: "lastName",
+          value: "name",
           sortable: true
         },
-        { text: "Age", align: "left", value: "age", sortable: true },
-        { text: "Gender", align: "left", value: "gender", sortable: false },
+        { text: "Category", align: "left", value: "category", sortable: true },
+        { text: "Province", align: "left", value: "province", sortable: false },
+        { text: "District", align: "left", value: "district", sortable: false },
         { text: "Location", align: "left", value: "location", sortable: false },
-        { text: "Status", align: "left", value: "status", sortable: false },
         { text: "Actions", value: "actions", align: "center", sortable: false }
       ],
-      desserts: [
-        {
-          firstName: "Frozensdfsdfsdf",
-          lastName: "sdfsdfsddsfsdfsd",
-          gender: "Male",
-          age: 6.0,
-          location: 24,
-          status: "General",
-          actions: " "
-        }
-      ]
+      hospitals: [],
+      hospital: "",
+      mapDialog: false,
+      geoData: null
     };
   },
   computed: {},
-  methods: {}
+  methods: {
+    showLocationInMap(hospital) {
+      this.mapDialog = true;
+      this.geoData = hospital;
+      // console.log(this.geoCordinates);
+    },
+    getHospitalData() {
+      this.tableLoading = true;
+      // Get all Hospital Data
+      this.$http
+        .get("/api/hospital")
+        .then(res => {
+          // console.log(res.data);
+          // this.hospitals = res.data;
+
+          res.data.forEach(hospital => {
+            this.hospitals.push({
+              registration_no: hospital.registration_no,
+              name: hospital.name,
+              province: hospital.province,
+              district: hospital.district,
+              docID: hospital.docID,
+              category: hospital.category,
+              geoCordinates: hospital.geoCordinates
+            });
+          });
+          this.tableLoading = false;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  },
+  created() {
+    this.getHospitalData();
+  }
 };
 </script>
 

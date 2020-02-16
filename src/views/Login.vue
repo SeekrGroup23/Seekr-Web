@@ -59,7 +59,13 @@
               <v-card-actions>
                 <v-container fluid class="pa-0 ma-0">
                   <v-layout row class="justify-end mx-2">
-                    <v-btn class="mb-2" small color="">Cancel</v-btn>
+                    <v-btn
+                      class="mb-2"
+                      small
+                      color=""
+                      @click="$router.push('/')"
+                      >Cancel</v-btn
+                    >
                     <v-btn v-on:click="login" class="mb-2" small color="primary"
                       >Login</v-btn
                     >
@@ -140,7 +146,7 @@ export default {
       this.$v.$touch();
 
       if (this.$v.$invalid) {
-        console.log("Error..");
+        console.log("Validation Error");
       } else {
         this.isPending = true;
 
@@ -151,14 +157,26 @@ export default {
               case "admin":
                 break;
 
-              case "gramaNiladhari":
-                console.log("Router GN");
+              case "Grama_Niladhari":
                 this.$router.push("/gramaniladhari/");
                 break;
-              case "user":
+              case "medical_officer":
+                this.$router.push("/medicalofficer/");
+                break;
+
+              case "Donor":
+                // this.$http
+                //   .get(
+                //     "/api/donor/isEmailVerified/" + this.$store.state.user.id
+                //   )
+                //   .then(res => {})
+                //   .catch();
+                // this.$router.push("/medicalofficer/");
                 break;
 
               default:
+                this.alert = true;
+                this.isPending = false;
                 break;
             }
           })

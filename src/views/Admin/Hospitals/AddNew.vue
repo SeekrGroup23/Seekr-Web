@@ -15,7 +15,7 @@
       wrap
     >
       <v-flex>
-        <v-card color="secondary" dark>
+        <v-card color="">
           <v-container fluid>
             <v-layout row wrap>
               <v-flex md5 sm12 xs12>
@@ -34,6 +34,7 @@
                       :items="provinces"
                       label="Province"
                       v-model="province"
+                      @change="getDistricts()"
                     ></v-select>
                   </v-flex>
                   <v-flex md6 sm12 xs12>
@@ -41,13 +42,14 @@
                       :items="districts"
                       label="District"
                       v-model="district"
+                      @change="getDivisions()"
                     ></v-select>
                   </v-flex>
                   <v-flex md6 sm12 xs12>
                     <v-select
-                      :items="gnDivs"
-                      label="Grama Niladhari Division Code"
-                      v-model="gnDiv"
+                      :items="divisions"
+                      label="Division"
+                      v-model="division"
                     ></v-select>
                   </v-flex>
                   <v-flex md6 sm12 xs12>
@@ -100,7 +102,7 @@
     <v-layout>
       <v-snackbar
         v-model="snackbar"
-        bottom
+        top
         right
         :color="snackbarColor"
         :timeout="snackbarTimeout"
@@ -139,11 +141,23 @@ export default {
       address: "",
       latitude: "",
       longitude: "",
-      gnDiv: "",
-      provinces: ["Western", "Eastern", "Southern", "Nothern"],
-      districts: ["Colombo", "Kaluthara", "Gampaha"],
-      gnDivs: ["Wethara-225"],
-      categories: ["Teaching Hospital", "District General"]
+      division: "",
+      provinces: [
+        "Western",
+        "Eastern",
+        "Southern",
+        "Nothern",
+        "Uva",
+        "North-Central",
+        "Sabaragamuwa",
+        "Central",
+        "North-Western"
+      ],
+      districts: [],
+      divisions: [],
+      categories: ["Teaching Hospital", "District General"],
+      provinceDistrictMap: new Map(),
+      districtDivisionMap: new Map()
     };
   },
   computed: {
@@ -193,7 +207,7 @@ export default {
           regNo: this.regNo,
           province: this.province,
           district: this.district,
-          gnDivCode: this.gnDiv,
+          division: this.division,
           category: this.category,
           address: this.address,
           latitude: this.latitude,
@@ -202,7 +216,7 @@ export default {
           lastModifiedBy: ""
         })
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.message == "Success") {
             this.snackbarTimeout = 1500;
             this.snackbarText = "Hospital Added Successfully";
@@ -214,28 +228,49 @@ export default {
           console.log(err);
         });
     },
+    // To Clear All Input Fields
     clearFields() {
       this.name = "";
       this.regNo = "";
       this.province = "";
       this.district = "";
-      this.gnDiv = "";
+      this.division = "";
       this.category = "";
       this.address = "";
       this.latitude = "";
       this.longitude = "";
+    },
+    // When User Select the Province, the Districts within that Provice should be loaded to the v-select
+    getDistricts() {
+      this.districts = this.provinceDistrictMap.get(this.province);
+    },
+    getDivisions() {
+      this.divisions = this.districtDivisionMap.get(this.district);
     }
   },
   created() {
-    // Load GN Divs From Database Based On Doctor's Hospital Location
+    this.$http
+      .get("/api/metadata/metadata_01")
+      .then(res => {
+        // Convert the Plain Object to a MAP Object
+        this.provinceDistrictMap = new Map(
+          Object.entries(res.data.province_district)
+        );
+        this.districtDivisionMap = new Map(
+          Object.entries(res.data.district_division)
+        );
+      })
+      .catch(err => {
+        console.log(err);
+      });
   },
   async mounted() {
     try {
       const google = await gmapsInit();
-      console.log(google);
+      // console.log(google);
 
       const mapContainer = document.querySelector("#map");
-      console.log(mapContainer);
+      // console.log(mapContainer);
 
       const map = new google.maps.Map(mapContainer, {
         center: { lat: 7.4224, lng: 80.8326 },
@@ -275,9 +310,9 @@ export default {
         }
       });
 
-      console.log(map);
+      // console.log(map);
     } catch (error) {
-      console.error("Error >> " + error);
+      // console.error("Error >> " + error);
     }
   }
 };

@@ -2,6 +2,7 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
+import router from "../router";
 
 Vue.use(Vuex);
 
@@ -11,6 +12,7 @@ export default new Vuex.Store({
     accessToken: localStorage.getItem("access_token") || "",
     currentUser: {},
     userJWT: "",
+    gnDivision: "",
     user: {
       id: "",
       firstName: "",
@@ -52,23 +54,21 @@ export default new Vuex.Store({
     login({ commit }, loginCredentials) {
       return new Promise((resolve, reject) => {
         commit("auth_request");
+
         axios({
           url: "http://localhost:5000/api/user/login",
           data: loginCredentials,
           method: "POST"
         })
           .then(response => {
+            console.log(response.data.token);
             const token = response.data.token;
             // const user = response.data.user;
-
-            console.log(">>>>>>>>>>>>" + response.data.token);
             if (response.data.token != "invalid") {
               //  Store the received JWT in the state variavle of Vuex Store "userJWT"
               this.state.userJWT = response.data.token;
-              console.log("JWT Saved" + this.state.userJWT);
               // Decoding the Payload from the userJWT
               const jwtPayload = jwtDecode(this.state.userJWT);
-              console.log(jwtPayload.user.id);
               this.state.user.id = jwtPayload.user.id;
               this.state.user.firstName = jwtPayload.user.firstName;
               this.state.user.lastName = jwtPayload.user.lastName;
@@ -77,20 +77,26 @@ export default new Vuex.Store({
               this.state.user.role = jwtPayload.user.role;
 
               localStorage.setItem("access_token", token);
-              axios.defaults.headers.common["Authorization"] = token;
-              console.log(
-                "Local Storage >> " + localStorage.getItem("access_token")
-              );
-
+              Vue.prototype.$http.defaults.headers.common["authorization"] =
+                "Bearer " + token;
               commit("auth_success", token);
             }
             resolve(response);
           })
           .catch(err => {
             commit("auth_error");
-            localStorage.removeItem("token");
+            localStorage.removeItem("access_token");
             reject(err);
           });
+      });
+    },
+    logout({ commit }) {
+      return new Promise(resolve => {
+        commit("logout");
+        localStorage.removeItem("access_token");
+        delete axios.defaults.headers.common["authorization"];
+        router.push("/login");
+        resolve();
       });
     }
   },

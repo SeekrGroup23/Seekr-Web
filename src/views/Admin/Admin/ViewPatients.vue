@@ -3,7 +3,7 @@
     <v-layout column>
       <v-flex>
         <h4 class="display-1 font-weight-medium" color="secondary">
-          Medical Officers
+          Patients
         </h4>
       </v-flex>
     </v-layout>
@@ -34,7 +34,7 @@
                   <v-btn
                     color="primary"
                     class="hidden-sm-and-down"
-                    @click="$router.push('/admin/patients/add')"
+                    @click="$router.push('/medicalofficer/add_patient')"
                     >New Patient</v-btn
                   >
                 </v-flex>
@@ -47,40 +47,36 @@
           </v-card-title>
           <v-data-table
             :headers="headers"
-            :items="medicalOfficers"
+            :items="patients"
             :search="search"
-            :loading="tableLoading"
+            :loading="loadingTable"
+            @click:row="onClickTableRow"
           >
             <template v-slot:items="props">
-              <td class="text-xs-left">
-                {{ props.item.doctorRegistrationNo }}
-              </td>
+              <tr @click="onClickTableRow(props.item)">
+                <td class="text-xs-left">{{ props.item.firstName }}</td>
+                <td class="text-xs-left">{{ props.item.lastName }}</td>
+                <td class="text-xs-left">{{ props.item.age }}</td>
+                <td class="text-xs-left">{{ props.item.gender }}</td>
+                <td class="text-xs-left">{{ props.item.location }}</td>
+                <td class="text-xs-left">{{ props.item.status }}</td>
+                <td class="text-xs-center">
+                  <v-btn icon flat color="secondary" dark>
+                    <v-icon class="" @click="viewPatient(props.item)">
+                      visibility
+                    </v-icon>
+                  </v-btn>
 
-              <td class="text-xs-left">{{ props.item.firstName }}</td>
-              <td class="text-xs-left">{{ props.item.lastName }}</td>
-              <td class="text-xs-left">
-                {{ props.item.currentWorking_hospitalName }}
-              </td>
-              <td class="text-xs-left">{{ props.item.specialty }}</td>
-              <td class="text-xs-center">
-                <v-btn
-                  icon
-                  flat
-                  color="secondary"
-                  dark
-                  @click="viewPatient(props.item)"
-                >
-                  <v-icon class="">
-                    visibility
-                  </v-icon>
-                </v-btn>
-
-                <v-btn icon @click="deletePatient(props.item.docID)">
-                  <v-icon color="red">
-                    delete
-                  </v-icon>
-                </v-btn>
-              </td>
+                  <v-btn icon>
+                    <v-icon
+                      @click="deletePatient(props.item.docID)"
+                      color="red"
+                    >
+                      delete
+                    </v-icon>
+                  </v-btn>
+                </td>
+              </tr>
             </template>
             <template v-slot:no-results>
               <v-alert :value="true" color="error" icon="warning">
@@ -104,6 +100,7 @@
         <v-icon dark>add</v-icon>
       </v-btn>
     </v-layout>
+
     <v-layout row justify-center>
       <v-dialog v-model="dialog" persistent max-width="290">
         <v-card>
@@ -126,9 +123,9 @@
       <v-snackbar
         v-model="snackbar"
         :color="snackbarColor"
-        :timeout="snackbarTimeout"
+        :timeout="timeout"
         right
-        top
+        bottom
       >
         {{ snackbarText }}
       </v-snackbar>
@@ -140,23 +137,15 @@
 export default {
   data: () => {
     return {
-      search: "",
       dialog: false,
       deletePointer: null,
-      tableLoading: false,
-
-      // Snackbar
       snackbar: false,
       snackbarColor: "secondary",
       snackbarText: "",
-      snackbarTimeout: 2000,
+      timeout: 2000,
+      search: "",
+      loadingTable: false,
       headers: [
-        {
-          text: "Registration No.",
-          align: "left",
-          sortable: false,
-          value: "doctorRegistrationNo"
-        },
         {
           text: "First Name",
           align: "left",
@@ -169,25 +158,29 @@ export default {
           value: "lastName",
           sortable: true
         },
-        {
-          text: "Hospital",
-          align: "left",
-          value: "currentWorking_hospitalName",
-          sortable: true
-        },
-        {
-          text: "Specialty",
-          align: "left",
-          value: "specialty",
-          sortable: false
-        },
-        { text: "Actions", align: "center", value: "action", sortable: false }
+        { text: "Age", align: "left", value: "age", sortable: true },
+        { text: "Gender", align: "left", value: "gender", sortable: false },
+        { text: "Location", align: "left", value: "location", sortable: false },
+        { text: "Status", align: "left", value: "status", sortable: false },
+        { text: "Actions", value: "actions", align: "center", sortable: false }
       ],
-      medicalOfficers: []
+      patients: []
     };
   },
   computed: {},
   methods: {
+    getAge(dateString) {
+      console.log(dateString);
+      var today = new Date();
+      var birthDate = new Date(dateString);
+      console.log(birthDate);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age;
+    },
     deletePatient(docID) {
       this.deletePointer = docID;
       this.dialog = true;
@@ -195,19 +188,17 @@ export default {
     onClickDelete() {
       this.dialog = false;
       this.$http
-        .delete("/api/medical_officer/" + this.deletePointer)
+        .delete("/api/patient/" + this.deletePointer)
         .then(res => {
           console.log(res.data);
-
           if (res.data.message == "Success") {
             this.snackbarColor = "success";
-            this.snackbarText = "Medical Officer Deleted Successfully";
+            this.snackbarText = "Patient Deleted Successfully";
             this.snackbar = true;
-
-            this.getAllMedicalOfficersData();
+            this.getAllPatientData();
           } else {
             this.snackbarColor = "warning";
-            this.snackbarText = "Medical Officer Deleted Failed!";
+            this.snackbarText = "Patient Deleted Failed!";
             this.snackbar = true;
           }
         })
@@ -218,27 +209,43 @@ export default {
           console.log(err);
         });
     },
+    onClickTableRow(event) {
+      console.log(event);
+    },
     onClickCancel() {
       this.dialog = false;
       this.deletePointer = null;
     },
-    getAllMedicalOfficersData() {
-      this.tableLoading = true;
+    getAllPatientData() {
+      this.loadingTable = true;
+      this.patients = [];
       this.$http
-        .get("/api/medical_officer/all")
+        .get("/api/patient/all")
         .then(res => {
-          console.log(res);
-
-          this.medicalOfficers = res.data;
-          this.tableLoading = false;
+          if (res.data == "") {
+            this.patients = [];
+          }
+          var tempArray = res.data;
+          tempArray.forEach(patient => {
+            this.patients.push({
+              firstName: patient.firstName,
+              lastName: patient.lastName,
+              age: this.getAge(patient.dob),
+              gender: patient.gender,
+              location: patient.location,
+              status: patient.state,
+              docID: patient.docID
+            });
+            this.loadingTable = false;
+          });
         })
         .catch(err => {
-          console.log(err);
+          console.log("Error" + err);
         });
     }
   },
-  created() {
-    this.getAllMedicalOfficersData();
+  mounted() {
+    this.getAllPatientData();
   }
 };
 </script>

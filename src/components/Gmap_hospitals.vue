@@ -4,6 +4,7 @@
 
 <script>
 import gmapsInit from "../utils/gmaps";
+import { bus } from "../main";
 
 export default {
   name: "App",
@@ -12,16 +13,25 @@ export default {
       hospitalLocations: [],
       google: null,
       map: null,
-      markers: null
+      markers: [],
+      province: "",
+      district: "",
+      division: "",
+      resData: null
     };
   },
   async created() {
     console.log("Created");
 
+    bus.$on("update_hospital_map", data => {
+      this.filterAndUpdateMap(data.province, data.district, data.division);
+    });
+
     // Get all Hospital Data
     await this.$http
       .get("/api/hospital")
       .then(res => {
+        this.resData = res.data;
         // console.log(res);
         res.data.forEach(hospital => {
           this.hospitalLocations.push({
@@ -31,9 +41,9 @@ export default {
         });
 
         this.hospitalLocations.forEach(hospital => {
-          console.log(hospital.location);
+          // console.log(hospital.location);
 
-          this.marker = new this.google.maps.Marker({
+          this.markers = new this.google.maps.Marker({
             position: {
               lat: parseFloat(hospital.location._latitude),
               lng: parseFloat(hospital.location._longitude)
@@ -41,7 +51,7 @@ export default {
             title: hospital.name
           });
           // To add the marker to the map, call setMap();
-          this.marker.setMap(this.map);
+          this.markers.setMap(this.map);
         });
       })
       .catch(err => {
@@ -68,6 +78,77 @@ export default {
       this.map = map;
     } catch (error) {
       console.error("Error >> " + error);
+    }
+  },
+  methods: {
+    filterAndUpdateMap(province, district, division) {
+      this.markers.setMap(null);
+      // this.marker = [];
+      this.hospitalLocations = [];
+
+      if (province != "All" && district == "All" && division == "All") {
+        console.log("01");
+
+        this.resData.forEach(hospital => {
+          if (hospital.province == province) {
+            this.hospitalLocations.push({
+              location: hospital.geoCordinates,
+              name: hospital.name
+            });
+          }
+        });
+
+        console.log("Select >> " + province);
+      } else if (province != "All" && district != "All" && division == "All") {
+        console.log("02");
+        this.resData.forEach(hospital => {
+          if (hospital.province == province && hospital.district == district) {
+            this.hospitalLocations.push({
+              location: hospital.geoCordinates,
+              name: hospital.name
+            });
+          }
+        });
+      } else if (province != "All" && district != "All" && division != "All") {
+        console.log("03");
+
+        this.resData.forEach(hospital => {
+          if (
+            hospital.province == province &&
+            hospital.district == district &&
+            hospital.division == division
+          ) {
+            this.hospitalLocations.push({
+              location: hospital.geoCordinates,
+              name: hospital.name
+            });
+          }
+        });
+      } else {
+        console.log("04");
+        this.resData.forEach(hospital => {
+          this.hospitalLocations.push({
+            location: hospital.geoCordinates,
+            name: hospital.name
+          });
+        });
+      }
+
+      this.hospitalLocations.forEach(hospital => {
+        console.log(hospital.location);
+
+        this.markers = new this.google.maps.Marker({
+          position: {
+            lat: parseFloat(hospital.location._latitude),
+            lng: parseFloat(hospital.location._longitude)
+          },
+          title: hospital.name
+          // map: this.map
+        });
+        // To add the marker to the map, call setMap();
+        this.markers.setMap(this.map);
+        console.log(this.markers);
+      });
     }
   }
 };

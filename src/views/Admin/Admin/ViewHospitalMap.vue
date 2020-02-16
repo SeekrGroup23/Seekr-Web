@@ -110,7 +110,6 @@ export default {
       this.districts.push("All");
       this.district = "All";
       this.division = "All";
-
       this.updateMap();
     },
     getDivisions() {
