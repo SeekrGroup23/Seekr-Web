@@ -612,7 +612,7 @@ export default {
       },
       theme: {
         mode: "dark"
-      }
+      } 
     };
     var pie = {
       chart: {
