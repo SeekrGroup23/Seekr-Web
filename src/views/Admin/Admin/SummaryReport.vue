@@ -13,7 +13,7 @@
             <v-flex shrink>
               <v-card height="120" color="amber accent-4" dark width="100" flat>
                 <v-container>
-                  <v-icon size="50">person</v-icon>
+                  <v-icon size="50">place</v-icon>
                 </v-container>
               </v-card>
             </v-flex>
@@ -35,7 +35,7 @@
             <v-flex shrink>
               <v-card height="120" color="amber accent-4" dark width="100" flat>
                 <v-container>
-                  <v-icon size="50">person</v-icon>
+                  <v-icon size="50">person_pin_circle</v-icon>
                 </v-container>
               </v-card>
             </v-flex>
@@ -44,6 +44,50 @@
               <v-layout column class="mt-2">
                 <v-divider></v-divider>
                 <button class="btn" @click="downloadProvincePdf">
+                  Download PDF
+                </button>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+      <v-card width="300" height="120" class="my-2 mx-auto" hover dark>
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card height="120" color="amber accent-4" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">date_range</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex align="text-center" class="py-2 px-2">
+              <h6 class="subheading">Age Report</h6>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <button class="btn" @click="downloadAgePdf">
+                  Download PDF
+                </button>
+              </v-layout>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </v-card>
+      <v-card width="300" height="120" class="my-2 mx-auto" hover dark>
+        <v-container fluid class="pa-0 ma-0">
+          <v-layout row>
+            <v-flex shrink>
+              <v-card height="120" color="amber accent-4" dark width="100" flat>
+                <v-container>
+                  <v-icon size="50">invert_colors</v-icon>
+                </v-container>
+              </v-card>
+            </v-flex>
+            <v-flex align="text-center" class="py-2 px-2">
+              <h6 class="subheading">Blood Group Report</h6>
+              <v-layout column class="mt-2">
+                <v-divider></v-divider>
+                <button class="btn" @click="downloadBloodPdf">
                   Download PDF
                 </button>
               </v-layout>
@@ -64,6 +108,8 @@ export default {
     return {
       areaCount: [],
       areaCount1: [],
+      ageCount: [],
+      bloodCount: [],
       gramaPC: [],
       gramaPN: [],
       h: " "
@@ -77,6 +123,7 @@ export default {
         { title: "Count", dataKey: "count" }
       ];
       var doc = new jsPDF("p", "pt");
+      doc.text("Ckdu Patient Count By District", 20, 20);
       doc.autoTable(column, vm.areaCount);
       doc.save("district.pdf");
     },
@@ -87,8 +134,31 @@ export default {
         { title: "Count", dataKey: "count" }
       ];
       var doc = new jsPDF("p", "pt");
+      doc.text("Ckdu Patient Count By Province", 20, 20);
       doc.autoTable(column, vm.areaCount1);
       doc.save("province.pdf");
+    },
+    downloadAgePdf() {
+      var vm = this;
+      var column = [
+        { title: "Age Category", dataKey: "cat" },
+        { title: "Count", dataKey: "count" }
+      ];
+      var doc = new jsPDF("p", "pt");
+      doc.text("Ckdu Patient Count By Age", 20, 20);
+      doc.autoTable(column, vm.ageCount);
+      doc.save("Age.pdf");
+    },
+    downloadBloodPdf() {
+      var vm = this;
+      var column = [
+        { title: "Blood Group Category", dataKey: "cat" },
+        { title: "Count", dataKey: "count" }
+      ];
+      var doc = new jsPDF("p", "pt");
+      doc.text("Ckdu Patient Count By Blood Group", 20, 20);
+      doc.autoTable(column, vm.bloodCount);
+      doc.save("BloodGroup.pdf");
     },
     patientDisCount() {
       this.$http
@@ -103,10 +173,32 @@ export default {
     },
     patientProCount() {
       this.$http
-        .get("/api/admin//provincepatientcountreport")
+        .get("/api/admin/provincepatientcountreport")
         .then(res => {
           this.areaCount1 = [];
           this.areaCount1 = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    patientAgeCount() {
+      this.$http
+        .get("/api/admin/agepatientcountreport")
+        .then(res => {
+          this.ageCount = [];
+          this.ageCount = res.data;
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    patientBloodCount() {
+      this.$http
+        .get("/api/admin/bloodpatientcountreport")
+        .then(res => {
+          this.bloodCount = [];
+          this.bloodCount = res.data;
         })
         .catch(err => {
           console.log(err);
@@ -116,6 +208,8 @@ export default {
   created() {
     this.patientDisCount();
     this.patientProCount();
+    this.patientAgeCount();
+    this.patientBloodCount();
   }
 };
 </script>
