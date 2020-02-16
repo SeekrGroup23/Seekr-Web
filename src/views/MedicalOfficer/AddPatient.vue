@@ -120,7 +120,7 @@
                       </template>
                       <v-date-picker
                         min="1980-01-01"
-                        picker-date="1990-01-01"
+                        picker-date=""
                         v-model="patientBasic.dob"
                         @input="menu2 = false"
                         no-title

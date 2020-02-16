@@ -21,8 +21,24 @@ import MO_ViewAllPatients from "./views/MedicalOfficer/ViewAllPatients.vue";
 import MO_Profile from "./views/MedicalOfficer/Profile.vue";
 import MO_Clinic from "./views/MedicalOfficer/Clinic.vue";
 
-import Admin from "./views/Admin/Admin.vue";
-import Admin_Dashboard from "./views/Admin/Dashboard.vue";
+// import Admin from "./views/Admin/Admin.vue";
+import Admin from "./views/Admin/Admin/Admin.vue";
+// import ADD_Grama from "./views/Admin/GramaNiladhari/AddGrama.vue";
+// import Edt_Grama from "./views/Admin/GramaNiladhari/EditGrama.vue";
+// import Grama_Loc from "./views/Admin/GramaNiladhari/GramaLocations.vue";
+// import Admin from "./views/Admin/Admin/Admin.vue";
+import Admin_Dash from "./views/Admin/Admin/AdminDashboard.vue";
+import Admin_view_Patients from "./views/Admin/Admin/ViewPatients.vue";
+import Admin_view_Hospitals from "./views/Admin/Admin/ViewHospitalMap.vue";
+import Summary_Charts from "./views/Admin/Admin/ViewCharts.vue";
+import Summary_Report from "./views/Admin/Admin/SummaryReport.vue";
+// import GramaNiladhari from "./views/GramaNiladhari/GramaNiladhari.vue";
+// import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
+// import GN_PatientLocation from "./views/GramaNiladhari/PatientLocations.vue";
+// import DE_AddNew from "./views/Admin/DataEntry/AddNew.vue";
+// import DE_View from "./views/Admin/DataEntry/View.vue";
+
+// import Admin_Dashboard from "./views/Admin/Dashboard.vue";
 import Admin_Patients_ViewAll from "./views/Admin/Patients/ViewAll.vue";
 import Admin_Patients_AddNew from "./views/Admin/Patients/AddNew.vue";
 import Admin_MO_AddNew from "./views/Admin/MedicalOfficers/AddNew.vue";
@@ -38,6 +54,7 @@ import Admin_DataEntry_View from "./views/Admin/DataEntry/ViewAll.vue";
 import Admin_DataEntry_AddNew from "./views/Admin/DataEntry/AddNew.vue";
 import Admin_Admins_AddNew from "./views/Admin/DataEntry/AddNew.vue";
 import Admin_Admins_View from "./views/Admin/DataEntry/ViewAll.vue";
+
 import MO_ViewPatient from "./views/MedicalOfficer/ViewPatient.vue";
 
 Vue.use(Router);
@@ -167,7 +184,7 @@ let router = new Router({
       children: [
         {
           path: "",
-          component: Admin_Dashboard
+          component: Admin_Dash
         },
         {
           path: "add_patient",
@@ -240,6 +257,47 @@ let router = new Router({
         {
           path: "admins/add",
           component: Admin_Admins_AddNew
+        },
+        // -----------
+        // {
+        //   path: "grama_niladhari/add",
+        //   component: ADD_Grama
+        // },
+        // {
+        //   path: "grama_niladhari/view",
+        //   component: Edt_Grama
+        // },
+        // {
+        //   path: "grama_niladhari/gramaloc",
+        //   component: Grama_Loc
+        // },
+        // {
+        //   path: "data_entry/add",
+        //   component: DE_AddNew
+        // },
+        // {
+        //   path: "data_entry/view",
+        //   component: DE_View
+        // },
+        {
+          path: "patients/view",
+          component: Admin_view_Patients
+        },
+        {
+          path: "hospital/map",
+          component: Admin_view_Hospitals
+        },
+        {
+          path: "summary/charts",
+          component: Summary_Charts
+        },
+        {
+          path: "summary/report",
+          component: Summary_Report
+        },
+        {
+          path: "",
+          component: Admin_Dash
         }
       ]
     }

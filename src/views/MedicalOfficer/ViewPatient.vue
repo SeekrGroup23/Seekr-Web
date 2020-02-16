@@ -678,7 +678,7 @@ export default {
   computed: {},
   created() {
     // this.patientID = this.$router.params.id;
-    console.log("Route Params: " + this.id);
+    console.log(">>>>>>>>> " + this.getAge("12-01-1996"));
     this.getPatientProfile();
   },
   methods: {
@@ -815,13 +815,19 @@ export default {
         });
     },
     getAge(dateString) {
+      var arr = dateString.split("-");
+      var dob = arr[2] + "-" + arr[1] + "-" + arr[0];
+      console.log(arr[2] + " " + arr[1] + " " + arr[0]);
+      console.log(dob);
       var today = new Date();
-      var birthDate = new Date(dateString);
+      var birthDate = new Date(dob.toString());
+
       var age = today.getFullYear() - birthDate.getFullYear();
       var m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
+      console.log( "==================" + age);
       return age;
     },
     onFileSelected(event) {

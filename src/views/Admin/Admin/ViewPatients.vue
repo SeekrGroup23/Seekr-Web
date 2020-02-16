@@ -62,7 +62,7 @@
                 <td class="text-xs-left">{{ props.item.status }}</td>
                 <td class="text-xs-center">
                   <v-btn icon flat color="secondary" dark>
-                    <v-icon class="" @click="viewPatient(props.item.docID)">
+                    <v-icon class="" @click="viewPatient(props.item)">
                       visibility
                     </v-icon>
                   </v-btn>
@@ -170,11 +170,10 @@ export default {
   computed: {},
   methods: {
     getAge(dateString) {
-      var arr = dateString.split("-");
-      var dob = arr[2] + "-" + arr[1] + "-" + arr[0];
+      console.log(dateString);
       var today = new Date();
-      var birthDate = new Date(dob.toString());
-      // console.log(birthDate);
+      var birthDate = new Date(dateString);
+      console.log(birthDate);
       var age = today.getFullYear() - birthDate.getFullYear();
       var m = today.getMonth() - birthDate.getMonth();
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
@@ -192,12 +191,10 @@ export default {
         .delete("/api/patient/" + this.deletePointer)
         .then(res => {
           console.log(res.data);
-
           if (res.data.message == "Success") {
             this.snackbarColor = "success";
             this.snackbarText = "Patient Deleted Successfully";
             this.snackbar = true;
-
             this.getAllPatientData();
           } else {
             this.snackbarColor = "warning";
@@ -220,12 +217,6 @@ export default {
       this.deletePointer = null;
     },
     getAllPatientData() {
-      console.log(
-        "Token >>>>>>>>>>>> " +
-          localStorage.getItem("access_token") +
-          "\n AH $HTTP >> " +
-          this.$http.defaults.headers.common["Authorization"]
-      );
       this.loadingTable = true;
       this.patients = [];
       this.$http
@@ -235,7 +226,6 @@ export default {
             this.patients = [];
           }
           var tempArray = res.data;
-
           tempArray.forEach(patient => {
             this.patients.push({
               firstName: patient.firstName,
@@ -250,15 +240,8 @@ export default {
           });
         })
         .catch(err => {
-          if (err.response.status == 403) {
-            this.$store.dispatch("logout");
-
-            console.log("I'm Here >> " + err);
-          }
+          console.log("Error" + err);
         });
-    },
-    viewPatient(docID) {
-      this.$router.push("/medicalofficer/patient/" + docID);
     }
   },
   mounted() {

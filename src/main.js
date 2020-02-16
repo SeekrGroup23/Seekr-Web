@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 import store from "./store/store";
 import Axios from "axios";
+import * as VueGoogleMaps from "vue2-google-maps";
 
 Vue.config.productionTip = false;
 
@@ -24,6 +25,13 @@ Vue.prototype.$http = Axios.create({
 
 // Adding Authorization Header to every request made to the server by Axios
 // const token = store.state.userJWT;
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: "AIzaSyBZTL2CCcBEYZrR3B6oeMqu7RGwMNwHKmU",
+    libraries: ["places", "visualization"]
+  }
+});
 
 const access_token = localStorage.getItem("access_token");
 
