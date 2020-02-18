@@ -23,7 +23,7 @@
           </v-stepper-step>
 
           <v-stepper-content step="1">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="" class="mb-5">
               <v-container fluid wrap>
                 <v-layout column>
                   <v-flex>
@@ -98,7 +98,6 @@
                       </template>
                       <v-date-picker
                         min="1980-01-01"
-                        picker-date="1990-01-01"
                         v-model="medicalOfficerBasic.dob"
                         @input="menu2 = false"
                         no-title
@@ -149,7 +148,7 @@
           >
 
           <v-stepper-content step="2">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="" class="mb-5">
               <v-container fluid>
                 <v-layout column>
                   <v-flex class="py-1">
@@ -196,7 +195,7 @@
           >
 
           <v-stepper-content step="3">
-            <v-card color="secondary" class="mb-5">
+            <v-card color="" class="mb-5">
               <v-container fluid>
                 <v-layout row wrap>
                   <v-flex class="py-1" md3 sm6 xs12>
@@ -239,7 +238,7 @@
           </v-stepper-step>
 
           <v-stepper-content step="4">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="" class="mb-5">
               <v-container fluid>
                 <v-layout column>
                   <v-flex>
@@ -414,7 +413,7 @@ export default {
         lastName: "",
         email: "",
         nic: "",
-        dob: new Date().toISOString().substr(0, 10),
+        dob: "",
         gender: "Male"
       },
       medicalOfficerProfessional: {

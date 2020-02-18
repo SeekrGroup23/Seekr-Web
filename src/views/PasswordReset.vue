@@ -120,24 +120,14 @@
         </v-flex>
         <v-layout justify-center>
           <v-flex xs12 sm6 md4 row>
-            <v-card :height="alert ? '625' : '475'" class="mt-4 mt-0">
+            <v-card :height="alert ? '550' : '400'" class="mt-4 mt-0">
               <v-progress-linear
                 v-show="isPending"
                 :indeterminate="isPending"
               ></v-progress-linear>
 
-              <v-card-title primary-title class="py-0">
-                <v-layout column align-content-center class="py-0">
-                  <v-img
-                    :src="require('../assets/logo.png')"
-                    width="200"
-                    height="100"
-                    aspect-ratio="1"
-                    class="mx-auto"
-                  ></v-img>
-                  <v-divider></v-divider>
-                  <h2 class="headline mx-auto py-2">Login</h2>
-                </v-layout>
+              <v-card-title primary-title>
+                <h2>Password Reset Portal</h2>
               </v-card-title>
               <v-card-text>
                 <v-alert
@@ -148,38 +138,48 @@
                   icon="warning"
                   style="height: 10px;"
                 >
-                  Invalid Email or Password!
+                  Invalid Passwords
                 </v-alert>
                 <v-text-field
-                  v-model="email"
-                  :error-messages="emailErrors"
-                  label="Email"
-                  append-icon="email"
+                  v-model="oldPW"
+                  :error-messages="oldPWErrors"
+                  label="Current Password"
+                  append-icon="lock"
                   required
                   @input="
-                    $v.email.$touch();
+                    $v.oldPW.$touch();
                     clearAlert();
                   "
-                  @blur="$v.email.$touch()"
+                  @blur="$v.oldPW.$touch()"
                 ></v-text-field>
 
                 <v-text-field
-                  v-model="password"
-                  :error-messages="passwordErrors"
+                  v-model="newPW"
+                  :error-messages="newPWErrors"
                   label="Password"
                   append-icon="lock"
                   required
                   type="password"
                   @input="
-                    $v.password.$touch();
+                    $v.newPW.$touch();
                     clearAlert();
                   "
-                  @blur="$v.password.$touch()"
+                  @blur="$v.newPW.$touch()"
                 ></v-text-field>
 
-                <span class="forg-pass mt-0"
-                  ><a href="#">Forgot Password</a></span
-                >
+                <v-text-field
+                  v-model="reNewPW"
+                  :error-messages="reNewPWErrors"
+                  label="Re-Enter Password"
+                  append-icon="lock"
+                  required
+                  type="password"
+                  @input="
+                    $v.reNewPW.$touch();
+                    clearAlert();
+                  "
+                  @blur="$v.reNewPW.$touch()"
+                ></v-text-field>
               </v-card-text>
               <v-card-actions>
                 <v-container fluid class="pa-0 ma-0">
@@ -191,22 +191,13 @@
                       @click="$router.push('/')"
                       >Cancel</v-btn
                     >
-                    <v-btn v-on:click="login" class="mb-2" small color="primary"
-                      >Login</v-btn
+                    <v-btn
+                      v-on:click="reset()"
+                      class="mb-2"
+                      small
+                      color="primary"
+                      >Reset Password</v-btn
                     >
-                  </v-layout>
-                  <v-divider class="my-3 mx-2"></v-divider>
-                  <v-layout row class="px-2">
-                    <v-layout row>
-                      <v-flex grow>
-                        <h5 class="subheading pt-1">Interested in Helping??</h5>
-                      </v-flex>
-                      <v-flex shrink>
-                        <v-btn v-on:click="toRegisterPage" class="" small
-                          >Register</v-btn
-                        >
-                      </v-flex>
-                    </v-layout>
                   </v-layout>
                 </v-container>
               </v-card-actions>
@@ -221,15 +212,19 @@
 <script>
 //Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
-import { required, email } from "vuelidate/lib/validators";
+import { required } from "vuelidate/lib/validators";
 // import toolbar from "../components/toolbar";
 // import jwtDecode from "jwt-decode";
 
 export default {
+  props: {
+    id: { required: true }
+  },
   mixins: [validationMixin],
   validations: {
-    email: { required, email },
-    password: { required }
+    oldPW: { required },
+    newPW: { required },
+    reNewPW: { required }
   },
   components: {
     // toolbar
@@ -248,7 +243,10 @@ export default {
       "fab fa-linkedin",
       "fab fa-instagram"
     ],
-    drawer: false
+    drawer: false,
+    oldPW: "",
+    newPW: "",
+    reNewPW: ""
   }),
 
   computed: {
@@ -263,17 +261,23 @@ export default {
       }
     },
     /**Form Validation and Error Handlin - begin */
-    emailErrors() {
+
+    oldPWErrors() {
       const errors = [];
-      if (!this.$v.email.$dirty) return errors;
-      !this.$v.email.email && errors.push("Must be valid e-mail");
-      !this.$v.email.required && errors.push("E-mail is required");
+      if (!this.$v.oldPW.$dirty) return errors;
+      !this.$v.oldPW.required && errors.push("Password is required");
       return errors;
     },
-    passwordErrors() {
+    newPWErrors() {
       const errors = [];
-      if (!this.$v.password.$dirty) return errors;
-      !this.$v.password.required && errors.push("Password is required");
+      if (!this.$v.newPW.$dirty) return errors;
+      !this.$v.newPW.required && errors.push("Password is required");
+      return errors;
+    },
+    reNewPWErrors() {
+      const errors = [];
+      if (!this.$v.reNewPW.$dirty) return errors;
+      !this.$v.reNewPW.required && errors.push("Password is required");
       return errors;
     }
     /**Form Validation and Error Handlin - end */
@@ -284,49 +288,34 @@ export default {
       this.alert = false;
     },
     //Login Method -> Sends HTTP POST request to the server to verify the user
-    login() {
+    reset() {
       //Form Validation
       this.$v.$touch();
 
       if (this.$v.$invalid) {
         console.log("Validation Error");
       } else {
-        this.isPending = true;
+        if (this.newPW == this.reNewPW) {
+          this.isPending = true;
 
-        this.$store
-          .dispatch("login", { email: this.email, password: this.password })
-          .then(() => {
-            switch (this.$store.state.user.role) {
-              case "admin":
-                break;
+          this.$http
+            .post("/api/user/password_reset", {
+              userID: this.id,
+              currentPassword: this.oldPW,
+              newPassword: this.newPW
+            })
+            .then(res => {
+              console.log(res.data);
 
-              case "Grama_Niladhari":
-                this.$router.push("/gramaniladhari/");
-                break;
-              case "medical_officer":
-                this.$router.push("/medicalofficer/");
-                break;
-              case "Admin":
-                this.$router.push("/admin/");
-                break;
+              if (res.data.message == "Success") {
+                console.log("Success");
+              }
+            })
+            .catch();
+        } else {
+          this.alert = true;
+        }
 
-              case "Donor":
-                // this.$http
-                //   .get(
-                //     "/api/donor/isEmailVerified/" + this.$store.state.user.id
-                //   )
-                //   .then(res => {})
-                //   .catch();
-                // this.$router.push("/medicalofficer/");
-                break;
-
-              default:
-                this.alert = true;
-                this.isPending = false;
-                break;
-            }
-          })
-          .catch(err => console.log(err));
         /*------------------------------------------------------------------------------------- */
         // //Sending the HTTP request - POST to verify user credentials
         // this.$http

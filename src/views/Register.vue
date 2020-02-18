@@ -1,21 +1,146 @@
 <template>
   <v-app>
     <v-container>
-      <toolbar></toolbar>
-      <v-layout justify-center>
+      <v-flex shrink>
+        <v-toolbar app dense>
+          <v-toolbar-side-icon
+            class="hidden-md-and-up"
+            @click.stop="drawer = !drawer"
+          ></v-toolbar-side-icon>
+          <v-toolbar-title>Seekr</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items class="hidden-sm-and-down">
+            <v-btn flat small color="primary">Home</v-btn>
+            <v-btn flat small>Data Analytics</v-btn>
+            <v-btn flat small>Information Hub</v-btn>
+            <v-btn flat small>Donations</v-btn>
+            <v-btn flat small>About</v-btn>
+            <v-btn flat small>Contact</v-btn>
+          </v-toolbar-items>
+          <v-btn
+            color="primary"
+            @click="$router.push('/login')"
+            small
+            class="hidden-md-and-down"
+            >Register/Login</v-btn
+          >
+        </v-toolbar>
+
+        <!-- Navigation Drawer - Only Visible in Screens Less than Md -->
+        <v-navigation-drawer v-model="drawer" absolute temporary>
+          <v-list class="pa-1">
+            <v-list-tile avatar>
+              <v-list-tile-avatar>
+                <img src="https://randomuser.me/api/portraits/men/85.jpg" />
+              </v-list-tile-avatar>
+
+              <v-list-tile-content>
+                <v-list-tile-title>John Leider</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+
+          <v-list class="pt-0" dense>
+            <v-divider></v-divider>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>home</v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Home</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>home</v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Data Analytics</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon></v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Information Hub</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon></v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>About Seekr</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon></v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Contact Us</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile>
+              <v-list-tile-action>
+                <v-icon>home</v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Donations</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-divider></v-divider>
+
+            <v-list-tile @click="$router.push('/login')">
+              <v-list-tile-action>
+                <v-icon>home</v-icon>
+              </v-list-tile-action>
+
+              <v-list-tile-content>
+                <v-list-tile-title>Login</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-navigation-drawer>
+      </v-flex>
+      <v-layout justify-center class="mt-5">
         <v-flex xs12 sm6 md4 row>
-          <v-card height="700" class="mt-2 mt-0">
+          <v-card height="550" class="mt-2 mt-0">
             <!-- Progress Bar -->
             <v-progress-linear
               :indeterminate="isPending"
               v-show="isPending"
             ></v-progress-linear>
 
-            <v-card-title primary-title>
-              <h2>Register</h2>
+            <v-card-title primary-title class="py-0">
+              <v-layout column align-content-center class="py-0">
+                <v-img
+                  :src="require('../assets/logo.png')"
+                  width="200"
+                  height="100"
+                  aspect-ratio="1"
+                  class="mx-auto"
+                ></v-img>
+                <v-divider></v-divider>
+                <h2 class="headline mx-auto py-2">Register</h2>
+              </v-layout>
             </v-card-title>
 
-            <v-card-text>
+            <v-card-text class="py-0">
               <v-layout column>
                 <v-radio-group v-model="donor.category" :mandatory="false" row>
                   <v-radio label="Individual" value="individual"></v-radio>
@@ -75,20 +200,33 @@
             </v-card-text>
 
             <v-card-actions>
-              <v-flex class="mx-1 px-1">
-                <v-btn
-                  v-on:click="register"
-                  class="btn-login mb-2"
-                  Large
-                  color="primary"
-                  >Register</v-btn
-                >
-                <p class="mx-1 mt-3">Already Have an Account?</p>
-
-                <v-btn v-on:click="toLoginPage" class="btn-login" Large
-                  >Login</v-btn
-                >
-              </v-flex>
+              <v-container fluid class="pa-0 ma-0">
+                <v-layout row class="justify-end mx-2">
+                  <v-btn class="mb-2" small color="" @click="$router.push('/')"
+                    >Cancel</v-btn
+                  >
+                  <v-btn
+                    v-on:click="register"
+                    class=" mb-2"
+                    small
+                    color="primary"
+                    >Register</v-btn
+                  >
+                </v-layout>
+                <v-divider class="my-3 mx-2"></v-divider>
+                <v-layout row class="px-2">
+                  <v-layout row>
+                    <v-flex grow>
+                      <h5 class="subheading pt-1">Already Have an Account?</h5>
+                    </v-flex>
+                    <v-flex shrink>
+                      <v-btn v-on:click="toLoginPage" class="btn-login" small
+                        >Login</v-btn
+                      >
+                    </v-flex>
+                  </v-layout>
+                </v-layout>
+              </v-container>
             </v-card-actions>
           </v-card>
         </v-flex>
@@ -101,7 +239,7 @@
 //Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
 import { required, email, minLength } from "vuelidate/lib/validators";
-import toolbar from "../components/toolbar";
+// import toolbar from "../components/toolbar";
 
 export default {
   mixins: [validationMixin],
@@ -119,7 +257,7 @@ export default {
     }
   },
   components: {
-    toolbar
+    // toolbar
   },
 
   data() {
@@ -143,10 +281,28 @@ export default {
         lastName: "",
         email: "",
         password: ""
-      }
+      },
+      icons: [
+        "fab fa-facebook",
+        "fab fa-twitter",
+        "fab fa-google-plus",
+        "fab fa-linkedin",
+        "fab fa-instagram"
+      ],
+      drawer: false
     };
   },
   computed: {
+    // Drawer Control
+    drawerControl: function() {
+      if (this.$vuetify.breakpoint.mdA) {
+        console.log("mdAndUp");
+        return false;
+      } else {
+        console.log("lessThanMd");
+        return true;
+      }
+    },
     /**Form Validation and Error Handlin - begin */
     firstNameErrors() {
       console.log(this.$v.user.firstName.$dirty);
@@ -330,9 +486,8 @@ export default {
     registerDonor() {
       //Form Validation
       this.$v.donor.$touch();
-      console.log("I'm Here################## -> " + this.$v.donor.$invalid);
       if (!this.$v.donor.$invalid) {
-        console.log("I'm Here**********************");
+        // console.log("I'm Here**********************");
         this.$http
           .post("/api/donor/create", {
             name: this.donor.name,

@@ -283,7 +283,7 @@ export default {
               age: this.getAge(patient.dob),
               gender: patient.gender,
               location:
-                patient.geoCordinates == null ? "Not Confirmed" : "Confirmed",
+                patient.geoCordinates == "" ? "Not Confirmed" : "Confirmed",
               status: patient.state,
               docID: patient.docID,
               address: patient.address_perm

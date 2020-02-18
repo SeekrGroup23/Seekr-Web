@@ -16,7 +16,7 @@
                 <v-layout class="pa-0 ma-0 px-3" row>
                   <v-flex>
                     <v-img
-                      src="https://cdn3.iconfinder.com/data/icons/picons-social/57/56-apple-512.png"
+                      :src="require('../../../assets/logoIcon.png')"
                       aspect-ratio="1"
                       height="42"
                       width="42"
@@ -369,7 +369,7 @@
           <v-divider></v-divider>
 
           <!-- Logout -->
-          <v-list-tile>
+          <v-list-tile @click="deleteConfirmation = true">
             <v-list-tile-action>
               <v-icon>exit_to_app</v-icon>
             </v-list-tile-action>
@@ -403,7 +403,7 @@
 
       <v-btn icon class="mr-2">
         <v-avatar size="35">
-          <img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="John" />
+          <img :src="require('../../../assets/user.png')" alt="John" />
         </v-avatar>
       </v-btn>
     </v-toolbar>
@@ -411,6 +411,22 @@
     <v-content>
       <v-container class="py-0 ma-0 containerRouterView" fluid>
         <router-view></router-view>
+        <v-dialog v-model="deleteConfirmation" persistent max-width="290">
+          <v-card>
+            <v-card-title class="headline">Logout Confirmation</v-card-title>
+            <v-card-text>Do you want to proceed with this action?</v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                color="green darken-1"
+                flat
+                @click="deleteConfirmation = false"
+                >Cancel</v-btn
+              >
+              <v-btn color="red darken-1" flat @click="logout()">Logout</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </v-container>
     </v-content>
     <v-footer color="" fixed app></v-footer>
@@ -480,11 +496,16 @@ export default {
           disabled: true,
           href: "breadcrumbs_link_2"
         }
-      ]
+      ],
+      deleteConfirmation: false
     };
   },
   beforeCreate() {},
-  methods: {}
+  methods: {
+    logout() {
+      this.$store.dispatch("logout");
+    }
+  }
 };
 </script>
 

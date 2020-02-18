@@ -32,13 +32,13 @@
                       {{ patient.firstName }} {{ patient.lastName }}
                     </div>
                     <div class="subheading font-weight-light pb-2">
-                      {{ patient.address_perm }}
+                      Address:{{ patient.address_perm }}
                     </div>
                     <div class="subheading font-weight-light pb-1">
-                      {{ patient.age }}
+                      Age: {{ patient.age }}
                     </div>
                     <div class="subheading font-weight-light pb-2">
-                      {{ patient.patientID }}
+                      Patient ID: {{ patient.patientID }}
                     </div>
                   </v-layout>
                 </v-container>
@@ -104,9 +104,9 @@
                           </v-flex>
                           <v-flex class="py-2 px-2">
                             <h6 class="subheading">No. of Clinical Visits</h6>
-                            <span class="subheading font-weight-medium"
-                              >00</span
-                            >
+                            <span class="subheading font-weight-medium">{{
+                              noOfClinicalVisits
+                            }}</span>
                             <v-layout column class="mt-2">
                               <v-divider></v-divider>
                               <h6 class="subheading pt-1 ">View Details</h6>
@@ -164,9 +164,9 @@
                           </v-flex>
                           <v-flex class="py-2 px-2">
                             <h6 class="subheading">Last Visited</h6>
-                            <span class="subheading font-weight-medium"
-                              >00</span
-                            >
+                            <span class="subheading font-weight-medium">{{
+                              lastVisited
+                            }}</span>
                             <v-layout column class="mt-2">
                               <v-divider></v-divider>
                               <h6 class="subheading pt-1 ">View Details</h6>
@@ -275,7 +275,7 @@
                     </v-flex>
                     <v-flex>
                       <v-text-field
-                        v-model="patient.dob"
+                        v-model="patient.gender"
                         label="Gender"
                         :readonly="!isEditable"
                       ></v-text-field>
@@ -379,8 +379,20 @@
                         ></v-checkbox>
                         <v-checkbox
                           v-model="patient.nonTransmittedDiseases"
+                          label="Low Blood Pressure"
+                          value="Low Blood Pressure"
+                          :readonly="!isMedicalEditable"
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="patient.nonTransmittedDiseases"
                           label="Cardiovascular Diseases"
                           value="Cardiovascular Diseases"
+                          :readonly="!isMedicalEditable"
+                        ></v-checkbox>
+                        <v-checkbox
+                          v-model="patient.nonTransmittedDiseases"
+                          label="Cancer"
+                          value="Cancer"
                           :readonly="!isMedicalEditable"
                         ></v-checkbox>
                         <v-checkbox
@@ -480,89 +492,90 @@
               </v-card>
             </v-tab-item>
 
-            <!-- Setting Tab -->
+            <!-- Clinical Tab -->
             <v-tab-item>
               <v-card flat>
-                <v-container fluid class="pa-0">
-                  <v-row>
-                    <v-column>
-                      <v-expansion-panel>
-                        <v-expansion-panel-content>
-                          <template v-slot:header>
-                            <div>Change Password</div>
-                          </template>
-                          <v-card flat>
-                            <v-container fluid>
-                              <v-layout row wrap>
-                                <v-flex md6 sm12 xs12 class="px-2">
-                                  <v-text-field
-                                    label="Current Password"
-                                  ></v-text-field>
-                                </v-flex>
-                                <v-spacer></v-spacer>
-                                <v-flex md6 sm12 xs12 class="px-2">
-                                  <v-text-field
-                                    label="New Password"
-                                  ></v-text-field>
-                                </v-flex>
-                                <v-flex md6 sm12 xs12 class="ma-0 pa-0">
-                                  <v-btn small color="">Save Changes</v-btn>
-                                </v-flex>
-                              </v-layout>
-                            </v-container>
-                          </v-card>
-                        </v-expansion-panel-content>
+                <v-container fluid class="">
+                  <v-layout row>
+                    <v-flex md6>
+                      <v-select
+                        label="Clinic"
+                        :items="[
+                          'C0001-Kidney Diseases Clinic',
+                          'C0002-CKDu Clinic'
+                        ]"
+                        v-model="clinic"
+                        :error-messages="clinicErrors"
+                        @input="$v.clinic.$touch()"
+                        @blur="$v.clinic.$touch()"
+                        @change="readOnlySw = false"
+                      ></v-select>
+                    </v-flex>
+                    <v-spacer></v-spacer>
+                    <v-flex md2>
+                      <v-switch
+                        v-model="isVisited"
+                        label="Mark as Visited"
+                        @change="markAsAttended"
+                        :readonly="readOnlySw"
+                      ></v-switch>
+                    </v-flex>
+                  </v-layout>
+                  <v-divider></v-divider>
+                  <v-layout column>
+                    <v-card flat>
+                      <v-card-title>
+                        <v-container fluid class="pa-0 ma-0">
+                          <v-layout row wrap class="pa-0 ma-0">
+                            <v-flex md6 xs10 sm6>
+                              <v-text-field
+                                v-model="search"
+                                append-icon="search"
+                                label="Search"
+                                single-line
+                                hide-details
+                              ></v-text-field>
+                            </v-flex>
+                            <v-spacer></v-spacer>
 
-                        <v-expansion-panel-content>
-                          <template v-slot:header>
-                            <div>Change Email</div>
-                          </template>
-                          <v-card flat color="grey lighten-3">
-                            <v-container fluid>
-                              <v-layout row wrap>
-                                <v-flex md6 sm12 xs12 class="px-2">
-                                  <v-text-field
-                                    label="Current Email"
-                                  ></v-text-field>
-                                </v-flex>
-                                <v-spacer></v-spacer>
-                                <v-flex md6 sm12 xs12 class="px-2">
-                                  <v-text-field
-                                    label="New Email"
-                                  ></v-text-field>
-                                </v-flex>
-                                <v-flex md6 sm12 xs12 class="ma-0 pa-0">
-                                  <v-btn small color="">Save Changes</v-btn>
-                                </v-flex>
-                              </v-layout>
-                            </v-container>
-                          </v-card>
-                        </v-expansion-panel-content>
-
-                        <v-expansion-panel-content>
-                          <template v-slot:header>
-                            <div>Delete Account</div>
-                          </template>
-                          <v-card flat color="grey lighten-3">
-                            <v-container fluid>
-                              <v-layout row wrap> </v-layout>
-                            </v-container>
-                          </v-card>
-                        </v-expansion-panel-content>
-
-                        <v-expansion-panel-content>
-                          <template v-slot:header>
-                            <div>Contact Admin</div>
-                          </template>
-                          <v-card flat color="grey lighten-3">
-                            <v-container fluid>
-                              <v-layout row wrap> </v-layout>
-                            </v-container>
-                          </v-card>
-                        </v-expansion-panel-content>
-                      </v-expansion-panel>
-                    </v-column>
-                  </v-row>
+                            <v-flex shrink xs2 md1 class="pl-5 align-self-end">
+                              <v-btn flat icon
+                                ><v-icon>more_vert</v-icon></v-btn
+                              >
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
+                      </v-card-title>
+                      <v-data-table
+                        :headers="headers"
+                        :items="clinicalData"
+                        :search="search"
+                        :loading="loadingTable"
+                      >
+                        <template v-slot:items="props">
+                          <tr>
+                            <td class="text-xs-left">
+                              {{ props.item.date }}
+                            </td>
+                            <td class="text-xs-left">
+                              {{ props.item.time }}
+                            </td>
+                            <td class="text-xs-left">
+                              {{ props.item.clinic }}
+                            </td>
+                            <td class="text-xs-left">
+                              {{ props.item.doctor_in_charge }}
+                            </td>
+                          </tr>
+                        </template>
+                        <template v-slot:no-results>
+                          <v-alert :value="true" color="error" icon="warning">
+                            Your search for "{{ search }}" found no results.
+                          </v-alert>
+                        </template>
+                      </v-data-table>
+                    </v-card>
+                  </v-layout>
                 </v-container>
               </v-card>
             </v-tab-item>
@@ -620,21 +633,48 @@
             </v-card-actions>
           </v-card>
         </v-dialog>
-        <v-snackbar v-model="snackBar" right :timeout="snackBarTimeout" top>
-          {{ snackBarText }}
-          <v-btn color="red" flat @click="snackbar = false">
-            Close
-          </v-btn>
-        </v-snackbar>
+        <v-layout row justify-center>
+          <v-dialog v-model="attendanceConfirmation" persistent max-width="400">
+            <v-card>
+              <v-card-title class="headline"
+                >Patient's Clinical Attendance</v-card-title
+              >
+              <v-card-text
+                >This action cannot be undone. Do you want to
+                proceed?</v-card-text
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="" flat @click="attendanceCancel">Cancel</v-btn>
+                <v-btn color="green darken-1" flat @click="saveAttendance()"
+                  >Okay</v-btn
+                >
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+          <v-snackbar v-model="snackBar" right :timeout="snackBarTimeout" top>
+            {{ snackBarText }}
+            <v-btn color="red" flat @click="snackbar = false">
+              Close
+            </v-btn>
+          </v-snackbar>
+        </v-layout>
       </v-layout>
     </v-layout>
   </v-container>
 </template>
 
 <script>
+import { validationMixin } from "vuelidate";
+import { required } from "vuelidate/lib/validators";
+
 export default {
   props: {
     id: { required: true }
+  },
+  mixins: [validationMixin],
+  validations: {
+    clinic: { required }
   },
   data: function() {
     return {
@@ -672,13 +712,54 @@ export default {
         alchoholUsage: "None",
         bloodGroup: ""
       },
-      bloodGroups: ["AB+", "A+", "B+", "O+", "AB-", "A-", "B-", "O-"]
+      bloodGroups: ["AB+", "A+", "B+", "O+", "AB-", "A-", "B-", "O-"],
+      isVisited: false,
+      attendanceConfirmation: false,
+      readOnlySw: true,
+      clinic: "",
+      loadingTable: false,
+      search: "",
+      headers: [
+        {
+          text: "Date",
+          align: "left",
+          sortable: true,
+          value: "date"
+        },
+        {
+          text: "Time",
+          align: "left",
+          value: "time",
+          sortable: true
+        },
+        {
+          text: "Clinic Code-Title",
+          align: "left",
+          value: "clininc",
+          sortable: true
+        },
+        {
+          text: "Doctor In Charge",
+          align: "left",
+          value: "doctor_in_charge",
+          sortable: false
+        }
+      ],
+      clinicalData: [],
+      noOfClinicalVisits: 0,
+      lastVisited: "00-00-0000"
     };
   },
-  computed: {},
+  computed: {
+    clinicErrors() {
+      const errors = [];
+      if (!this.$v.clinic.$dirty) return errors;
+      !this.$v.clinic.required && errors.push("Please Select the Clinic");
+      return errors;
+    }
+  },
   created() {
     // this.patientID = this.$router.params.id;
-    console.log(">>>>>>>>> " + this.getAge("12-01-1996"));
     this.getPatientProfile();
   },
   methods: {
@@ -715,9 +796,71 @@ export default {
       }
     },
     test() {
-      console.log(this.patient.snakeBites);
+      // console.log(this.patient.snakeBites);
     },
+    attendanceCancel() {
+      this.attendanceConfirmation = false;
+      this.isVisited = false;
+      this.readOnlySw = true;
+      this.clinic = "";
+      this.$v.$reset();
+    },
+    markAsAttended() {
+      this.$v.$touch();
+      if (!this.$v.$invalid) {
+        this.attendanceConfirmation = true;
+      } else {
+        this.isVisited = false;
+      }
+    },
+    saveAttendance() {
+      this.attendanceConfirmation = false;
+      var today = new Date();
+      var date =
+        today.getFullYear() +
+        "-" +
+        (today.getMonth() + 1) +
+        "-" +
+        today.getDate();
+      var time =
+        today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      this.$http
+        .put("api/patient/" + this.id + "/clinical", {
+          date: date,
+          time: time,
+          clinic: this.clinic,
+          doctor_in_charge:
+            "Dr. " +
+            this.$store.state.user.firstName +
+            " " +
+            this.$store.state.user.lastName
+        })
+        .then(res => {
+          if (res.data.message == "Success") {
+            // console.log("Updated");
+            this.savePending = false;
+            this.snackBar = true;
+            this.snackBarText = "Attendance Updated";
+            this.readOnlySw = true;
 
+            this.clinicalData.push({
+              date: date,
+              time: time,
+              clinic: this.clinic,
+              doctor_in_charge:
+                "Dr. " +
+                this.$store.state.user.firstName +
+                " " +
+                this.$store.state.user.lastName
+            });
+          }
+        })
+        .catch(err => {
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
+        });
+    },
     savePersonalInfo() {
       this.saveConfirmation = false;
       this.savePending = true;
@@ -737,27 +880,31 @@ export default {
         })
         .then(res => {
           if (res.data.message == "Success") {
-            console.log("Updated");
+            // console.log("Updated");
             this.savePending = false;
             this.snackBar = true;
             this.snackBarText = "Personal Information Updated Successfully";
           }
         })
-        .catch();
+        .catch(err => {
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
+        });
     },
     saveMedicalInfo() {
       this.medicalSaveConfirmation = false;
       this.savePending = true;
-      console.log({
-        bloodGroup: this.patient.bloodGroup,
-        state: this.patient.state,
-        condition: this.patient.condition,
-        specialNotes: this.patient.specialNotes,
-        smokingStatus: this.patient.smokingStatus,
-        alchoholUsage: this.patient.alchoholUsage,
-        snakeBites: this.patient.snakeBites,
-        nonTransmittedDiseases: this.patient.nonTransmittedDiseases
-      });
+      // console.log({
+      //   bloodGroup: this.patient.bloodGroup,
+      //   state: this.patient.state,
+      //   condition: this.patient.condition,
+      //   specialNotes: this.patient.specialNotes,
+      //   smokingStatus: this.patient.smokingStatus,
+      //   alchoholUsage: this.patient.alchoholUsage,
+      //   snakeBites: this.patient.snakeBites,
+      //   nonTransmittedDiseases: this.patient.nonTransmittedDiseases
+      // });
       this.$http
         .put("api/patient/" + this.id + "/medical", {
           bloodGroup: this.patient.bloodGroup,
@@ -771,22 +918,28 @@ export default {
         })
         .then(res => {
           if (res.data.message == "Success") {
-            console.log("Updated");
+            // console.log("Updated");
             this.savePending = false;
             this.snackBar = true;
             this.snackBarText = "Medical Information Updated Successfully";
           }
         })
-        .catch();
+        .catch(err => {
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
+        });
     },
     getPatientProfile() {
       this.$http
         .get("/api/patient/profile/" + this.id)
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           this.patient.firstName = res.data.firstName;
           this.patient.lastName = res.data.lastName;
           this.patient.dob = res.data.dob;
+          this.patient.gender = res.data.gender;
+
           this.patient.age = this.getAge(res.data.dob);
           this.patient.address_perm =
             res.data.address_perm == "null" ? "" : res.data.address_perm;
@@ -808,17 +961,23 @@ export default {
             res.data.smokingStatus == "" ? "None" : res.data.smokingStatus;
           this.patient.alchoholUsage = res.data.alchoholUsage;
 
+          this.clinicalData = res.data.clinicalVisits;
+          this.noOfClinicalVisits = res.data.clinicalVisits.length;
+          this.lastVisited =
+            res.data.clinicalVisits[res.data.clinicalVisits.length - 1].date;
+
           // this.patient.firstName = res.data.firstName;
         })
         .catch(err => {
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     },
     getAge(dateString) {
       var arr = dateString.split("-");
       var dob = arr[2] + "-" + arr[1] + "-" + arr[0];
-      console.log(arr[2] + " " + arr[1] + " " + arr[0]);
-      console.log(dob);
       var today = new Date();
       var birthDate = new Date(dob.toString());
 
@@ -827,7 +986,6 @@ export default {
       if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
         age--;
       }
-      console.log( "==================" + age);
       return age;
     },
     onFileSelected(event) {
@@ -841,8 +999,8 @@ export default {
     uploadFile() {
       let formData = new FormData();
       formData.append("imageFile", this.selectedFile);
-      console.log(formData);
-      console.log(this.selectedFile);
+      // console.log(formData);
+      // console.log(this.selectedFile);
       this.loading_1 = true;
 
       this.$http
@@ -874,6 +1032,9 @@ export default {
           this.snackbarColor = "warning";
           this.snackbar = true;
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     }
   }

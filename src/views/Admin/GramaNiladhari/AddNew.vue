@@ -455,9 +455,11 @@ export default {
       provDistMap: new Map(),
       distGnMap: new Map(),
       divGnDivMap: new Map(),
-      districtDivisionMap: new Map()
+      districtDivisionMap: new Map(),
+      provinceDistrictMap: new Map()
     };
   },
+
   computed: {
     /**Form Validation and Error Handling - begin */
     firstNameErrors() {

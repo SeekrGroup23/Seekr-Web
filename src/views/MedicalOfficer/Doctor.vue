@@ -16,7 +16,7 @@
                 <v-layout class="pa-0 ma-0 px-3" row>
                   <v-flex>
                     <v-img
-                      src=""
+                      :src="require('../../assets/logoIcon.png')"
                       aspect-ratio="1"
                       height="42"
                       width="42"
@@ -151,7 +151,7 @@
           <v-list-tile @click="$router.push('/medicalofficer/profile')">
             <v-list-tile-title>Profile</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile @click="deleteConfirmation()">
+          <v-list-tile @click="deleteConfirmation = true">
             <v-list-tile-title>Logout</v-list-tile-title>
           </v-list-tile>
         </v-list>
@@ -184,6 +184,8 @@
 </template>
 
 <script>
+import jwtDecode from "jwt-decode";
+
 export default {
   data: () => {
     return {
@@ -254,8 +256,19 @@ export default {
   },
   beforeCreate() {},
   created() {
+    this.$store.state.userJWT = localStorage.getItem("access_token");
+    // Decoding the Payload from the userJWT
+    const jwtPayload = jwtDecode(this.$store.state.userJWT);
+    // console.log(jwtPayload);
+    this.$store.state.user.id = jwtPayload.user.id;
+    this.$store.state.user.firstName = jwtPayload.user.firstName;
+    this.$store.state.user.lastName = jwtPayload.user.lastName;
+    this.$store.state.user.email = jwtPayload.user.email;
+    // this.$store.state.user.imageURL = jwtPayload.user.imageURL;
+    this.$store.state.user.role = jwtPayload.user.role;
     this.getProfile();
   },
+  mounted() {},
   methods: {
     logout() {
       this.$store.dispatch("logout");
@@ -269,10 +282,20 @@ export default {
           if (res.data != null) {
             // Display the Image converted into Base64 - Decoding
             this.image = "data:image/jpeg;base64, " + res.data.img;
-            console.log(this.image);
+            // console.log(this.image);
+          } else {
+            this.image = require("../../assets/user.png");
+          }
+
+          if (res.data.img == "") {
+            this.image = require("../../assets/user.png");
           }
         })
-        .catch();
+        .catch(err => {
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
+        });
     },
     getProfile() {
       // moID = "this.$store.state.user.id";
@@ -280,10 +303,16 @@ export default {
         .get("/api/medical_officer/get_profile/" + this.$store.state.user.id)
         .then(res => {
           this.imageURL = res.data.imageURL;
-          console.log(this.imageURL);
           this.getImageFromServer(this.imageURL);
+
+          this.$store.state.user.firstName = res.data.firstName;
+          this.$store.state.user.lastName = res.data.lastName;
         })
-        .catch();
+        .catch(err => {
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
+        });
     }
   }
 };

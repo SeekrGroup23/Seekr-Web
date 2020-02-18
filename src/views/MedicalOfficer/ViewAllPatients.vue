@@ -210,6 +210,9 @@ export default {
           this.snackbarText = "Patient Deleted Failed!";
           this.snackbar = true;
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     },
     onClickTableRow(event) {
@@ -220,12 +223,6 @@ export default {
       this.deletePointer = null;
     },
     getAllPatientData() {
-      console.log(
-        "Token >>>>>>>>>>>> " +
-          localStorage.getItem("access_token") +
-          "\n AH $HTTP >> " +
-          this.$http.defaults.headers.common["Authorization"]
-      );
       this.loadingTable = true;
       this.patients = [];
       this.$http
@@ -252,8 +249,6 @@ export default {
         .catch(err => {
           if (err.response.status == 403) {
             this.$store.dispatch("logout");
-
-            console.log("I'm Here >> " + err);
           }
         });
     },

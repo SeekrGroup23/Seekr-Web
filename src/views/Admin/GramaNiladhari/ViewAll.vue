@@ -30,14 +30,6 @@
                 </v-flex>
                 <v-spacer></v-spacer>
                 <v-flex md3> </v-flex>
-                <v-flex shrink align-self-end md2 class="pl-5">
-                  <v-btn
-                    color="primary"
-                    class="hidden-sm-and-down"
-                    @click="$router.push('/medicalofficer/add_patient')"
-                    >Add New</v-btn
-                  >
-                </v-flex>
 
                 <v-flex shrink xs2 md1 class="pl-5 align-self-end">
                   <v-btn flat icon><v-icon>more_vert</v-icon></v-btn>

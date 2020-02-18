@@ -1,26 +1,19 @@
 <template>
   <v-container class="px-0 mx-0" fluid>
-    <v-layout
-      row
-      wrap
-      justify-space-between
-      align-content-start
-      class="py-0 px-2"
-    >
+    <v-layout row wrap justify-space-between align-start class="py-0 px-4 ">
       <!-- Suspected CKDu Patients Count -->
       <v-card
         router-link
-        to="patients/view"
+        to="admin/patients/view"
         width="300"
-        height="120"
+        height="100"
         class="my-2 mx-auto"
         hover
-        dark
       >
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex shrink>
-              <v-card height="120" color="amber accent-4" dark width="100" flat>
+              <v-card height="100" color="amber accent-4" dark width="100" flat>
                 <v-container>
                   <v-icon size="50">person</v-icon>
                 </v-container>
@@ -40,19 +33,18 @@
         </v-container>
       </v-card>
       <!-- Hospitals -->
-      <!-- <v-card
+      <v-card
         router-link
-        to="hospital/map"
+        to="hospitals/view_map"
         width="300"
-        height="120"
+        height="100"
         class="my-2 mx-auto"
         hover
-        dark
       >
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex shrink>
-              <v-card height="120" color="green darken-3" dark width="100" flat>
+              <v-card height="100" color="green darken-3" dark width="100" flat>
                 <v-container>
                   <v-icon size="50">local_hospital</v-icon>
                 </v-container>
@@ -70,29 +62,27 @@
             </v-flex>
           </v-layout>
         </v-container>
-      </v-card> -->
+      </v-card>
       <!-- Registerd GramaNiladhari -->
       <v-card
         router-link
-        to="grama_niladhari/view"
+        to="admin/grama_niladhari/view"
         width="300"
-        height="120"
-        color="red lighten-2"
+        height="100"
         class="my-2 mx-auto"
         hover
-        dark
       >
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex shrink>
-              <v-card height="120" color="red lighten-2" dark width="100" flat>
+              <v-card height="100" color="teal lighten-1" dark width="100" flat>
                 <v-container>
                   <v-icon size="50">person</v-icon>
                 </v-container>
               </v-card>
             </v-flex>
             <v-flex align="text-center" class="py-2 px-2">
-              <h6 class="subheading">Registerd Grama Niladhari</h6>
+              <h6 class="subheading">Grama Niladhari</h6>
               <span class="subheading font-weight-medium">{{
                 gramaCount
               }}</span>
@@ -109,15 +99,14 @@
         router-link
         to="editgrama"
         width="300"
-        height="120"
+        height="100"
         class="my-2 mx-auto"
         hover
-        dark
       >
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex shrink>
-              <v-card height="120" color="cyan darken-4" dark width="100" flat>
+              <v-card height="100" color="cyan darken-4" dark width="100" flat>
                 <v-container>
                   <v-icon size="50">monetization_on</v-icon>
                 </v-container>
@@ -139,17 +128,22 @@
       <!-- Analytics -->
       <v-card
         router-link
-        to="summary/charts"
+        to="admin/summary/charts"
         width="300"
-        height="120"
+        height="100"
         class="my-2 mx-auto"
         hover
-        dark
       >
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex shrink>
-              <v-card height="120" color="red lighten-2" dark width="100" flat>
+              <v-card
+                height="100"
+                color="indigo lighten-1"
+                dark
+                width="100"
+                flat
+              >
                 <v-container>
                   <v-icon size="50">trending_up</v-icon>
                 </v-container>
@@ -168,20 +162,24 @@
 
       <v-card
         router-link
-        to="summary/report"
+        to="admin/summary/report"
         width="300"
-        height="120"
-        color="red lighten-2"
+        height="100"
         class="my-2 mx-auto"
         hover
-        dark
       >
         <v-container fluid class="pa-0 ma-0">
           <v-layout row>
             <v-flex shrink>
-              <v-card height="120" color="red lighten-2" dark width="100" flat>
+              <v-card
+                height="100"
+                color="purple lighten-1"
+                dark
+                width="100"
+                flat
+              >
                 <v-container>
-                  <v-icon size="50">room</v-icon>
+                  <v-icon size="50">report</v-icon>
                 </v-container>
               </v-card>
             </v-flex>
@@ -206,7 +204,9 @@
       <v-flex lg12 sm12 xs12>
         <v-card height="500" class="my-4 mx-2">
           <v-card-title class="headline">
-            <span class="title font-weight-light">Top 5 Patient Areas</span>
+            <span class="title font-weight-light"
+              >District-Wise Patient Distribution</span
+            >
           </v-card-title>
           <v-card-text>
             <v-container grid list-md>
@@ -215,158 +215,6 @@
           </v-card-text>
         </v-card>
       </v-flex>
-      <!-- <v-flex lg4 sm12 xs12>
-        <v-card class="mx-2" height="480px" color="#C62828" dark>
-          <v-card-title class="headline">
-            <span class="title font-weight-light">Top Affected Areas</span>
-          </v-card-title>
-          <v-card-text>
-            <v-container grid list-md>
-              <div id="pie"></div>
-            </v-container>
-          </v-card-text>
-        </v-card>
-      </v-flex>
-      <v-flex lg8 sm12 xs12>
-        <v-toolbar dark color="primary">
-          <v-toolbar-title class="white--text">Important Dates</v-toolbar-title>
-        </v-toolbar>
-        <v-sheet height="500">
-          <v-calendar :now="today" :value="today" color="primary">
-            <template v-slot:day="{ date }">
-              <template v-for="event in eventsMap[date]">
-                <v-menu
-                  :key="event.title"
-                  v-model="event.open"
-                  full-width
-                  offset-x
-                >
-                  <template v-slot:activator="{ on }">
-                    <div
-                      v-if="!event.time"
-                      v-ripple
-                      class="my-event"
-                      v-on="on"
-                      v-html="event.title"
-                    ></div>
-                  </template>
-                  <v-card color="grey lighten-4" min-width="350px" flat>
-                    <v-toolbar color="primary" dark>
-                      <v-btn icon>
-                        <v-icon>edit</v-icon>
-                      </v-btn>
-                      <v-toolbar-title v-html="event.title"></v-toolbar-title>
-                      <v-spacer></v-spacer>
-                      <v-btn icon>
-                        <v-icon>favorite</v-icon>
-                      </v-btn>
-                      <v-btn icon>
-                        <v-icon>more_vert</v-icon>
-                      </v-btn>
-                    </v-toolbar>
-                    <v-card-title primary-title>
-                      <span v-html="event.details"></span>
-                    </v-card-title>
-                    <v-card-actions>
-                      <v-btn flat color="secondary">
-                        Cancel
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-menu>
-              </template>
-            </template>
-          </v-calendar>
-        </v-sheet>
-      </v-flex>
-      <v-flex lg4 sm12 xs12>
-        <v-timeline align-top dense>
-          <v-timeline-item color="pink" small>
-            <v-layout pt-3>
-              <v-flex xs3>
-                <strong>19 Nov</strong>
-              </v-flex>
-              <v-flex>
-                <strong>25 Researchers</strong>
-              </v-flex>
-            </v-layout>
-          </v-timeline-item>
-
-          <v-timeline-item color="teal lighten-3" small>
-            <v-layout wrap pt-3>
-              <v-flex xs3>
-                <strong>20 Nov</strong>
-              </v-flex>
-              <v-flex>
-                <strong>Medical Clinic</strong>
-                <div class="caption mb-2">Anuradhapura</div>
-                <v-avatar>
-                  <v-img
-                    src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairFrida&accessoriesType=Kurt&hairColor=Red&facialHairType=BeardLight&facialHairColor=BrownDark&clotheType=GraphicShirt&clotheColor=Gray01&graphicType=Skull&eyeType=Wink&eyebrowType=RaisedExcitedNatural&mouthType=Disbelief&skinColor=Brown"
-                  ></v-img>
-                </v-avatar>
-                <v-avatar>
-                  <v-img
-                    src="https://avataaars.io/?avatarStyle=Circle&topType=ShortHairFrizzle&accessoriesType=Prescription02&hairColor=Black&facialHairType=MoustacheMagnum&facialHairColor=BrownDark&clotheType=BlazerSweater&clotheColor=Black&eyeType=Default&eyebrowType=FlatNatural&mouthType=Default&skinColor=Tanned"
-                  ></v-img>
-                </v-avatar>
-                <v-avatar>
-                  <v-img
-                    src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairMiaWallace&accessoriesType=Sunglasses&hairColor=BlondeGolden&facialHairType=Blank&clotheType=BlazerSweater&eyeType=Surprised&eyebrowType=RaisedExcited&mouthType=Smile&skinColor=Pale"
-                  ></v-img>
-                </v-avatar>
-              </v-flex>
-            </v-layout>
-          </v-timeline-item>
-
-          <v-timeline-item color="pink" small>
-            <v-layout pt-3>
-              <v-flex xs3>
-                <strong>22 Nov</strong>
-              </v-flex>
-              <v-flex>
-                <strong>Research</strong>
-              </v-flex>
-            </v-layout>
-          </v-timeline-item>
-
-          <v-timeline-item color="teal lighten-3" small>
-            <v-layout pt-3>
-              <v-flex xs3>
-                <strong>25 Nov</strong>
-              </v-flex>
-              <v-flex>
-                <strong>Finish Home Screen</strong>
-                <div class="caption">Web App</div>
-              </v-flex>
-            </v-layout>
-          </v-timeline-item>
-        </v-timeline>
-      </v-flex> -->
-
-      <!-- <v-flex lg3 sm6 xs12>
-          <v-card color="cyan darken-3" class="white--text" height="200px" dark>
-            <v-card-title primary-title class="justify-center">
-              <v-icon dark x-large right >fiber_new</v-icon>
-              <span class="title font-weight-light">New Divisions</span>               
-            </v-card-title>
-            <v-card-title class="justify-center">
-              <p class="text-center display-2"><pre>       5      </pre></p>
-            </v-card-title>
-          </v-card>
-        </v-flex>
-        <v-flex lg3 sm6 xs12>
-          <v-card height="500px" width="500px" dark>
-            <v-card-title>
-              <span class="headline">Hey</span>
-            </v-card-title>
-                                <v-card-text>
-                      <v-container grid list-md>
-                        <div id="sp"></div>
-                      </v-container>
-                    </v-card-text>
-          </v-card>
-        </v-flex> -->
     </v-layout>
   </v-container>
 </template>

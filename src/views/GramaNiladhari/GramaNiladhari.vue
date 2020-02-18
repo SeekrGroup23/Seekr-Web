@@ -16,7 +16,7 @@
                 <v-layout class="pa-0 ma-0 px-3" row>
                   <v-flex>
                     <v-img
-                      src=""
+                      :src="require('../../assets/logoIcon.png')"
                       aspect-ratio="1"
                       height="42"
                       width="42"

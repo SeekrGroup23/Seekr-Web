@@ -170,10 +170,10 @@ export default {
   computed: {},
   methods: {
     getAge(dateString) {
-      console.log(dateString);
-
+      var arr = dateString.split("-");
+      var dob = arr[2] + "-" + arr[1] + "-" + arr[0];
       var today = new Date();
-      var birthDate = new Date(dateString);
+      var birthDate = new Date(dob.toString());
       console.log(birthDate);
       var age = today.getFullYear() - birthDate.getFullYear();
       var m = today.getMonth() - birthDate.getMonth();
@@ -210,6 +210,9 @@ export default {
           this.snackbarText = "Patient Deleted Failed!";
           this.snackbar = true;
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     },
     onClickTableRow(event) {
@@ -245,6 +248,9 @@ export default {
         })
         .catch(err => {
           console.log("Error" + err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     }
   },

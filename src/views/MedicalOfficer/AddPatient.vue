@@ -23,7 +23,7 @@
           </v-stepper-step>
 
           <v-stepper-content step="1">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="" class="mb-5">
               <v-container fluid wrap>
                 <v-layout column>
                   <!-- 
@@ -120,7 +120,7 @@
                       </template>
                       <v-date-picker
                         min="1980-01-01"
-                        picker-date=""
+                        :max="today"
                         v-model="patientBasic.dob"
                         @input="menu2 = false"
                         no-title
@@ -205,7 +205,7 @@
           >
 
           <v-stepper-content step="2">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="" class="mb-5">
               <v-container fluid>
                 <v-layout column>
                   <v-flex class="py-1">
@@ -272,7 +272,7 @@
           </v-stepper-step>
 
           <v-stepper-content step="3">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="" class="mb-5">
               <v-container fluid>
                 <v-layout column>
                   <v-flex>
@@ -356,7 +356,7 @@
             <small>Doctor's Special Notes Regarding Patient </small>
           </v-stepper-step>
           <v-stepper-content step="4">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="" class="mb-5">
               <v-container fluid>
                 <v-layout column>
                   <v-flex>
@@ -378,7 +378,7 @@
             <small>Patient's Contact Information </small>
           </v-stepper-step>
           <v-stepper-content step="5">
-            <v-card color="secondary" class="mb-5" dark>
+            <v-card color="secondary" class="mb-5">
               <v-container fluid>
                 <v-layout column>
                   <v-flex>
@@ -493,6 +493,7 @@
 </template>
 
 <script>
+var date = new Date();
 //Form Validation - Vuelidate
 import { validationMixin } from "vuelidate";
 import { required, minLength, email } from "vuelidate/lib/validators";
@@ -587,7 +588,8 @@ export default {
       },
 
       gnDivisions: [],
-      docID: ""
+      docID: "",
+      today: date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate()
     };
   },
   computed: {
@@ -714,6 +716,9 @@ export default {
           })
           .catch(err => {
             console.log(err);
+            if (err.response.status == 403) {
+              this.$store.dispatch("logout");
+            }
           });
       } else {
         console.log("Forma Validation Failed");
@@ -733,6 +738,9 @@ export default {
         })
         .catch(err => {
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     },
     savePatientsDiseases() {
@@ -754,6 +762,9 @@ export default {
         })
         .catch(err => {
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     },
     // To save Loaction and Address
@@ -776,6 +787,9 @@ export default {
           })
           .catch(err => {
             console.log(err);
+            if (err.response.status == 403) {
+              this.$store.dispatch("logout");
+            }
           });
       }
     },
@@ -793,6 +807,9 @@ export default {
           })
           .catch(err => {
             console.log(err);
+            if (err.response.status == 403) {
+              this.$store.dispatch("logout");
+            }
           });
       } else {
         this.e6 = 5;
@@ -816,6 +833,9 @@ export default {
           })
           .catch(err => {
             console.log(err);
+            if (err.response.status == 403) {
+              this.$store.dispatch("logout");
+            }
           });
       }
     },
@@ -877,7 +897,7 @@ export default {
       this.patientDiseases.otherDiseases = [];
       this.patientContact.teleNum = "";
       this.patientContact.email = "";
-
+      this.$v.patientBasic.$reset();
       this.e6 = 1;
     },
     // Get Location related metadata
@@ -901,6 +921,9 @@ export default {
         })
         .catch(err => {
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     },
     // Analytics
@@ -913,11 +936,15 @@ export default {
         .then(() => {})
         .catch(err => {
           console.log(err);
+          if (err.response.status == 403) {
+            this.$store.dispatch("logout");
+          }
         });
     }
   },
   created() {
     this.getMetaData();
+    console.log("Today: " + this.today);
   }
 };
 </script>
