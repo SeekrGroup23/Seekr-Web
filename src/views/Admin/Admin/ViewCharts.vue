@@ -57,6 +57,38 @@
           </v-container>
         </v-card-text>
       </v-card>
+      <v-card height="500" class="my-2 mx-auto">
+        <v-card-title class="headline">
+          <span class="title font-weight-light"
+            >Patient Distribution (Blood Group)
+          </span>
+          <v-spacer></v-spacer>
+          <v-btn @click="dialog04 = true" small color="primary"
+            >View in Table</v-btn
+          >
+        </v-card-title>
+        <v-card-text>
+          <v-container grid list-md>
+            <div id="grp"></div>
+          </v-container>
+        </v-card-text>
+      </v-card>
+      <v-card height="500" class="my-2 mx-auto">
+        <v-card-title class="headline">
+          <span class="title font-weight-light"
+            >Patient Distribution (Smoke Status)
+          </span>
+          <v-spacer></v-spacer>
+          <v-btn @click="dialog05 = true" small color="primary"
+            >View in Table</v-btn
+          >
+        </v-card-title>
+        <v-card-text>
+          <v-container grid list-md>
+            <div id="grp1"></div>
+          </v-container>
+        </v-card-text>
+      </v-card>
     </v-layoyt>
     <v-layout>
       <v-dialog v-model="dialog01" max-width="800">
@@ -150,6 +182,70 @@
         </v-card>
       </v-dialog>
     </v-layout>
+    <v-layout>
+      <v-dialog v-model="dialog04" max-width="800">
+        <v-card class="my-2 mx-auto">
+          <v-spacer>
+            Patient Distribution (Blood Group)
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search1"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-spacer>
+          <v-data-table
+            :headers="headers4"
+            :items="bloodCount"
+            :search="search"
+          >
+            <template v-slot:items="props">
+              <td class="text-xs-left">{{ props.item[0] }}</td>
+              <td class="text-xs-left">{{ props.item[1] }}</td>
+            </template>
+            <template v-slot:no-results>
+              <v-alert :value="true" color="error" icon="warning">
+                Your search for "{{ search }}" found no results.
+              </v-alert>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+    <v-layout>
+      <v-dialog v-model="dialog05" max-width="800">
+        <v-card class="my-2 mx-auto">
+          <v-spacer>
+            Patient Distribution (Smoking Stauts)
+            <v-spacer></v-spacer>
+            <v-text-field
+              v-model="search1"
+              append-icon="search"
+              label="Search"
+              single-line
+              hide-details
+            ></v-text-field>
+          </v-spacer>
+          <v-data-table
+            :headers="headers5"
+            :items="smokeCount"
+            :search="search"
+          >
+            <template v-slot:items="props">
+              <td class="text-xs-left">{{ props.item[0] }}</td>
+              <td class="text-xs-left">{{ props.item[1] }}</td>
+            </template>
+            <template v-slot:no-results>
+              <v-alert :value="true" color="error" icon="warning">
+                Your search for "{{ search }}" found no results.
+              </v-alert>
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </v-container>
 </template>
 
@@ -169,9 +265,17 @@ export default {
       agePatientCount: [],
       ageNames: [],
       ageCount: [],
+      bloodPatientCount: [],
+      bloodNames: [],
+      bloodCount: [],
+      smokePatientCount: [],
+      smokeNames: [],
+      smokeCount: [],
       dialog01: false,
       dialog02: false,
       dialog03: false,
+      dialog04: false,
+      dialog05: false,
       h: " ",
       search: "",
       search1: "",
@@ -209,6 +313,34 @@ export default {
           align: "left",
           sortable: true,
           value: "age"
+        },
+        {
+          text: "Count",
+          align: "left",
+          value: "count",
+          sortable: true
+        }
+      ],
+      headers4: [
+        {
+          text: "Blood Group",
+          align: "left",
+          sortable: true,
+          value: "bgrp"
+        },
+        {
+          text: "Count",
+          align: "left",
+          value: "count",
+          sortable: true
+        }
+      ],
+      headers5: [
+        {
+          text: "Smoking Status",
+          align: "left",
+          sortable: true,
+          value: "smkstatus"
         },
         {
           text: "Count",
@@ -300,6 +432,58 @@ export default {
         .catch(err => {
           console.log(err);
         });
+    },
+    patientBloodCount() {
+      this.$http
+        .get("/api/admin/bloodpatientcount")
+        .then(res => {
+          console.log(res.data);
+          this.bloodCount = [];
+          this.bloodCount = res.data;
+          //console.log(this.ageCount);
+          var l;
+          for (l = 0; l < 8; l++) {
+            //this.h = this.districtCount[i][0];
+            this.bloodNames.push(this.bloodCount[l][0].toString());
+            //console.log(this.h);
+          }
+          //console.log(this.provincetNames);
+          this.bloodNames = Object.values(this.bloodNames);
+          for (l = 0; l < 8; l++) {
+            this.h = this.bloodCount[l][1];
+            this.bloodPatientCount.push(this.h);
+          }
+          //console.log(this.agePatientCount);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+    patientSmokeCount() {
+      this.$http
+        .get("/api/admin/smkpatientcount")
+        .then(res => {
+          //console.log(res.data);
+          this.smokeCount = [];
+          this.smokeCount = res.data;
+          //console.log(this.ageCount);
+          var l;
+          for (l = 0; l < 3; l++) {
+            //this.h = this.districtCount[i][0];
+            this.smokeNames.push(this.smokeCount[l][0].toString());
+            //console.log(this.h);
+          }
+          //console.log(this.provincetNames);
+          this.smokeNames = Object.values(this.smokeNames);
+          for (l = 0; l < 3; l++) {
+            this.h = this.smokeCount[l][1];
+            this.smokePatientCount.push(this.h);
+          }
+          //console.log(this.agePatientCount);
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
 
@@ -307,6 +491,8 @@ export default {
     this.patientdistrictCount();
     this.patientprovinceCount();
     this.patientAgeCount();
+    this.patientBloodCount();
+    this.patientSmokeCount();
   },
 
   mounted() {
@@ -409,8 +595,107 @@ export default {
         }
       ],
       xaxis: {
-        //categories: this.districtNames
+        //categories: this.ageNames
         categories: ["Children", "Youth", "Adults", "Senior"]
+      }
+    };
+    var grpp = {
+      chart: {
+        type: "bar",
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          barHeight: "100%",
+          distributed: true,
+          horizontal: true,
+          dataLabels: {
+            position: "bottom"
+          }
+        }
+      },
+      colors: [
+        "#33b2df",
+        "#d4526e",
+        "#546E7A",
+        "#13d8aa",
+        "#A5978B",
+        "#2b908f",
+        "#f9a3a4",
+        "#90ee7e",
+        "#f48024",
+        "#69d2e7"
+      ],
+      dataLabels: {
+        enabled: true,
+        textAnchor: "start",
+        style: {
+          colors: ["#fff"]
+        },
+        formatter: function(val, opt) {
+          return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
+        },
+        offsetX: 0,
+        dropShadow: {
+          enabled: true
+        }
+      },
+      stroke: {
+        width: 1,
+        colors: ["#fff"]
+      },
+      series: [
+        {
+          data: this.bloodPatientCount
+        }
+      ],
+      xaxis: {
+        //categories: this.districtNames
+        categories: ["AB+", "A+", "B+", "O+", "AB-", "A-", "B-", "O-"]
+      }
+    };
+    var grpp1 = {
+      chart: {
+        type: "bar",
+        height: 350
+      },
+      plotOptions: {
+        bar: {
+          barHeight: "100%",
+          distributed: true,
+          horizontal: true,
+          dataLabels: {
+            position: "bottom"
+          }
+        }
+      },
+      colors: ["#33b2df", "#546E7A", "#d4526e"],
+      dataLabels: {
+        enabled: true,
+        textAnchor: "start",
+        style: {
+          colors: ["#fff"]
+        },
+        formatter: function(val, opt) {
+          return opt.w.globals.labels[opt.dataPointIndex] + ":  " + val;
+        },
+        offsetX: 0,
+        dropShadow: {
+          enabled: true
+        }
+      },
+      stroke: {
+        width: 1,
+        colors: ["#fff"]
+      },
+      series: [
+        {
+          data: this.smokePatientCount
+        }
+      ],
+      xaxis: {
+        //categories: this.districtNames
+        categories: ["None", "Mild Smoker", "Heavy Smoker"]
       }
     };
     var pie = {
@@ -454,8 +739,12 @@ export default {
     };
     var chart = new ApexCharts(document.querySelector("#chart"), options);
     var chart1 = new ApexCharts(document.querySelector("#bar"), opt1);
+    var chart2 = new ApexCharts(document.querySelector("#grp"), grpp);
+    var chart3 = new ApexCharts(document.querySelector("#grp1"), grpp1);
     chart.render();
     chart1.render();
+    chart2.render();
+    chart3.render();
     var pie1 = new ApexCharts(document.querySelector("#pie"), pie);
     // eslint-disable-next-line no-unused-vars
     const paper = chart.paper();

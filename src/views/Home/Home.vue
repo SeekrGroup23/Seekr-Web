@@ -13,7 +13,6 @@
             <v-toolbar-items class="hidden-sm-and-down">
               <v-btn flat small color="primary">Home</v-btn>
               <v-btn flat small>Data Analytics</v-btn>
-              <v-btn flat small>Research</v-btn>
               <v-btn flat small>Information Hub</v-btn>
               <v-btn flat small>Donations</v-btn>
               <v-btn flat small>About</v-btn>
@@ -29,7 +28,7 @@
           </v-toolbar>
 
           <!-- Navigation Drawer - Only Visible in Screens Less than Md -->
-          <v-navigation-drawer v-model="drawer" absolute temporary >
+          <v-navigation-drawer v-model="drawer" absolute temporary>
             <v-list class="pa-1">
               <v-list-tile avatar>
                 <v-list-tile-avatar>
@@ -45,7 +44,7 @@
             <v-list class="pt-0" dense>
               <v-divider></v-divider>
 
-              <v-list-tile >
+              <v-list-tile>
                 <v-list-tile-action>
                   <v-icon>home</v-icon>
                 </v-list-tile-action>
@@ -55,7 +54,7 @@
                 </v-list-tile-content>
               </v-list-tile>
 
-              <v-list-tile >
+              <v-list-tile>
                 <v-list-tile-action>
                   <v-icon>home</v-icon>
                 </v-list-tile-action>
@@ -95,7 +94,7 @@
                 </v-list-tile-content>
               </v-list-tile>
 
-              <v-list-tile >
+              <v-list-tile>
                 <v-list-tile-action>
                   <v-icon>home</v-icon>
                 </v-list-tile-action>
@@ -107,7 +106,7 @@
 
               <v-divider></v-divider>
 
-              <v-list-tile @click="$router.push('/login')" >
+              <v-list-tile @click="$router.push('/login')">
                 <v-list-tile-action>
                   <v-icon>home</v-icon>
                 </v-list-tile-action>
@@ -119,7 +118,7 @@
             </v-list>
           </v-navigation-drawer>
         </v-flex>
-        
+
         <!-- Image Carousal -->
         <v-flex grow>
           <v-layout row fill-height>

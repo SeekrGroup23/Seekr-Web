@@ -133,7 +133,8 @@ export default {
   },
   created() {
     console.log(
-      "From Dashboard >> " + this.$http.defaults.headers.common["Authorization"]
+      "From MO Dashboard >> " +
+        this.$http.defaults.headers.common["Authorization"]
     );
   },
   computed: {},

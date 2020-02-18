@@ -4,6 +4,8 @@ import store from "./store/store";
 
 import Home from "./views/Home/Home.vue";
 import Login from "./views/Login.vue";
+import PasswordReset from "./views/PasswordReset.vue";
+
 import Register from "./views/Register.vue";
 import GramaNiladhari from "./views/GramaNiladhari/GramaNiladhari.vue";
 import GN_Dashboard from "./views/GramaNiladhari/Dashboard.vue";
@@ -75,6 +77,19 @@ let router = new Router({
       // this generates a separate chunk (about.[hash].js) for this route
       // which is lazy-loaded when the route is visited.
       component: Login,
+      meta: {
+        guest: true
+      }
+    },
+    {
+      path: "/password_reset/:id",
+      name: "passwordReset",
+      props: true,
+
+      // route level code-splitting
+      // this generates a separate chunk (about.[hash].js) for this route
+      // which is lazy-loaded when the route is visited.
+      component: PasswordReset,
       meta: {
         guest: true
       }
@@ -184,39 +199,66 @@ let router = new Router({
       children: [
         {
           path: "",
-          component: Admin_Dash
+          component: Admin_Dash,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "add_patient",
-          component: MO_AddPatient
+          component: MO_AddPatient,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "patients",
-          component: MO_ViewAllPatients
+          component: MO_ViewAllPatients,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "profile",
-          component: MO_Profile
+          component: MO_Profile,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "patients/view",
-          component: Admin_Patients_ViewAll
+          component: Admin_Patients_ViewAll,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "patients/add",
-          component: Admin_Patients_AddNew
+          component: Admin_Patients_AddNew,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "medical_officer/view",
-          component: Admin_MO_ViewAll
+          component: Admin_MO_ViewAll,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "medical_officer/add",
-          component: Admin_MO_AddNew
+          component: Admin_MO_AddNew,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "hospitals/add",
-          component: Admin_Hospital_AddNew
+          component: Admin_Hospital_AddNew,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "hospitals/view",
@@ -224,39 +266,66 @@ let router = new Router({
         },
         {
           path: "hospitals/view_map",
-          component: Admin_Hospital_ViewMap
+          component: Admin_Hospital_ViewMap,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "grama_niladhari/view",
-          component: Admin_GN_ViewAll
+          component: Admin_GN_ViewAll,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "grama_niladhari/add",
-          component: Admin_GN_AddNew
+          component: Admin_GN_AddNew,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "donors/view",
-          component: Admin_Donor_ViewAll
+          component: Admin_Donor_ViewAll,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "donors/add",
-          component: Admin_Donor_AddNew
+          component: Admin_Donor_AddNew,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "data_entry/view",
-          component: Admin_DataEntry_View
+          component: Admin_DataEntry_View,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "data_entry/add",
-          component: Admin_DataEntry_AddNew
+          component: Admin_DataEntry_AddNew,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "admins/view",
-          component: Admin_Admins_View
+          component: Admin_Admins_View,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "admins/add",
-          component: Admin_Admins_AddNew
+          component: Admin_Admins_AddNew,
+          meta: {
+            requiresAuth: true
+          }
         },
         // -----------
         // {
@@ -281,23 +350,38 @@ let router = new Router({
         // },
         {
           path: "patients/view",
-          component: Admin_view_Patients
+          component: Admin_view_Patients,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "hospital/map",
-          component: Admin_view_Hospitals
+          component: Admin_view_Hospitals,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "summary/charts",
-          component: Summary_Charts
+          component: Summary_Charts,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "summary/report",
-          component: Summary_Report
+          component: Summary_Report,
+          meta: {
+            requiresAuth: true
+          }
         },
         {
           path: "",
-          component: Admin_Dash
+          component: Admin_Dash,
+          meta: {
+            requiresAuth: true
+          }
         }
       ]
     }
