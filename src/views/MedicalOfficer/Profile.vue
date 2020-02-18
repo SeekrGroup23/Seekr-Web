@@ -26,7 +26,11 @@
                 </v-layout>
                 <v-divider class="hidden-sm-and-up mt-2"></v-divider>
               </v-flex>
-              <v-divider vertical class="my-2" hidden-sm-and-down></v-divider>
+              <v-divider
+                vertical
+                class="my-2 pl-3"
+                hidden-sm-and-down
+              ></v-divider>
               <v-flex md8 sm6 xs12>
                 <v-container class="pl-4">
                   <v-layout class="align-start" column>
@@ -226,7 +230,10 @@
                       <v-container fluid class="py-0">
                         <v-layout column class="">
                           <v-avatar tile color="secondary" size="208">
-                            <v-img :src="mo.imageURL"></v-img>
+                            <v-img
+                              :src="mo.imageURL"
+                              :lazy-src="require('../../assets/user.png')"
+                            ></v-img>
                           </v-avatar>
                         </v-layout>
                       </v-container>

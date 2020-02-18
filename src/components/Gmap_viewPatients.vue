@@ -20,9 +20,10 @@ export default {
     };
   },
   async created() {
+    console.log("GN MAP : " + localStorage.getItem("gnDivision"));
     // Get all Patient Data
     await this.$http
-      .get("/api/patient/all/" + this.$store.state.gnDivision)
+      .get("/api/patient/all/" + localStorage.getItem("gnDivision"))
       .then(res => {
         this.resData = res.data;
         res.data.forEach(patient => {

@@ -94,6 +94,8 @@ export default new Vuex.Store({
       return new Promise(resolve => {
         commit("logout");
         localStorage.removeItem("access_token");
+        localStorage.removeItem("gnDivision");
+
         delete axios.defaults.headers.common["authorization"];
         router.push("/login");
         resolve();

@@ -267,8 +267,9 @@ export default {
     getAllPatientData() {
       this.loadingTable = true;
       this.patients = [];
+      var gnDivision = localStorage.getItem("gnDivision");
       this.$http
-        .get("/api/patient/all/" + this.$store.state.gnDivision)
+        .get("/api/patient/all/" + gnDivision)
         .then(res => {
           //   console.log(res.data + " " + this.$store.state.gnDivision);
           if (res.data == "") {

@@ -134,7 +134,7 @@
           <v-list-tile @click="$router.push('/medicalofficer/profile')">
             <v-list-tile-title>Profile</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile @click="deleteConfirmation()">
+          <v-list-tile @click="logoutConfirmation = true">
             <v-list-tile-title>Logout</v-list-tile-title>
           </v-list-tile>
         </v-list>
@@ -144,7 +144,7 @@
     <v-content>
       <v-container class="py-0 ma-0 containerRouterView" fluid>
         <router-view></router-view>
-        <v-dialog v-model="deleteConfirmation" persistent max-width="290">
+        <v-dialog v-model="logoutConfirmation" persistent max-width="290">
           <v-card>
             <v-card-title class="headline">Logout Confirmation</v-card-title>
             <v-card-text>Do you want to proceed with this action?</v-card-text>
@@ -153,7 +153,7 @@
               <v-btn
                 color="green darken-1"
                 flat
-                @click="deleteConfirmation = false"
+                @click="logoutConfirmation = false"
                 >Cancel</v-btn
               >
               <v-btn color="red darken-1" flat @click="logout()">Logout</v-btn>
@@ -173,7 +173,7 @@ export default {
   data: () => {
     return {
       drawer: true,
-      deleteConfirmation: false,
+      logoutConfirmation: false,
       imageURL: "",
       image: null,
       gnID: "",
@@ -279,6 +279,7 @@ export default {
         .then(res => {
           this.imageURL = res.data.imageURL;
           this.$store.state.gnDivision = res.data.gnDivision;
+          localStorage.setItem("gnDivision", res.data.gnDivision);
 
           // console.log(">>>>>>>>>>>" + this.$store.state.gnDivision);
           this.getImageFromServer(this.imageURL);

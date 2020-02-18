@@ -69,7 +69,7 @@
               </v-card>
             </v-flex>
             <v-flex class="py-2 px-2">
-              <h6 class="subheading">SUspected CKDu Patients</h6>
+              <h6 class="subheading">Suspected CKDu Patients</h6>
               <span class="subheading font-weight-medium">{{
                 suspectedPatients
               }}</span>
@@ -111,9 +111,9 @@
               </v-card>
             </v-flex>
             <v-flex class="py-2 px-2">
-              <h6 class="subheading">Critical CKDu Patients</h6>
+              <h6 class="subheading">Pending Confirmations</h6>
               <span class="subheading font-weight-medium">{{
-                CriticalPatients
+                pendingConfirmations
               }}</span>
             </v-flex>
           </v-layout>
@@ -132,10 +132,12 @@
               </v-card>
             </v-flex>
             <v-flex class="py-2 px-2">
-              <h6 class="subheading">Critical CKDu Patients</h6>
-              <span class="subheading font-weight-medium">{{
-                CriticalPatients
-              }}</span>
+              <v-layout column justify-start>
+                <h6 class="subheading">CKDu Deaths</h6>
+                <span class="subheading font-weight-medium">{{
+                  CriticalPatients
+                }}</span>
+              </v-layout>
             </v-flex>
           </v-layout>
         </v-container>
@@ -163,7 +165,9 @@ export default {
       regPatientCount: 0,
       verifiedPatients: 0,
       suspectedPatients: 0,
-      CriticalPatients: 0
+      CriticalPatients: 0,
+      pendingConfirmations: 0,
+      gnDivision: localStorage.getItem("gnDivision")
     };
   },
   created() {
@@ -174,8 +178,9 @@ export default {
   computed: {},
   methods: {},
   async mounted() {
+    console.log("gn: " + localStorage.getItem("gnDivision"));
     await this.$http
-      .get("/api/patient/all/" + this.$store.state.gnDivision)
+      .get("/api/patient/all/" + this.gnDivision)
       .then(res => {
         this.resData = res.data;
         console.log(this.resData);
@@ -190,6 +195,9 @@ export default {
 
           if (patient.condition == "Critical") {
             this.CriticalPatients = this.CriticalPatients + 1;
+          }
+          if (patient.geoCordinates == "") {
+            this.pendingConfirmations = this.pendingConfirmations + 1;
           }
         });
       })
